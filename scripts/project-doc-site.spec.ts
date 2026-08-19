@@ -128,7 +128,7 @@ describe('rewriteMarkdown', () => {
       repositoryRef: 'abc123',
     })).toBe(
       '[B](./reference/b.md#part) '
-      + '[source](https://github.com/aflydream/mineko-herness/blob/abc123/packages/tool.ts#L2) '
+      + '[source](https://github.com/aflydream/mineko-harness/blob/abc123/packages/tool.ts#L2) '
       + '[web](https://example.com)\n',
     )
   })
@@ -154,7 +154,7 @@ describe('rewriteMarkdown', () => {
       pages,
       repoRoot: root,
       repositoryRef: 'abc123',
-    })).toBe('![logo](https://raw.githubusercontent.com/aflydream/mineko-herness/abc123/packages/logo.svg)\n')
+    })).toBe('![logo](https://raw.githubusercontent.com/aflydream/mineko-harness/abc123/packages/logo.svg)\n')
   })
 
   it('hands an image to the placer and uses the URL it returns', () => {
@@ -233,7 +233,7 @@ describe('rewriteMarkdown', () => {
       repositoryRef: 'abc123',
     })).toBe(
       '[title](./reference/b.md "b.md") '
-      + '[escaped](https://github.com/aflydream/mineko-herness/blob/abc123/docs/x(y).md)\n',
+      + '[escaped](https://github.com/aflydream/mineko-harness/blob/abc123/docs/x(y).md)\n',
     )
   })
 
@@ -284,7 +284,7 @@ describe('docsPages locale routes', () => {
       expect(projected).toContain('layout: false')
       expect(projected).toContain('http-equiv: refresh')
       expect(projected).toContain('content: 0; url=./guide/quickstart')
-      expect(projected).not.toContain('# MiNeko Herness')
+      expect(projected).not.toContain('# MiNeko Harness')
     }
   })
 
@@ -432,7 +432,7 @@ describe('projectedPageContent', () => {
   })
 
   it('drops the repository badge every page links from its footer', () => {
-    const badge = '[![](https://img.shields.io/badge/powered_by-mnh-4D6BFE?style=flat-square)](https://github.com/aflydream/mineko-herness)'
+    const badge = '[![](https://img.shields.io/badge/powered_by-mnh-4D6BFE?style=flat-square)](https://github.com/aflydream/mineko-harness)'
     expect(projectedPageContent(`# Guide\n\nBody.\n\n${badge}\n`, page('zh-guide')))
       .toBe('# Guide\n\nBody.\n')
   })

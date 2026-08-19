@@ -17,11 +17,11 @@ This tutorial is the programmatic alternative to the Electron desktop and Web cl
 Clone the repository for its runnable example, create a virtual environment, and install the SDK with its same-version bundled runtime:
 
 ```sh
-git clone https://github.com/aflydream/mineko-herness.git
-cd mineko-herness
+git clone https://github.com/aflydream/mineko-harness.git
+cd mineko-harness
 python -m venv .venv
 . .venv/bin/activate
-python -m pip install mineko-herness-sdk
+python -m pip install mineko-harness-sdk
 ```
 
 The installed runtime needs no system Node.js. Repository contributors who need to build the runtime or wheels from source should use the [Python contributor workflows](../../../python/development.md).
@@ -56,13 +56,13 @@ The checked-in example is a thin wrapper around this SDK call:
 ```python
 from pathlib import Path
 
-from mineko_herness import MiNekoHerness
+from mineko_harness import MiNekoHarness
 
 config = Path("examples/jsonrpc-agent/minimal.cordis.yml").resolve()
 workspace = Path("/absolute/path/to/workspace").resolve()
 sessions = Path("/absolute/path/to/sessions").resolve()
 
-with MiNekoHerness(
+with MiNekoHarness(
     provider="deepseek-official",
     model="deepseek-v4-flash",
     max_tokens=49_152,
@@ -78,7 +78,7 @@ with MiNekoHerness(
 print(result.final_response)
 ```
 
-`MiNekoHerness` starts the bundled runtime lazily and reuses it until the context manager exits. Reusing the same harness and session id preserves the session-owned Bash process, including its working directory, exported variables, and shell functions. Use a fresh session id for an independent task; reuse an id only when the next call should continue the same durable conversation.
+`MiNekoHarness` starts the bundled runtime lazily and reuses it until the context manager exits. Reusing the same harness and session id preserves the session-owned Bash process, including its working directory, exported variables, and shell functions. Use a fresh session id for an independent task; reuse an id only when the next call should continue the same durable conversation.
 
 ## Understand the example composition
 

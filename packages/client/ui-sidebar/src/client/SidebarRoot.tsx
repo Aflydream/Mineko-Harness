@@ -128,10 +128,10 @@ export function SidebarRoot({
     >
       <div className={css.logoRow}>
         {wide && (
-          <div className={clsx(css.brand, css.wide)} aria-label="MiNeko Herness">
+          <div className={clsx(css.brand, css.wide)} aria-label="MiNeko Harness">
             <img className={css.brandLogo} src="/logo.png" alt="" />
             <span className={css.brandPrimary}>MiNeko</span>
-            <span className={css.brandSecondary}>Herness</span>
+            <span className={css.brandSecondary}>Harness</span>
           </div>
         )}
         <Tooltip label={collapsed ? t('toggle.open') : t('toggle.collapse')} delayMs={500}>

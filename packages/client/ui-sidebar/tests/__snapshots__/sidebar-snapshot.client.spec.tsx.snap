@@ -82,7 +82,7 @@ exports[`sidebar shell snapshots > renders the expanded column (text brand, caps
       class="logoRow"
     >
       <div
-        aria-label="MiNeko Herness"
+        aria-label="MiNeko Harness"
         class="brand wide"
       >
         <img
@@ -98,7 +98,7 @@ exports[`sidebar shell snapshots > renders the expanded column (text brand, caps
         <span
           class="brandSecondary"
         >
-          Herness
+          Harness
         </span>
       </div>
       <button
@@ -181,7 +181,7 @@ exports[`sidebar shell snapshots > renders the expanded column in the default lo
       class="logoRow"
     >
       <div
-        aria-label="MiNeko Herness"
+        aria-label="MiNeko Harness"
         class="brand wide"
       >
         <img
@@ -197,7 +197,7 @@ exports[`sidebar shell snapshots > renders the expanded column in the default lo
         <span
           class="brandSecondary"
         >
-          Herness
+          Harness
         </span>
       </div>
       <button

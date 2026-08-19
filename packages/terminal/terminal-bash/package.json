@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-terminal-bash",
-  "description": "Persistent shell PTY backend over the MiNeko Herness subprocess terminal primitive",
+  "description": "Persistent shell PTY backend over the MiNeko Harness subprocess terminal primitive",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/terminal/terminal-bash"
   },
   "type": "module",

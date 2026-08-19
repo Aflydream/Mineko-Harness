@@ -371,8 +371,8 @@ describe('CodexAppServerWire', () => {
     const initialize = await child.peer.nextMethod('initialize')
     expect(initialize.params).toEqual({
       clientInfo: {
-        name: 'mineko-herness',
-        title: 'MiNeko Herness',
+        name: 'mineko-harness',
+        title: 'MiNeko Harness',
         version: '0.0.1',
       },
       capabilities: {

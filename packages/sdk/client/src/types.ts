@@ -44,8 +44,8 @@ export interface HarnessClientOptions {
   disposeGraceMs?: number
 }
 
-/** Options for the high-level {@link MiNekoHerness} wrapper. */
-export interface MiNekoHernessOptions {
+/** Options for the high-level {@link MiNekoHarness} wrapper. */
+export interface MiNekoHarnessOptions {
   /** Launch spec for the runtime subprocess (command, args, cwd, env, timeouts). */
   launch: HarnessClientOptions
   /** Workspace cwd recorded on every SDK-created session (default: the launch cwd, else `process.cwd()`). */

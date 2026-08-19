@@ -40,7 +40,7 @@ export function AppRoot(props: AppRootProps) {
     <div className={css.boot}>
       <div className={css.card}>
         <img className={css.logo} src="/logo.png" alt="" />
-        <div className={css.wordmark}>MiNeko Herness</div>
+        <div className={css.wordmark}>MiNeko Harness</div>
         {!loud
           ? (
             <>

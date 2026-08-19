@@ -49,7 +49,7 @@ export interface Config {
   toolOrder?: string[]
   /** Tool-registry config — its presentation `mode` (forwarded through agent-spine-demo; see mnh-tools). */
   tools?: ToolsConfig
-  /** MiNeko Herness home directory exposed to bash and used for local skill discovery. */
+  /** MiNeko Harness home directory exposed to bash and used for local skill discovery. */
   mnhHome?: string
   /** Fallback session-title limits forwarded through agent-spine-demo. */
   sessionTitle?: NonNullable<agentCore.Config['sessionTitle']>

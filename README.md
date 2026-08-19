@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="logo.png" alt="MiNeko Herness logo" width="112">
+  <img src="logo.png" alt="MiNeko Harness logo" width="112">
 </p>
 
-<h1 align="center">MiNeko Herness</h1>
+<h1 align="center">MiNeko Harness</h1>
 
 <p align="center"><strong>Make Everything Happen</strong></p>
 
@@ -10,11 +10,11 @@
 
 [中文](README.zh.md)
 
-MiNeko Herness (`mnh`) is an independent Agent Harness built on the vendored Cordis plugin runtime. The Windows desktop application uses Electron for the interface and Node.js for agents, plugins, tools, sessions, and model adapters. It loads the built client through the private `mnh://` protocol and does not start a Web server or TCP listener.
+MiNeko Harness (`mnh`) is an independent Agent Harness built on the vendored Cordis plugin runtime. The Windows desktop application uses Electron for the interface and Node.js for agents, plugins, tools, sessions, and model adapters. It loads the built client through the private `mnh://` protocol and does not start a Web server or TCP listener.
 
-> **Windows-only project.** MiNeko Herness targets Windows desktop. macOS and Linux desktop releases are not planned. Any non-Windows CI that remains covers reusable repository components, not desktop support.
+> **Windows-only project.** MiNeko Harness targets Windows desktop. macOS and Linux desktop releases are not planned. Any non-Windows CI that remains covers reusable repository components, not desktop support.
 
-The project is derived from DeepSeek Harness under the MIT License. MiNeko Herness is not affiliated with or endorsed by DeepSeek.
+The project is derived from DeepSeek Harness under the MIT License. MiNeko Harness is not affiliated with or endorsed by DeepSeek.
 
 ## Repository facts
 
@@ -91,7 +91,7 @@ The [model setup guide](docs/user/guide/providers.md) covers built-in providers 
 
 Issues and pull requests are welcome. Use the repository's Issue templates for bugs, features, research, and tasks. Pull requests should stay within the Windows desktop scope, reference a same-repository Issue, describe the user-visible change, and include focused verification. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening one.
 
-MiNeko Herness is distributed under the [MIT License](LICENSE). Third-party packages, vendored sources, and license notices are recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+MiNeko Harness is distributed under the [MIT License](LICENSE). Third-party packages, vendored sources, and license notices are recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Community
 - [linux.do](https://linux.do/)

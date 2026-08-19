@@ -7,7 +7,7 @@ import argparse
 import os
 from pathlib import Path
 
-from mineko_herness import MiNekoHerness
+from mineko_harness import MiNekoHarness
 
 
 CONFIG = Path(__file__).with_name("minimal.cordis.yml")
@@ -27,7 +27,7 @@ def main() -> None:
 
     workspace = args.workspace.resolve()
     session_root = args.session_root.resolve()
-    with MiNekoHerness(
+    with MiNekoHarness(
         provider=args.provider,
         model=args.model,
         max_tokens=args.max_tokens,

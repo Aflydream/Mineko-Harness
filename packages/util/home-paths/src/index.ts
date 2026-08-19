@@ -1,5 +1,5 @@
 /**
- * Shared filesystem path helpers for MiNeko Herness user data.
+ * Shared filesystem path helpers for MiNeko Harness user data.
  *
  * @module @aflydream/mnh-home-paths
  */
@@ -8,13 +8,13 @@ import { opendir, realpath } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { basename, dirname, join, resolve } from 'node:path'
 
-/** Directory name for the default MiNeko Herness home under the OS home. */
+/** Directory name for the default MiNeko Harness home under the OS home. */
 export const MNH_HOME_DIR_NAME = '.mnh'
 
-/** Stable user-facing display form for the default MiNeko Herness home. */
+/** Stable user-facing display form for the default MiNeko Harness home. */
 export const DEFAULT_MNH_HOME_DISPLAY = `~/${MNH_HOME_DIR_NAME}`
 
-/** Environment variable that overrides the default MiNeko Herness home. */
+/** Environment variable that overrides the default MiNeko Harness home. */
 export const MNH_HOME_ENV = 'MNH_HOME'
 
 /**
@@ -55,7 +55,7 @@ export async function canonicalizeWatchPath(path: string): Promise<string> {
 }
 
 /**
- * Resolve the default MiNeko Herness home using Node's platform path rules.
+ * Resolve the default MiNeko Harness home using Node's platform path rules.
  * @returns the absolute default harness home path.
  */
 export function defaultMnhHome(): string {
@@ -74,7 +74,7 @@ export function expandHomePath(path: string): string {
 }
 
 /**
- * Resolve the single-root MiNeko Herness home.
+ * Resolve the single-root MiNeko Harness home.
  *
  * Precedence, highest first: an explicit configured path, `$MNH_HOME`, then
  * `~/.mnh`. The harness keeps all user data under one root. An empty or
@@ -91,7 +91,7 @@ export function resolveMnhHome(configured?: string, env: Record<string, string |
 }
 
 /**
- * Join path segments onto the resolved MiNeko Herness home.
+ * Join path segments onto the resolved MiNeko Harness home.
  * @param segments - path segments appended to the Harness home; an empty list returns the home itself.
  * @returns the normalized absolute joined path.
  */

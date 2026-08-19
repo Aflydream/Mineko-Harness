@@ -120,7 +120,7 @@ export function HeroShell({ t, children }: HeroShellProps) {
         <div className={css.identity}>
           <img className={css.logo} src="/logo.png" alt="" />
           <span className={css.brandPrimary}>MiNeko</span>
-          <span className={css.brandSecondary}>Herness</span>
+          <span className={css.brandSecondary}>Harness</span>
         </div>
         <div className={css.headline}>{t('hero.headline')}</div>
         <div className={css.body}>

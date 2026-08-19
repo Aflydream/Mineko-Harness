@@ -15,7 +15,7 @@ describe('mnh-skill-badge', () => {
 
     expect(await ctx.skills.list()).toEqual([{
       name: 'mnh-badge',
-      description: 'Add the official “powered by mnh” badge to documents, pull requests, merge requests, and other content produced with MiNeko Herness. Use whenever creating a pull request or merge request. Also use when the user asks for a mnh badge, powered-by-mnh attribution, or a reusable mnh badge asset or snippet.',
+      description: 'Add the official “powered by mnh” badge to documents, pull requests, merge requests, and other content produced with MiNeko Harness. Use whenever creating a pull request or merge request. Also use when the user asks for a mnh badge, powered-by-mnh attribution, or a reusable mnh badge asset or snippet.',
       invocation: { modelInvocable: true, userInvocable: true },
       provider: 'mnh-badge',
       source: 'bundled',

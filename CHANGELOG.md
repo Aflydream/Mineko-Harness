@@ -1,6 +1,6 @@
 # Changelog
 
-This file records user-visible changes in MiNeko Herness Windows desktop releases.
+This file records user-visible changes in MiNeko Harness Windows desktop releases.
 
 ## [0.1.0-rc.5] - 2026-08-17
 

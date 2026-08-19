@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import mineko_herness_runtime as runtime
+import mineko_harness_runtime as runtime
 import pytest
 
-from mineko_herness_runtime import (
+from mineko_harness_runtime import (
     RUNTIME_MODE_ENV_VAR,
     bundled_default_config_path,
     bundled_package_dir,

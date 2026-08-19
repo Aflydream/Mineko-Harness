@@ -259,7 +259,7 @@ describe('Python release workflows', () => {
       },
     })
     expect(pythonCompat.strategy).toMatchObject({ matrix: { python: ['3.10', '3.14'] } })
-    expect(JSON.stringify(pythonCompat.steps)).toContain('mineko-herness-sdk==${{ steps.compatibility-version.outputs.version }}')
+    expect(JSON.stringify(pythonCompat.steps)).toContain('mineko-harness-sdk==${{ steps.compatibility-version.outputs.version }}')
     const validateSteps = JSON.stringify(validate.steps)
     const authorize = validate.steps.filter(isRecord).find(step => step.name === 'Authorize publication request')
     if (!isRecord(authorize) || typeof authorize.run !== 'string') {

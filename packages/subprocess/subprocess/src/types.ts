@@ -9,13 +9,13 @@
 
 import type { Readable, Writable } from 'node:stream'
 
-/** Namespace prefix reserved for MiNeko Herness-managed child environment facts. */
+/** Namespace prefix reserved for MiNeko Harness-managed child environment facts. */
 export const MNH_ENV_PREFIX = 'MNH_' as const
 
 /** One environment key inside the managed {@link MNH_ENV_PREFIX} namespace. */
 export type MnhEnvironmentKey = `${typeof MNH_ENV_PREFIX}${string}`
 
-/** Trusted MiNeko Herness variables for one child-process execution. */
+/** Trusted MiNeko Harness variables for one child-process execution. */
 export type MnhEnvironment = Readonly<Record<MnhEnvironmentKey, string>>
 
 /** One captured stream: the (possibly truncated) text plus recovery info. */

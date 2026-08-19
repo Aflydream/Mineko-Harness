@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-e2b",
-  "description": "Shared E2B sandbox lifecycle for MiNeko Herness provider adapters",
+  "description": "Shared E2B sandbox lifecycle for MiNeko Harness provider adapters",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/e2b/e2b"
   },
   "type": "module",

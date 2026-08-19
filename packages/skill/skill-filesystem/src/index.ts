@@ -51,7 +51,7 @@ export interface Config {
   providerName?: string
   /** Whether project and user roots are included around custom roots. */
   includeDefaultRoots?: boolean
-  /** MiNeko Herness config root. Defaults to `$MNH_HOME` or `~/.mnh`. */
+  /** MiNeko Harness config root. Defaults to `$MNH_HOME` or `~/.mnh`. */
   mnhHome?: string
   /** Shared agent config root. Defaults to `$MNH_AGENTS_HOME` or `~/.agents`. */
   agentsHome?: string

@@ -57,9 +57,9 @@ export function prepareDesktopRelease({ root = repositoryRoot, eventName, refNam
   return {
     version,
     tag,
-    artifactName: `MiNeko-Herness-Setup-${version}.exe`,
-    bundleName: `mineko-herness-windows-${version}`,
-    releaseTitle: `MiNeko Herness v${version}`,
+    artifactName: `MiNeko-Harness-Setup-${version}.exe`,
+    bundleName: `mineko-harness-windows-${version}`,
+    releaseTitle: `MiNeko Harness v${version}`,
     prerelease: version.includes('-'),
     notes,
   }
@@ -80,7 +80,7 @@ function formatReleaseNotes({ version, changelogSection }) {
   return [
     '> Make Everything Happen',
     '>',
-    `> MiNeko Herness v${version} · Windows x64`,
+    `> MiNeko Harness v${version} · Windows x64`,
     '',
     '## What changed',
     '',
@@ -92,7 +92,7 @@ function formatReleaseNotes({ version, changelogSection }) {
     '',
     '| File | Description |',
     '| --- | --- |',
-    `| \`MiNeko-Herness-Setup-${version}.exe\` | Windows x64 installer |`,
+    `| \`MiNeko-Harness-Setup-${version}.exe\` | Windows x64 installer |`,
     '| `SHA256SUMS` | SHA-256 checksum for the installer |',
     '',
     'The installer is unsigned unless the repository has configured its Authenticode signing secrets.',

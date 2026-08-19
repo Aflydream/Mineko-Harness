@@ -1,9 +1,9 @@
 /**
- * Named wire types for the MiNeko Herness SDK runtime protocol: the three
+ * Named wire types for the MiNeko Harness SDK runtime protocol: the three
  * request/result pairs and the four server-to-client notification payloads
  * exchanged over the newline-delimited JSON-RPC stdio transport. The server
  * plugin (`@aflydream/mnh-sdk-jsonrpc-server`) and SDK clients share these shapes;
- * `serverInfo.name` stays the wire-stable `mineko-herness-sdk-runtime`.
+ * `serverInfo.name` stays the wire-stable `mineko-harness-sdk-runtime`.
  *
  * @module @aflydream/mnh-sdk-protocol/types
  */
@@ -26,7 +26,7 @@ export interface InitializeParams {
 
 /** Wire-stable server identity returned by initialization. */
 export interface InitializeResult {
-  /** Wire-stable server identity (`mineko-herness-sdk-runtime`) and version. */
+  /** Wire-stable server identity (`mineko-harness-sdk-runtime`) and version. */
   serverInfo: { name: string; version: string }
 }
 

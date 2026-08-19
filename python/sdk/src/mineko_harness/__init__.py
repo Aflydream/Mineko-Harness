@@ -1,11 +1,11 @@
-from .api import MiNekoHerness, MiNekoHernessConfig, RunResult, Session
+from .api import MiNekoHarness, MiNekoHarnessConfig, RunResult, Session
 from .client import HarnessClient, HarnessConfig
 from .errors import SdkProtocolError
 from .models import IncomingRequest, InitializeResponse, JsonObject, Notification, ServerInfo
 
 __all__ = [
-    "MiNekoHerness",
-    "MiNekoHernessConfig",
+    "MiNekoHarness",
+    "MiNekoHarnessConfig",
     "Session",
     "RunResult",
     "HarnessClient",

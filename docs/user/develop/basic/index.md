@@ -2,7 +2,7 @@
 
 English | [中文](index.zh.md)
 
-This tutorial creates a minimal MiNeko Herness plugin and loads it into the source Web profile. Start from a repository checkout that has completed the [run-from-source path](../../../../README.md#development). The Electron desktop uses the same plugin graph after a build, but `--patch` layers are applied at desktop startup and require a restart after edits; the live patch loop below is intentionally a Web-development workflow.
+This tutorial creates a minimal MiNeko Harness plugin and loads it into the source Web profile. Start from a repository checkout that has completed the [run-from-source path](../../../../README.md#development). The Electron desktop uses the same plugin graph after a build, but `--patch` layers are applied at desktop startup and require a restart after edits; the live patch loop below is intentionally a Web-development workflow.
 
 ## Create a local project
 
@@ -45,12 +45,12 @@ export function apply(ctx: Context) {
 
 ## Register it in cordis.yml
 
-Run `pwd` from the repository root, then create `scratch-plugin/cordis.yml` as a Web overlay that inserts the local plugin. Replace `/absolute/path/to/mineko-herness` below with the printed path:
+Run `pwd` from the repository root, then create `scratch-plugin/cordis.yml` as a Web overlay that inserts the local plugin. Replace `/absolute/path/to/mineko-harness` below with the printed path:
 
 ```yaml
 - insert:
     - id: hello
-      name: '/absolute/path/to/mineko-herness/scratch-plugin/src/my-plugin.ts'
+      name: '/absolute/path/to/mineko-harness/scratch-plugin/src/my-plugin.ts'
 ```
 
 The plugin path must be absolute. A patch file contributes configuration but does not change the profile directory from which the loader resolves module paths.

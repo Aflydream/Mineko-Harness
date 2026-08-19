@@ -549,7 +549,7 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY || notReady.length > 0)('web smoke
     await page.waitForFunction(() => document.body.innerText.length > 50, undefined, { timeout: 15_000 })
     expect(pageErrors).toEqual([])
     await page.waitForFunction(
-      () => document.title !== 'MiNeko Herness' && document.title.endsWith(' — MiNeko Herness'),
+      () => document.title !== 'MiNeko Harness' && document.title.endsWith(' — MiNeko Harness'),
       undefined,
       { timeout: 15_000 },
     )
@@ -561,7 +561,7 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY || notReady.length > 0)('web smoke
     if (sessionId === undefined) throw new Error('created Web session was not listed')
     const durableTitle = await waitForProviderTitle(baseUrl, sessionId)
     await page.waitForFunction(
-      expected => document.title === `${expected} — MiNeko Herness`,
+      expected => document.title === `${expected} — MiNeko Harness`,
       durableTitle,
       { timeout: 15_000 },
     )

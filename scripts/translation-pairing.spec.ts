@@ -158,10 +158,10 @@ describe('translation pairing switchers', () => {
   it('accepts only the canonical public URL for an absolute switcher', () => {
     const targets = languageSwitcherTargets('python/sdk/README.zh.md')
     const canonical = parseTranslationMarkdown(
-      '[中文](https://github.com/aflydream/mineko-herness/blob/main/python/sdk/README.zh.md)',
+      '[中文](https://github.com/aflydream/mineko-harness/blob/main/python/sdk/README.zh.md)',
     )
     const wrongPath = parseTranslationMarkdown(
-      '[中文](https://github.com/aflydream/mineko-herness/blob/main/other/README.zh.md)',
+      '[中文](https://github.com/aflydream/mineko-harness/blob/main/other/README.zh.md)',
     )
 
     expect(linksTo(canonical, targets)).toBe(true)
@@ -223,8 +223,8 @@ describe('translation scope discovery', () => {
     'packages/example/node_modules/dependency/README.md',
     'packages/example/lib/README.md',
     'coverage/report/README.md',
-    'python/sdk-runtime/src/mineko_herness_runtime/runtime/mnh-jsonrpc-agent-macos-arm64/README.md',
-    'python/sdk-runtime/src/mineko_herness_runtime/runtime/node/README.md',
+    'python/sdk-runtime/src/mineko_harness_runtime/runtime/mnh-jsonrpc-agent-macos-arm64/README.md',
+    'python/sdk-runtime/src/mineko_harness_runtime/runtime/node/README.md',
   ])('excludes non-source or non-README path %s', (file) => {
     expect(isTranslationScopeFile(file)).toBe(false)
   })

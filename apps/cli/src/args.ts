@@ -125,7 +125,7 @@ export function parseMnhArgs(argv: readonly string[], version: string): MnhInvoc
   program
     .name('mnh')
     .version(version, '-V, --version', 'output the version number')
-    .description('mnh: boot a MiNeko Herness profile — an ordered stack of plugin-bundle patch layers under your own overrides.')
+    .description('mnh: boot a MiNeko Harness profile — an ordered stack of plugin-bundle patch layers under your own overrides.')
     .addHelpText('after', HELP_EXAMPLES)
     .exitOverride()
     // The launcher's flags come first and end at the first token it does not

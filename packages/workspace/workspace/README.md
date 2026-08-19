@@ -2,7 +2,7 @@
 
 English | [中文](README.zh.md)
 
-Workspace entity registry (`ctx.workspaceRegistry`) for the MiNeko Herness: durable workspace records, stable workspace order, and a newest-first candidate session index stored through the domain data form. Consumers see the `Workspace` interface; the entity implementation stays package-private.
+Workspace entity registry (`ctx.workspaceRegistry`) for the MiNeko Harness: durable workspace records, stable workspace order, and a newest-first candidate session index stored through the domain data form. Consumers see the `Workspace` interface; the entity implementation stays package-private.
 
 The entity/storage rationale lives in the [domain Agent Note](../../../AgentGuide/architecture.md); header-only bootstrap and GUI ordering live in the [Workspace UI product-flow Agent Note](../../../AgentGuide/conventions.md).
 

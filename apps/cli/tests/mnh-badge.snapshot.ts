@@ -58,7 +58,7 @@ describe('mnh badge assembled snapshot', () => {
       A skill is a reusable set of task-specific instructions. The following skills are available in this session:
 
       <available_skills>
-      - \`mnh-badge\`: Add the official “powered by mnh” badge to documents, pull requests, merge requests, and other content produced with MiNeko Herness. Use whenever creating a pull request or merge request. Also use when the user asks for a mnh badge, powered-by-mnh attribution, or a reusable mnh badge asset or snippet.
+      - \`mnh-badge\`: Add the official “powered by mnh” badge to documents, pull requests, merge requests, and other content produced with MiNeko Harness. Use whenever creating a pull request or merge request. Also use when the user asks for a mnh badge, powered-by-mnh attribution, or a reusable mnh badge asset or snippet.
       </available_skills>
 
       If the user names a skill, or the task clearly matches a skill's description, call the \`skill\` tool with the exact skill name before taking task actions. Load all applicable skills, then follow their full instructions. This catalog contains summaries only; do not infer or follow a skill's instructions until it has been loaded.
@@ -85,14 +85,14 @@ describe('mnh badge assembled snapshot', () => {
 
       - Local PNG: [\`mnh-badge.png\`](mnh-badge.png), 726×120 source image; render at 121×20
       - Shields.io image URL: \`https://img.shields.io/badge/powered_by-mnh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white\`
-      - Project URL: \`https://github.com/aflydream/mineko-herness\`
+      - Project URL: \`https://github.com/aflydream/mineko-harness\`
 
       ## Markdown
 
       Use this linked badge in Markdown:
 
       \`\`\`markdown
-      [![](https://img.shields.io/badge/powered_by-mnh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/aflydream/mineko-herness)
+      [![](https://img.shields.io/badge/powered_by-mnh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/aflydream/mineko-harness)
       \`\`\`
 
       If attribution should not be linked, use:
@@ -124,14 +124,14 @@ describe('mnh badge assembled snapshot', () => {
 
       - Local PNG: [\`mnh-badge.png\`](mnh-badge.png), 726×120 source image; render at 121×20
       - Shields.io image URL: \`https://img.shields.io/badge/powered_by-mnh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white\`
-      - Project URL: \`https://github.com/aflydream/mineko-herness\`
+      - Project URL: \`https://github.com/aflydream/mineko-harness\`
 
       ## Markdown
 
       Use this linked badge in Markdown:
 
       \`\`\`markdown
-      [![](https://img.shields.io/badge/powered_by-mnh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/aflydream/mineko-herness)
+      [![](https://img.shields.io/badge/powered_by-mnh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/aflydream/mineko-harness)
       \`\`\`
 
       If attribution should not be linked, use:
@@ -157,7 +157,7 @@ describe('mnh badge assembled snapshot', () => {
           },
         },
         "summary": {
-          "description": "Add the official “powered by mnh” badge to documents, pull requests, merge requests, and other content produced with MiNeko Herness. Use whenever creating a pull request or merge request. Also use when the user asks for a mnh badge, powered-by-mnh attribution, or a reusable mnh badge asset or snippet.",
+          "description": "Add the official “powered by mnh” badge to documents, pull requests, merge requests, and other content produced with MiNeko Harness. Use whenever creating a pull request or merge request. Also use when the user asks for a mnh badge, powered-by-mnh attribution, or a reusable mnh badge asset or snippet.",
           "invocation": {
             "modelInvocable": true,
             "userInvocable": true,

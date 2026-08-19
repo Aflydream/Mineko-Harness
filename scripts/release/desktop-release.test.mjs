@@ -21,11 +21,11 @@ test('prepares the exact tagged prerelease and its changelog section', () => {
   assert.deepEqual(release, {
     version: '0.1.0-rc.5',
     tag: 'v0.1.0-rc.5',
-    artifactName: 'MiNeko-Herness-Setup-0.1.0-rc.5.exe',
-    bundleName: 'mineko-herness-windows-0.1.0-rc.5',
-    releaseTitle: 'MiNeko Herness v0.1.0-rc.5',
+    artifactName: 'MiNeko-Harness-Setup-0.1.0-rc.5.exe',
+    bundleName: 'mineko-harness-windows-0.1.0-rc.5',
+    releaseTitle: 'MiNeko Harness v0.1.0-rc.5',
     prerelease: true,
-    notes: '> Make Everything Happen\n>\n> MiNeko Herness v0.1.0-rc.5 · Windows x64\n\n## What changed\n\nReleased on 2026-08-17.\n\n### Added\n\n- Windows desktop.\n\n## Downloads\n\n| File | Description |\n| --- | --- |\n| `MiNeko-Herness-Setup-0.1.0-rc.5.exe` | Windows x64 installer |\n| `SHA256SUMS` | SHA-256 checksum for the installer |\n\nThe installer is unsigned unless the repository has configured its Authenticode signing secrets.\n',
+    notes: '> Make Everything Happen\n>\n> MiNeko Harness v0.1.0-rc.5 · Windows x64\n\n## What changed\n\nReleased on 2026-08-17.\n\n### Added\n\n- Windows desktop.\n\n## Downloads\n\n| File | Description |\n| --- | --- |\n| `MiNeko-Harness-Setup-0.1.0-rc.5.exe` | Windows x64 installer |\n| `SHA256SUMS` | SHA-256 checksum for the installer |\n\nThe installer is unsigned unless the repository has configured its Authenticode signing secrets.\n',
   })
 })
 
@@ -113,7 +113,7 @@ test('keeps manual dispatch dry-run and tag publication artifact-first', () => {
   assert.match(installerSmokeScript, /Start-Process -FilePath \$setup/)
   assert.match(installerSmokeScript, /installRoot = Join-Path \$workingRoot 'install'/)
   assert.match(installerSmokeScript, /ArgumentList @\('\/S', "\/D=\$installRoot"\)/)
-  assert.match(installerSmokeScript, /MiNekoHerness\.exe/)
+  assert.match(installerSmokeScript, /MiNekoHarness\.exe/)
   assert.match(installerSmokeScript, /resources\/app\.asar/)
   assert.match(installerSmokeScript, /Start-Process -FilePath \$application/)
   assert.match(installerSmokeScript, /AutomationElement/)
@@ -121,7 +121,7 @@ test('keeps manual dispatch dry-run and tag publication artifact-first', () => {
   assert.match(installerSmokeScript, /CloseMainWindow/)
   assert.match(installerSmokeScript, /Uninstall\*\.exe/)
   assert.match(installerSmokeScript, /left application files behind/)
-  assert.match(installerSmokeScript, /removed MiNeko Herness user data/)
+  assert.match(installerSmokeScript, /removed MiNeko Harness user data/)
   assert.ok(buildSteps.some(step => step.uses === 'actions/upload-artifact@v7'))
 
   const releaseSteps = workflow.jobs.release.steps
@@ -134,10 +134,10 @@ test('keeps manual dispatch dry-run and tag publication artifact-first', () => {
   assert.match(publish.run, /dist\/\$ARTIFACT_NAME/)
 
   assert.equal(builder.win.icon, 'mineko.ico')
-  assert.equal(builder.appId, 'com.aflydream.minekoherness')
-  assert.equal(builder.productName, 'MiNeko Herness')
-  assert.equal(builder.win.executableName, 'MiNekoHerness')
-  assert.equal(builder.nsis.shortcutName, 'MiNeko Herness')
+  assert.equal(builder.appId, 'com.aflydream.minekoharness')
+  assert.equal(builder.productName, 'MiNeko Harness')
+  assert.equal(builder.win.executableName, 'MiNekoHarness')
+  assert.equal(builder.nsis.shortcutName, 'MiNeko Harness')
   assert.ok(builder.extraResources.some(resource =>
     resource.from === 'mineko.ico' && resource.to === 'mineko.ico'))
   const staging = readFile(join(repositoryRoot, 'apps/desktop/scripts/stage-release.mjs'))

@@ -23,7 +23,7 @@ NotificationFilter: TypeAlias = Callable[[Notification], bool]
 
 @dataclass(slots=True)
 class HarnessConfig:
-    """Configuration for launching the local MiNeko Herness SDK runtime."""
+    """Configuration for launching the local MiNeko Harness SDK runtime."""
 
     runtime_bin: str | None = None
     bridge_bin: str | None = None
@@ -35,7 +35,7 @@ class HarnessConfig:
 
 
 class HarnessClient:
-    """Synchronous JSON-RPC client for the MiNeko Herness SDK runtime over stdio."""
+    """Synchronous JSON-RPC client for the MiNeko Harness SDK runtime over stdio."""
 
     def __init__(self, config: HarnessConfig | None = None) -> None:
         self.config = config or HarnessConfig()
@@ -108,7 +108,7 @@ class HarnessClient:
             proc.kill()
             proc.wait()
         self._proc = None
-        self._fail_waiters(self._runtime_closed_error("MiNeko Herness runtime closed"))
+        self._fail_waiters(self._runtime_closed_error("MiNeko Harness runtime closed"))
         if self._reader_thread and self._reader_thread.is_alive():
             self._reader_thread.join(timeout=0.5)
         if self._stderr_thread and self._stderr_thread.is_alive():
@@ -272,7 +272,7 @@ class HarnessClient:
                         diagnostics = self._runtime_diagnostics()
                         suffix = f"\n{diagnostics}" if diagnostics else ""
                         raise TimeoutError(
-                            f"{method} timed out waiting for MiNeko Herness runtime{suffix}"
+                            f"{method} timed out waiting for MiNeko Harness runtime{suffix}"
                         )
                     wait_timeout = remaining if wait_timeout is None else min(wait_timeout, remaining)
                 try:
@@ -298,14 +298,14 @@ class HarnessClient:
     def _write_message(self, message: JsonObject) -> None:
         proc = self._proc
         if proc is None or proc.stdin is None:
-            raise TransportClosedError("MiNeko Herness runtime is not running")
+            raise TransportClosedError("MiNeko Harness runtime is not running")
         try:
             payload = json.dumps(message, separators=(",", ":")) + "\n"
             with self._write_lock:
                 proc.stdin.write(payload)
                 proc.stdin.flush()
         except Exception as exc:
-            raise self._runtime_closed_error("Failed to write to MiNeko Herness runtime") from exc
+            raise self._runtime_closed_error("Failed to write to MiNeko Harness runtime") from exc
 
     def _start_reader_thread(self) -> None:
         self._reader_thread = threading.Thread(target=self._reader_loop, name="mnh-runtime-reader", daemon=True)
@@ -331,7 +331,7 @@ class HarnessClient:
         except BaseException as exc:
             self._fail_waiters(exc)
         finally:
-            self._fail_waiters(self._runtime_closed_error("MiNeko Herness runtime stdout closed"))
+            self._fail_waiters(self._runtime_closed_error("MiNeko Harness runtime stdout closed"))
 
     def _stderr_loop(self) -> None:
         proc = self._proc
@@ -427,11 +427,11 @@ class HarnessClient:
         if self.config.bridge_bin is not None:
             return (self.config.bridge_bin,)
         try:
-            from mineko_herness_runtime import resolve_bundled_launch_args
+            from mineko_harness_runtime import resolve_bundled_launch_args
         except ImportError as exc:
             raise FileNotFoundError(
-                "Unable to locate the bundled MiNeko Herness SDK runtime. "
-                "Install mineko-herness-runtime-bin or set HarnessConfig.runtime_bin."
+                "Unable to locate the bundled MiNeko Harness SDK runtime. "
+                "Install mineko-harness-runtime-bin or set HarnessConfig.runtime_bin."
             ) from exc
         return resolve_bundled_launch_args()
 
@@ -449,7 +449,7 @@ class HarnessClient:
         if not uses_bundled_runtime or env.get("MNH_CORDIS_CONFIG"):
             return
         # _default_launch_args already imported the package or raised its install error.
-        from mineko_herness_runtime import bundled_default_config_path
+        from mineko_harness_runtime import bundled_default_config_path
 
         env["MNH_CORDIS_CONFIG"] = str(bundled_default_config_path())
 

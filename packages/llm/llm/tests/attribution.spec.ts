@@ -19,9 +19,9 @@ describe('APP_IDENTITY', () => {
 
   it('carries only static public product facts', () => {
     expect(APP_IDENTITY).toEqual({
-      product: 'mineko-herness',
+      product: 'mineko-harness',
       version: manifest.version,
-      url: 'https://github.com/aflydream/mineko-herness',
+      url: 'https://github.com/aflydream/mineko-harness',
     })
   })
 })
@@ -29,7 +29,7 @@ describe('APP_IDENTITY', () => {
 describe('userAgent', () => {
   it('renders product/version with the +url comment', () => {
     expect(userAgent()).toBe(
-      `mineko-herness/${manifest.version} (+https://github.com/aflydream/mineko-herness)`,
+      `mineko-harness/${manifest.version} (+https://github.com/aflydream/mineko-harness)`,
     )
   })
 

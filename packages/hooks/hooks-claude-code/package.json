@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-hooks-claude-code",
-  "description": "Bridge plugin: run a Claude Code hooks.json / settings hook config on the MiNeko Herness interception seams",
+  "description": "Bridge plugin: run a Claude Code hooks.json / settings hook config on the MiNeko Harness interception seams",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/hooks/hooks-claude-code"
   },
   "type": "module",

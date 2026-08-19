@@ -27,7 +27,7 @@ import {
   type NormalizeContext,
 } from '@aflydream/mnh-acp-snapshot'
 import { resolveExampleLaunch } from '@aflydream/mnh-loader-smoke'
-import { MiNekoHerness, type HarnessNotification, type RunResult } from '@aflydream/mnh-sdk-client'
+import { MiNekoHarness, type HarnessNotification, type RunResult } from '@aflydream/mnh-sdk-client'
 
 const testsDir = dirOf(import.meta.url)
 const snapshotsDir = join(testsDir, 'snapshots')
@@ -292,7 +292,7 @@ async function runScenario(scenario: SdkScenario): Promise<{
     ...scenario.environment,
   }
 
-  const harness = new MiNekoHerness({
+  const harness = new MiNekoHarness({
     launch: {
       command: launch.command,
       args: launch.args,

@@ -33,7 +33,7 @@ function mount() {
 describe('AppRoot', () => {
   it('shows the loading page and never calls renderApp before settled', () => {
     const { container, queryByTestId, counts, getByText } = mount()
-    expect(getByText('MiNeko Herness')).toBeTruthy()
+    expect(getByText('MiNeko Harness')).toBeTruthy()
     expect(container.querySelector('img')?.getAttribute('src')).toBe('/logo.png')
     expect(queryByTestId('real-ui')).toBeNull()
     expect(counts()).toBe(0)
@@ -71,7 +71,7 @@ describe('AppRoot', () => {
     const { settled, getByTestId, queryByText, counts } = mount()
     act(() => { settled.set(true) })
     expect(getByTestId('real-ui')).toBeTruthy()
-    expect(queryByText('MiNeko Herness')).toBeNull()
+    expect(queryByText('MiNeko Harness')).toBeNull()
     expect(counts()).toBe(1)
   })
 })

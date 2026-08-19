@@ -81,4 +81,4 @@ ValidationError: invalid config:
 
 下一章：[组合与 HMR（热模块替换）](06-composition-and-hmr.md)：将 `cordis.yml` 视为应用。
 
-[![](https://img.shields.io/badge/powered_by-mnh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/aflydream/mineko-herness)
+[![](https://img.shields.io/badge/powered_by-mnh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/aflydream/mineko-harness)

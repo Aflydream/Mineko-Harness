@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-tool-fs",
-  "description": "Model-facing filesystem tools (read, write, edit) over the MiNeko Herness filesystem seam (ctx.fs)",
+  "description": "Model-facing filesystem tools (read, write, edit) over the MiNeko Harness filesystem seam (ctx.fs)",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/fs/tool-fs"
   },
   "type": "module",

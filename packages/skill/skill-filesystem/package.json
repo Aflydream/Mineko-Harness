@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-skill-filesystem",
-  "description": "Local filesystem skill provider for the MiNeko Herness",
+  "description": "Local filesystem skill provider for the MiNeko Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/skill/skill-filesystem"
   },
   "type": "module",

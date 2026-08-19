@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-code-runtime",
-  "description": "Abstract code-execution seam (ctx.codeRuntime) for the MiNeko Herness",
+  "description": "Abstract code-execution seam (ctx.codeRuntime) for the MiNeko Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/code-runtime/code-runtime"
   },
   "type": "module",

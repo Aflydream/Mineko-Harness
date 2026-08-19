@@ -97,7 +97,7 @@ jobs:
           ARTIFACT_NAME: ${{ steps.release.outputs.artifact_name }}
           EXPECT_SIGNED: ${{ secrets.WINDOWS_CSC_LINK != '' }}
         run: |
-          $setups = @(Get-ChildItem -LiteralPath release -File -Filter 'MiNeko-Herness-Setup-*.exe')
+          $setups = @(Get-ChildItem -LiteralPath release -File -Filter 'MiNeko-Harness-Setup-*.exe')
           if ($setups.Count -ne 1) {
             throw "Expected exactly one NSIS Setup executable, found $($setups.Count)."
           }

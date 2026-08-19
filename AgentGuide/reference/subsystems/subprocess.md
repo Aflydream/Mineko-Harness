@@ -20,7 +20,7 @@ type MnhEnvironmentKey = `${typeof MNH_ENV_PREFIX}${string}`
 ```
 
 ```ts type-equiv
-/** Trusted MiNeko Herness variables for one child-process execution. */
+/** Trusted MiNeko Harness variables for one child-process execution. */
 type MnhEnvironment = Readonly<Record<MnhEnvironmentKey, string>>
 ```
 

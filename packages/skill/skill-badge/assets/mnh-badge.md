@@ -6,14 +6,14 @@ Add the official “powered by mnh” badge without recreating or restyling it.
 
 - Local PNG: [`mnh-badge.png`](mnh-badge.png), 726×120 source image; render at 121×20
 - Shields.io image URL: `https://img.shields.io/badge/powered_by-mnh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white`
-- Project URL: `https://github.com/aflydream/mineko-herness`
+- Project URL: `https://github.com/aflydream/mineko-harness`
 
 ## Markdown
 
 Use this linked badge in Markdown:
 
 ```markdown
-[![](https://img.shields.io/badge/powered_by-mnh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/aflydream/mineko-herness)
+[![](https://img.shields.io/badge/powered_by-mnh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/aflydream/mineko-harness)
 ```
 
 If attribution should not be linked, use:

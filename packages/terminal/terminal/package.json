@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-terminal",
-  "description": "Persistent PTY session seam for the MiNeko Herness — owner-scoped ids, backend registry, interactive sends, reads, signals, and awaited cleanup",
+  "description": "Persistent PTY session seam for the MiNeko Harness — owner-scoped ids, backend registry, interactive sends, reads, signals, and awaited cleanup",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/terminal/terminal"
   },
   "type": "module",

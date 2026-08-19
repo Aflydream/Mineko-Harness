@@ -2,7 +2,7 @@
 
 [English](index.md) | 中文
 
-MiNeko Herness 通过两个面向用户的 profile 提供同一套由插件组合而成的 agent 产品。Windows 桌面端用 Electron 承载窗口，用 Node.js 承载 Host、agent、工具、会话和模型适配器；可选的 Web profile 则通过 HTTP 提供共享客户端。桌面 profile 不会启动 Web 服务器，也不需要浏览器地址。
+MiNeko Harness 通过两个面向用户的 profile 提供同一套由插件组合而成的 agent 产品。Windows 桌面端用 Electron 承载窗口，用 Node.js 承载 Host、agent、工具、会话和模型适配器；可选的 Web profile 则通过 HTTP 提供共享客户端。桌面 profile 不会启动 Web 服务器，也不需要浏览器地址。
 
 ## 开始之前
 
@@ -23,7 +23,7 @@ pnpm run build
 pnpm run desktop
 ```
 
-Electron 会直接打开 MiNeko Herness 窗口，不需要复制浏览器地址。Node.js 负责 agent 运行时，渲染器通过桌面桥接与其通信；桌面进程不会打开 HTTP、WebSocket 或其他 TCP 监听器。
+Electron 会直接打开 MiNeko Harness 窗口，不需要复制浏览器地址。Node.js 负责 agent 运行时，渲染器通过桌面桥接与其通信；桌面进程不会打开 HTTP、WebSocket 或其他 TCP 监听器。
 
 ## 启动可选的 Web profile
 

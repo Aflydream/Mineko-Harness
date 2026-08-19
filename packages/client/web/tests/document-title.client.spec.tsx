@@ -10,19 +10,19 @@ afterEach(() => {
 
 describe('DocumentTitle', () => {
   it('preserves the product title without a durable title and restores it on unmount', () => {
-    document.title = 'MiNeko Herness'
+    document.title = 'MiNeko Harness'
     const mounted = render(<DocumentTitle />)
-    expect(document.title).toBe('MiNeko Herness')
+    expect(document.title).toBe('MiNeko Harness')
 
     mounted.rerender(<DocumentTitle title="First title" />)
-    expect(document.title).toBe('First title — MiNeko Herness')
+    expect(document.title).toBe('First title — MiNeko Harness')
 
     mounted.rerender(<DocumentTitle title="Revised title" />)
-    expect(document.title).toBe('Revised title — MiNeko Herness')
+    expect(document.title).toBe('Revised title — MiNeko Harness')
 
     mounted.rerender(<DocumentTitle />)
-    expect(document.title).toBe('MiNeko Herness')
+    expect(document.title).toBe('MiNeko Harness')
     mounted.unmount()
-    expect(document.title).toBe('MiNeko Herness')
+    expect(document.title).toBe('MiNeko Harness')
   })
 })

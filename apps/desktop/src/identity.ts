@@ -1,10 +1,10 @@
 /** Stable Windows identity shared by the runtime and taskbar metadata. */
 
 /** User-visible product name used by the native desktop shell. */
-export const DESKTOP_APP_NAME = 'MiNeko Herness'
+export const DESKTOP_APP_NAME = 'MiNeko Harness'
 
 /** Stable AppUserModelId shared by development and packaged Windows launches. */
-export const DESKTOP_APP_USER_MODEL_ID = 'com.aflydream.minekoherness'
+export const DESKTOP_APP_USER_MODEL_ID = 'com.aflydream.minekoharness'
 
 /** The taskbar properties accepted by Electron's Windows-only API. */
 interface DesktopTaskbarDetails {

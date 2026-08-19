@@ -1,5 +1,5 @@
 /**
- * Fresh-process SDK subagent client. Drives one child MiNeko Herness
+ * Fresh-process SDK subagent client. Drives one child MiNeko Harness
  * runtime over stdio JSON-RPC through `@aflydream/mnh-sdk-client` and owns
  * cancellation and quiescent disposal. Structure mirrors the ACP backend
  * (`@aflydream/mnh-subagent-acp`): publish after the child handshake,
@@ -12,7 +12,7 @@
  */
 
 import { randomUUID } from 'node:crypto'
-import { MiNekoHerness, type HarnessNotification } from '@aflydream/mnh-sdk-client'
+import { MiNekoHarness, type HarnessNotification } from '@aflydream/mnh-sdk-client'
 import type { ContentBlock } from '@aflydream/mnh-llm'
 import { SessionId, type SessionEvent, type TurnEndReason } from '@aflydream/mnh-session'
 import type { SubagentResult, SubagentRun, SubagentStartRequest, SubagentStopReason } from '@aflydream/mnh-subagent'
@@ -115,7 +115,7 @@ export async function startSdkRun(request: SubagentStartRequest, spec: SdkRunSpe
   // (minted below, private to the wire) exists only inside the child process.
   const id = SessionId(randomUUID())
 
-  const harness = new MiNekoHerness({
+  const harness = new MiNekoHarness({
     launch: {
       command: spec.command,
       args: spec.args,

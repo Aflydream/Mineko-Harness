@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-anonymous-user-id",
-  "description": "Shared anonymous user identity for MiNeko Herness telemetry and feedback correlation",
+  "description": "Shared anonymous user identity for MiNeko Harness telemetry and feedback correlation",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/identity/anonymous-user-id"
   },
   "type": "module",

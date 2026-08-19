@@ -2,11 +2,11 @@
 
 English | [中文](README.zh.md)
 
-Shared filesystem path helpers for MiNeko Herness user data.
+Shared filesystem path helpers for MiNeko Harness user data.
 
 ## MNH home
 
-`resolveMnhHome()` resolves the single-root MiNeko Herness home. Precedence, highest first: an explicit configured path, `$MNH_HOME`, then `~/.mnh`. The harness keeps all user data under one root.
+`resolveMnhHome()` resolves the single-root MiNeko Harness home. Precedence, highest first: an explicit configured path, `$MNH_HOME`, then `~/.mnh`. The harness keeps all user data under one root.
 
 `mnhHomePath(...segments)` joins child segments onto that resolved home with Node's platform path rules. With no segments it returns the home itself.
 
@@ -14,7 +14,7 @@ Shared filesystem path helpers for MiNeko Herness user data.
 
 `MNH_HOME_DIR_NAME` owns the default user-data directory name: `.mnh`.
 
-`defaultMnhHome()` returns the default MiNeko Herness home by joining the operating-system home directory with `.mnh`, using Node's platform path rules.
+`defaultMnhHome()` returns the default MiNeko Harness home by joining the operating-system home directory with `.mnh`, using Node's platform path rules.
 
 `expandHomePath()` expands `~`, `~/...`, and Windows-style `~\...` prefixes against the operating-system home directory. It leaves non-tilde paths and `~user/...` untouched.
 

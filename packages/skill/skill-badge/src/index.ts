@@ -21,7 +21,7 @@ const RESOURCE_BASE = {
   path: fileURLToPath(new URL('../assets/', import.meta.url)),
 } as const
 const INVOCATION = { modelInvocable: true, userInvocable: true } as const
-const DESCRIPTION = 'Add the official “powered by mnh” badge to documents, pull requests, merge requests, and other content produced with MiNeko Herness. Use whenever creating a pull request or merge request. Also use when the user asks for a mnh badge, powered-by-mnh attribution, or a reusable mnh badge asset or snippet.'
+const DESCRIPTION = 'Add the official “powered by mnh” badge to documents, pull requests, merge requests, and other content produced with MiNeko Harness. Use whenever creating a pull request or merge request. Also use when the user asks for a mnh badge, powered-by-mnh attribution, or a reusable mnh badge asset or snippet.'
 const CANDIDATE: SkillCandidate = {
   name: 'mnh-badge',
   description: DESCRIPTION,

@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "MiNeko Herness",
+  "productName": "MiNeko Harness",
   "version": "0.1.0-rc.5",
-  "identifier": "com.aflydream.minekoherness",
+  "identifier": "com.aflydream.minekoharness",
   "build": {
     "frontendDist": "../../web/dist"
   },

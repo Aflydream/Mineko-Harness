@@ -22,7 +22,7 @@ Electron 运行时无法暴露 Node 的内部 ESM loader，因此 app boot 会�
 
 `build:native` 脚本保留 `apps/desktop/native` 下隔离的 Tauri/WebView2 原型；根目录与包内的启动命令都不会选择它。
 
-根构建通过后，`pnpm --filter @aflydream/mnh-desktop run package:win` 是唯一的 Windows 打包入口。它以 workspace 注入且禁用依赖脚本的方式，把 CLI 所有的 profile boot 及其生产依赖闭包部署到隔离的 staging 目录，拒绝任何解析到该目录外的链接，加载 staged app-boot 模块图，验证桌面 preload、Web 资源和 node-pty Windows 预构建文件，然后生成 `release/MiNeko-Herness-Setup-<version>.exe`。NSIS 安装器采用每用户的分步向导，允许选择安装目录，并创建桌面和开始菜单快捷方式。应用文件使用 ASAR，完整的 node-pty 包会被解包，使其 `.node`、ConPTY 和 WinPTY helper 可以执行。
+根构建通过后，`pnpm --filter @aflydream/mnh-desktop run package:win` 是唯一的 Windows 打包入口。它以 workspace 注入且禁用依赖脚本的方式，把 CLI 所有的 profile boot 及其生产依赖闭包部署到隔离的 staging 目录，拒绝任何解析到该目录外的链接，加载 staged app-boot 模块图，验证桌面 preload、Web 资源和 node-pty Windows 预构建文件，然后生成 `release/MiNeko-Harness-Setup-<version>.exe`。NSIS 安装器采用每用户的分步向导，允许选择安装目录，并创建桌面和开始菜单快捷方式。应用文件使用 ASAR，完整的 node-pty 包会被解包，使其 `.node`、ConPTY 和 WinPTY helper 可以执行。
 
 发布环境提供 Windows 代码签名证书时，electron-builder 会读取 `CSC_LINK` 和 `CSC_KEY_PASSWORD`。未提供这些变量时会按预期生成未签名安装包，Windows 可能通过 SmartScreen 显示警告。
 

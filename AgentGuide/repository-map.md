@@ -1,6 +1,6 @@
 # Repository Map
 
-MiNeko Herness separates product assemblies, plugin capabilities, runnable examples, platform support, and documentation. Start from the user-visible behavior and follow ownership inward.
+MiNeko Harness separates product assemblies, plugin capabilities, runnable examples, platform support, and documentation. Start from the user-visible behavior and follow ownership inward.
 
 ## Top-level directories
 

@@ -1,4 +1,4 @@
-# MiNeko Herness 架构
+# MiNeko Harness 架构
 
 [English](architecture.md) | 中文
 

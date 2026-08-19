@@ -1,5 +1,5 @@
 /**
- * OpenTelemetry Service Provider for the MiNeko Herness telemetry capability.
+ * OpenTelemetry Service Provider for the MiNeko Harness telemetry capability.
  *
  * Composes the OTel JS SDK as-is — a `LoggerProvider` with a
  * `BatchLogRecordProcessor` and an OTLP/HTTP log exporter — and maps each

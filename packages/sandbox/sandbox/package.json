@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-sandbox",
-  "description": "Abstract process-sandbox seam (ctx.sandbox) for the MiNeko Herness: same-world confinement vocabulary and the SandboxProvider contract",
+  "description": "Abstract process-sandbox seam (ctx.sandbox) for the MiNeko Harness: same-world confinement vocabulary and the SandboxProvider contract",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/sandbox/sandbox"
   },
   "type": "module",

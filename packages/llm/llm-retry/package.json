@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-llm-retry",
-  "description": "Provider-routed LLM request retry policy for the MiNeko Herness",
+  "description": "Provider-routed LLM request retry policy for the MiNeko Harness",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/llm/llm-retry"
   },
   "type": "module",

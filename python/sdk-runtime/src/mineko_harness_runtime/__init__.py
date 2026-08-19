@@ -1,4 +1,4 @@
-"""Locate the bundled MiNeko Herness SDK runtime shipped with this package.
+"""Locate the bundled MiNeko Harness SDK runtime shipped with this package.
 
 Two runtime carriers coexist under ``runtime/``, both injected by the repo's
 ``scripts/build-exe-for-python-sdk.ts`` build (neither is checked into git):
@@ -27,7 +27,7 @@ import shutil
 import sys
 from pathlib import Path
 
-PACKAGE_METADATA_FILENAME = "mineko-herness-runtime.json"
+PACKAGE_METADATA_FILENAME = "mineko-harness-runtime.json"
 
 RUNTIME_MODE_ENV_VAR = "MNH_RUNTIME_MODE"
 
@@ -36,7 +36,7 @@ _ARCH_TAGS = {"x86_64": "x64", "amd64": "x64", "arm64": "arm64", "aarch64": "arm
 
 _EXE_ACQUISITION_HINT = (
     "Two ways to get the executable: run `scripts/build-exe-for-python-sdk.ts` (via tsx) in a "
-    "mineko-herness checkout, or install the matching `mineko-herness-runtime-bin` platform "
+    "mineko-harness checkout, or install the matching `mineko-harness-runtime-bin` platform "
     "wheel retained by the `build-exe-for-python-sdk` CI workflow. For local development "
     "against a repo source build, explicitly select the dev-only node carrier with "
     f"{RUNTIME_MODE_ENV_VAR}=node (or resolve_bundled_launch_args('node'))."
@@ -48,7 +48,7 @@ def bundled_package_dir() -> Path:
     root = Path(__file__).resolve().parent
     metadata = root / PACKAGE_METADATA_FILENAME
     if not metadata.is_file():
-        raise FileNotFoundError(f"mineko-herness-runtime-bin is missing {metadata}")
+        raise FileNotFoundError(f"mineko-harness-runtime-bin is missing {metadata}")
     return root
 
 
@@ -62,7 +62,7 @@ def bundled_default_config_path() -> Path:
     path = bundled_package_dir() / "runtime" / "cordis.yml"
     if not path.is_file():
         raise FileNotFoundError(
-            f"mineko-herness-runtime-bin is missing the default runtime config at {path}"
+            f"mineko-harness-runtime-bin is missing the default runtime config at {path}"
         )
     return path
 
@@ -80,14 +80,14 @@ def bundled_runtime_path() -> Path:
     path = bundled_package_dir() / "runtime" / f"mnh-jsonrpc-agent-pkg-{tag}"
     if not path.is_file():
         raise FileNotFoundError(
-            f"mineko-herness-runtime-bin is missing the runtime executable at {path}. "
+            f"mineko-harness-runtime-bin is missing the runtime executable at {path}. "
             + _EXE_ACQUISITION_HINT
         )
     if tag.startswith("macos-"):
         helper = Path(f"{path}-spawn-helper")
         if not helper.is_file():
             raise FileNotFoundError(
-                f"mineko-herness-runtime-bin is missing the node-pty spawn helper at {helper}. "
+                f"mineko-harness-runtime-bin is missing the node-pty spawn helper at {helper}. "
                 + _EXE_ACQUISITION_HINT
             )
     return path
@@ -111,7 +111,7 @@ def resolve_bundled_launch_args(mode: str | None = None) -> tuple[str, ...]:
     if selected == "node":
         return _node_launch_args()
     raise ValueError(
-        f"unsupported MiNeko Herness runtime mode {selected!r}: expected 'exe' or 'node' "
+        f"unsupported MiNeko Harness runtime mode {selected!r}: expected 'exe' or 'node' "
         f"(explicit argument or ${RUNTIME_MODE_ENV_VAR})"
     )
 
@@ -141,7 +141,7 @@ def _node_launch_args() -> tuple[str, str]:
     if not bin_js.is_file():
         raise FileNotFoundError(
             f"the dev-only node runtime closure is missing at {node_root} "
-            f"(no {bin_js}); run `scripts/build-exe-for-python-sdk.ts` in a mineko-herness "
+            f"(no {bin_js}); run `scripts/build-exe-for-python-sdk.ts` in a mineko-harness "
             "checkout, which builds and copies the deploy closure here. The node carrier "
             "is for repo-local development only — production uses the single-file exe."
         )

@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-host-directory-picker-native",
-  "description": "Native-OS-chooser backend of the directory-picker seam for the MiNeko Herness web GUI host",
+  "description": "Native-OS-chooser backend of the directory-picker seam for the MiNeko Harness web GUI host",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/host/directory-picker-native"
   },
   "type": "module",

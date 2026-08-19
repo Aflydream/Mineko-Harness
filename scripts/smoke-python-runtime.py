@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Callable
 
 if TYPE_CHECKING:
-    from mineko_herness import RunResult
+    from mineko_harness import RunResult
 
 
 EXPECTED_TEXT = "runtime smoke ok"
@@ -511,12 +511,12 @@ def main() -> None:
 
 
 def smoke_sdk_default(base_url: str) -> None:
-    from mineko_herness import MiNekoHerness
+    from mineko_harness import MiNekoHarness
 
     with tempfile.TemporaryDirectory(prefix="mnh-sdk-default-") as temporary:
         root = Path(temporary).resolve()
         sessions = root / "sessions"
-        with MiNekoHerness(
+        with MiNekoHarness(
             provider="deepseek-official",
             model="smoke-model",
             cwd=str(root),
@@ -531,14 +531,14 @@ def smoke_sdk_default(base_url: str) -> None:
 
 
 def smoke_sdk_custom(base_url: str, executable: Path) -> None:
-    from mineko_herness import MiNekoHerness
+    from mineko_harness import MiNekoHarness
 
     with tempfile.TemporaryDirectory(prefix="mnh-sdk-custom-") as temporary:
         root = Path(temporary).resolve()
         sessions = root / "sessions"
         cordis = root / "cordis.yml"
         cordis.write_text(CUSTOM_CORDIS)
-        with MiNekoHerness(
+        with MiNekoHarness(
             provider="deepseek-official",
             model="smoke-model",
             cwd=str(root),
@@ -560,14 +560,14 @@ def smoke_sdk_custom(base_url: str, executable: Path) -> None:
 
 def smoke_sdk_minimal(base_url: str, executable: Path) -> None:
     """Exercise the checked-in minimal composition through the packaged executable."""
-    from mineko_herness import MiNekoHerness
+    from mineko_harness import MiNekoHarness
 
     with tempfile.TemporaryDirectory(prefix="mnh-sdk-minimal-") as temporary:
         root = Path(temporary).resolve()
         editor_path = root / "created.txt"
         prompt = f"{MINIMAL_PROMPT}\n{MINIMAL_EDITOR_PATH_PREFIX}{editor_path}"
         sessions = root / "sessions"
-        with MiNekoHerness(
+        with MiNekoHarness(
             provider="deepseek-official",
             model="smoke-model",
             cwd=str(root),
@@ -590,14 +590,14 @@ def smoke_sdk_minimal(base_url: str, executable: Path) -> None:
 
 def smoke_sdk_snapshot(base_url: str, executable: Path, update_snapshots: bool) -> None:
     """Drive and compare the advanced SDK/executable behavioral snapshot."""
-    from mineko_herness import MiNekoHerness
+    from mineko_harness import MiNekoHarness
 
     with tempfile.TemporaryDirectory(prefix="mnh-sdk-snapshot-") as temporary:
         root = Path(temporary).resolve()
         sessions = root / "sessions"
         cordis = root / "cordis.yml"
         cordis.write_text(CUSTOM_CORDIS)
-        with MiNekoHerness(
+        with MiNekoHarness(
             provider="deepseek-official",
             model="smoke-model",
             cwd=str(root),

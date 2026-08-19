@@ -1,5 +1,5 @@
-appId: com.aflydream.minekoherness
-productName: MiNeko Herness
+appId: com.aflydream.minekoharness
+productName: MiNeko Harness
 electronVersion: 43.4.0
 asar: true
 npmRebuild: false
@@ -18,7 +18,7 @@ extraResources:
 asarUnpack:
   - '**/node_modules/node-pty/**/*'
 win:
-  executableName: MiNekoHerness
+  executableName: MiNekoHarness
   target:
     - target: nsis
       arch:
@@ -26,15 +26,15 @@ win:
   icon: mineko.ico
   requestedExecutionLevel: asInvoker
 nsis:
-  artifactName: MiNeko-Herness-Setup-${version}.${ext}
+  artifactName: MiNeko-Harness-Setup-${version}.${ext}
   oneClick: false
   perMachine: false
   allowElevation: false
   allowToChangeInstallationDirectory: true
   createDesktopShortcut: true
   createStartMenuShortcut: true
-  shortcutName: MiNeko Herness
-  uninstallDisplayName: MiNeko Herness
+  shortcutName: MiNeko Harness
+  uninstallDisplayName: MiNeko Harness
   deleteAppDataOnUninstall: false
   differentialPackage: false
   runAfterFinish: true

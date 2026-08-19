@@ -32,12 +32,12 @@ export function resolveCommands(args, env = process.env) {
       args: [pnpmEntry, 'install'],
     },
     {
-      label: 'Building MiNeko Herness',
+      label: 'Building MiNeko Harness',
       command: process.execPath,
       args: [pnpmEntry, 'run', 'build'],
     },
     {
-      label: 'Starting MiNeko Herness Web',
+      label: 'Starting MiNeko Harness Web',
       command: process.execPath,
       args: ['apps/cli/lib/bin.js', 'web', ...webArgs],
     },

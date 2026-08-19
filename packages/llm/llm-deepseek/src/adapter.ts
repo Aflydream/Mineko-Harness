@@ -285,12 +285,12 @@ export class DeepSeekAdapter extends LlmAdapter {
       'content-type': 'application/json',
       'accept': 'text/event-stream',
       ...attributionHeaders(),
-      'x-mineko-herness-user-id': String(userId),
+      'x-mineko-harness-user-id': String(userId),
       ...options.sessionId !== undefined
-        ? { 'x-mineko-herness-session-id': String(options.sessionId) }
+        ? { 'x-mineko-harness-session-id': String(options.sessionId) }
         : {},
       ...options.purpose === 'compaction'
-        ? { 'x-mineko-herness-compact': '1' }
+        ? { 'x-mineko-harness-compact': '1' }
         : {},
     }
 

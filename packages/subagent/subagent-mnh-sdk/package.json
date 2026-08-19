@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-subagent-mnh-sdk",
-  "description": "Out-of-process SDK subagent backend: drives a child MiNeko Herness runtime subprocess over stdio JSON-RPC through the TypeScript SDK client",
+  "description": "Out-of-process SDK subagent backend: drives a child MiNeko Harness runtime subprocess over stdio JSON-RPC through the TypeScript SDK client",
   "version": "0.1.0-rc.5",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/subagent/subagent-mnh-sdk"
   },
   "type": "module",

@@ -95,4 +95,4 @@ One ordering caveat: disposers start in reverse registration order, but multiple
 
 Next: [Services](03-services.md) — how plugins share capabilities.
 
-[![](https://img.shields.io/badge/powered_by-mnh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/aflydream/mineko-herness)
+[![](https://img.shields.io/badge/powered_by-mnh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/aflydream/mineko-harness)

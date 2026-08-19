@@ -30,9 +30,9 @@ uv run --project python/sdk pytest
 An interactive smoke test needs `DEEPSEEK_API_KEY` in the environment or repository-root `.env`:
 
 ```python
-from mineko_herness import MiNekoHerness
+from mineko_harness import MiNekoHarness
 
-with MiNekoHerness() as harness:
+with MiNekoHarness() as harness:
     print(harness.run("say hi").final_response)
 ```
 
@@ -47,7 +47,7 @@ See `python/sdk/tests/manual_sdk_agent_smoke.py` for a complete source-mode invo
 
 ## Build distributions
 
-The root `package.json` version is authoritative for both Python distributions. The staging script injects that version into both wheels and pins the SDK to the same `mineko-herness-runtime-bin` version.
+The root `package.json` version is authoritative for both Python distributions. The staging script injects that version into both wheels and pins the SDK to the same `mineko-harness-runtime-bin` version.
 
 Build the pure SDK wheel once and one runtime wheel on each native platform:
 
@@ -55,7 +55,7 @@ Build the pure SDK wheel once and one runtime wheel on each native platform:
 version="$(node -p "require('./package.json').version")"
 python scripts/build-python-release.py --package sdk --output-dir dist-python
 python scripts/build-python-release.py --package runtime --platform macos-arm64 --runtime-exe dist-exe/mnh-jsonrpc-agent-pkg-macos-arm64 --output-dir dist-python
-pip install --find-links dist-python mineko-herness-sdk=="$version"
+pip install --find-links dist-python mineko-harness-sdk=="$version"
 ```
 
 The runtime distribution is wheel-only. The release pipeline publishes three platform wheels with the pure SDK wheel: Linux x64, Linux arm64, and macOS 14 or newer on arm64. A `python-v<repository-version>` tag is accepted only when it matches the repository version; prerelease repository versions such as `0.0.1-rc.1` use their normalized PEP 440 spelling, such as `0.0.1rc1`, inside wheel filenames and metadata.

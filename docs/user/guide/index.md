@@ -2,7 +2,7 @@
 
 English | [中文](index.zh.md)
 
-MiNeko Herness runs the same plugin-composed agent product in two user-facing profiles. The Windows desktop uses Electron for the window and Node.js for the Host, agents, tools, sessions, and model adapters. The optional Web profile serves the shared client over HTTP. The desktop profile does not start a Web server and does not require a browser URL.
+MiNeko Harness runs the same plugin-composed agent product in two user-facing profiles. The Windows desktop uses Electron for the window and Node.js for the Host, agents, tools, sessions, and model adapters. The optional Web profile serves the shared client over HTTP. The desktop profile does not start a Web server and does not require a browser URL.
 
 ## Before you start
 
@@ -23,7 +23,7 @@ Run:
 pnpm run desktop
 ```
 
-Electron opens the MiNeko Herness window directly. There is no browser address to copy. Node.js owns the agent runtime, while the renderer communicates with it through the desktop bridge; the desktop process does not open an HTTP, WebSocket, or other TCP listener.
+Electron opens the MiNeko Harness window directly. There is no browser address to copy. Node.js owns the agent runtime, while the renderer communicates with it through the desktop bridge; the desktop process does not open an HTTP, WebSocket, or other TCP listener.
 
 ## Start the optional Web profile
 

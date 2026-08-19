@@ -43,7 +43,7 @@ interface WebOptions {
 function webCommand(): Command {
   return new Command()
     .name('mnh --profile web')
-    .description('Serve the MiNeko Herness browser UI.')
+    .description('Serve the MiNeko Harness browser UI.')
     .helpOption('-h, --help', 'show this help')
     .option('--host <host>', 'bind host; use 0.0.0.0 for trusted LAN/mobile access')
     .option('--port <port>', 'listen port; pass 0 to let the OS pick a free one')

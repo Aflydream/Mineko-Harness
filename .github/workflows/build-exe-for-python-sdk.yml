@@ -116,7 +116,7 @@ jobs:
 
   sdk-wheel:
     needs: plan
-    name: mineko_herness_sdk-${{ needs.plan.outputs.version }}-py3-none-any.whl
+    name: mineko_harness_sdk-${{ needs.plan.outputs.version }}-py3-none-any.whl
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -137,8 +137,8 @@ jobs:
 
       - uses: actions/upload-artifact@v7
         with:
-          name: mineko_herness_sdk-${{ needs.plan.outputs.version }}-py3-none-any.whl
-          path: dist-python/mineko_herness_sdk-${{ needs.plan.outputs.version }}-py3-none-any.whl
+          name: mineko_harness_sdk-${{ needs.plan.outputs.version }}-py3-none-any.whl
+          path: dist-python/mineko_harness_sdk-${{ needs.plan.outputs.version }}-py3-none-any.whl
           if-no-files-found: error
           retention-days: 7
 
@@ -233,9 +233,9 @@ jobs:
           exe="$PWD/dist-exe/mnh-jsonrpc-agent-pkg-$platform"
           [ -x "$exe" ] || { echo "::error::$exe missing or not executable"; exit 1; }
           case "$platform" in
-            linux-x64) wheel=mineko_herness_runtime_bin-$VERSION-py3-none-manylinux_2_28_x86_64.whl ;;
-            linux-arm64) wheel=mineko_herness_runtime_bin-$VERSION-py3-none-manylinux_2_28_aarch64.whl ;;
-            macos-arm64) wheel=mineko_herness_runtime_bin-$VERSION-py3-none-macosx_14_0_arm64.whl ;;
+            linux-x64) wheel=mineko_harness_runtime_bin-$VERSION-py3-none-manylinux_2_28_x86_64.whl ;;
+            linux-arm64) wheel=mineko_harness_runtime_bin-$VERSION-py3-none-manylinux_2_28_aarch64.whl ;;
+            macos-arm64) wheel=mineko_harness_runtime_bin-$VERSION-py3-none-macosx_14_0_arm64.whl ;;
             *) echo "::error::Unsupported runtime platform $platform"; exit 1 ;;
           esac
           echo "platform=$platform" >> "$GITHUB_OUTPUT"
@@ -259,7 +259,7 @@ jobs:
 
       - uses: actions/download-artifact@v8
         with:
-          name: mineko_herness_sdk-${{ needs.plan.outputs.version }}-py3-none-any.whl
+          name: mineko_harness_sdk-${{ needs.plan.outputs.version }}-py3-none-any.whl
           path: dist-python
 
       - name: Install only the SDK into a clean venv and run zero-config
@@ -270,7 +270,7 @@ jobs:
           python -m venv "$RUNNER_TEMP/mnh-sdk-smoke"
           "$RUNNER_TEMP/mnh-sdk-smoke/bin/python" -m pip install \
             --find-links dist-python \
-            mineko-herness-sdk=="$VERSION"
+            mineko-harness-sdk=="$VERSION"
           "$RUNNER_TEMP/mnh-sdk-smoke/bin/python" scripts/smoke-python-runtime.py \
             --scenario sdk-default
 
@@ -308,7 +308,7 @@ jobs:
           esac
           docker run --rm -e VERSION -e MNH_TELEMETRY_DISABLED -v "$PWD:/work" -w /work "$image" bash -euxo pipefail -c '
             /opt/python/cp310-cp310/bin/python -m venv /tmp/mnh-sdk
-            /tmp/mnh-sdk/bin/python -m pip install --find-links /work/dist-python mineko-herness-sdk=="$VERSION"
+            /tmp/mnh-sdk/bin/python -m pip install --find-links /work/dist-python mineko-harness-sdk=="$VERSION"
             /tmp/mnh-sdk/bin/python /work/scripts/smoke-python-runtime.py --scenario sdk-default
           '
 

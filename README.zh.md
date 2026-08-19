@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="logo.png" alt="MiNeko Herness 标志" width="112">
+  <img src="logo.png" alt="MiNeko Harness 标志" width="112">
 </p>
 
-<h1 align="center">MiNeko Herness</h1>
+<h1 align="center">MiNeko Harness</h1>
 
 <p align="center"><strong>Make Everything Happen</strong></p>
 
@@ -10,11 +10,11 @@
 
 [English](README.md)
 
-MiNeko Herness（`mnh`）是基于仓库内置 Cordis 插件运行时构建的独立 Agent Harness。Windows 桌面应用使用 Electron 承载界面，由 Node.js 运行 agent、插件、工具、会话和模型适配器。应用通过私有 `mnh://` 协议加载构建后的客户端，不会启动 Web 服务或 TCP 监听端口。
+MiNeko Harness（`mnh`）是基于仓库内置 Cordis 插件运行时构建的独立 Agent Harness。Windows 桌面应用使用 Electron 承载界面，由 Node.js 运行 agent、插件、工具、会话和模型适配器。应用通过私有 `mnh://` 协议加载构建后的客户端，不会启动 Web 服务或 TCP 监听端口。
 
-> **Windows-only 项目。** MiNeko Herness 面向 Windows 桌面端。目前没有 macOS 或 Linux 桌面版本计划。仓库中保留的非 Windows CI 只验证可复用的仓库组件，不代表桌面端支持这些平台。
+> **Windows-only 项目。** MiNeko Harness 面向 Windows 桌面端。目前没有 macOS 或 Linux 桌面版本计划。仓库中保留的非 Windows CI 只验证可复用的仓库组件，不代表桌面端支持这些平台。
 
-本项目基于 MIT 许可证从 DeepSeek Harness 衍生而来。MiNeko Herness 与 DeepSeek 不存在隶属或官方背书关系。
+本项目基于 MIT 许可证从 DeepSeek Harness 衍生而来。MiNeko Harness 与 DeepSeek 不存在隶属或官方背书关系。
 
 ## 仓库数据
 
@@ -91,7 +91,7 @@ pnpm run desktop
 
 欢迎提交 Issue 和 PR。Bug、功能、研究和任务都可以使用仓库现有的 Issue 模板。PR 应保持在 Windows 桌面端范围内，关联同一仓库的 Issue，说明用户可见变化，并附上针对性的验证结果。提交前请阅读[贡献指南](CONTRIBUTING.md)。
 
-MiNeko Herness 按 [MIT 许可证](LICENSE)发布。第三方包、内置源码及其许可证记录在 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)中。
+MiNeko Harness 按 [MIT 许可证](LICENSE)发布。第三方包、内置源码及其许可证记录在 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)中。
 
 ## 社区
 - [linux.do](https://linux.do/)

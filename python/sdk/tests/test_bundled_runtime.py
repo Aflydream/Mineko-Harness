@@ -10,9 +10,9 @@ from pathlib import Path
 
 import pytest
 
-from mineko_herness import MiNekoHerness, HarnessClient, HarnessConfig
-from mineko_herness.errors import TransportClosedError
-from mineko_herness_runtime import resolve_bundled_launch_args
+from mineko_harness import MiNekoHarness, HarnessClient, HarnessConfig
+from mineko_harness.errors import TransportClosedError
+from mineko_harness_runtime import resolve_bundled_launch_args
 
 _MODES = ("exe", "node")
 _REPO_ROOT = Path(__file__).parents[3]
@@ -79,14 +79,14 @@ def test_bundled_runtime_boots_a_cordis_config(tmp_path: Path, mode: str) -> Non
         init = client.initialize(provider="deepseek-official", cwd=str(tmp_path), model="deepseek-v4-pro")
 
     assert init.serverInfo is not None
-    assert init.serverInfo.name == "mineko-herness-sdk-runtime"
+    assert init.serverInfo.name == "mineko-harness-sdk-runtime"
 
 
 @pytest.mark.parametrize("mode", _MODES)
 def test_python_sdk_boots_minimal_jsonrpc_config(tmp_path: Path, mode: str) -> None:
     launch_args = _launch_args(mode)
     model = "minimal-environment-model"
-    harness = MiNekoHerness(
+    harness = MiNekoHarness(
         model=model,
         cwd=str(tmp_path),
         session_root=str(tmp_path / "sessions"),
@@ -136,7 +136,7 @@ def test_zero_config_run_injects_bundled_default_cordis_config(
     else:
         monkeypatch.setenv("MNH_CORDIS_CONFIG", ambient_config)
 
-    harness = MiNekoHerness(
+    harness = MiNekoHarness(
         model="deepseek-v4-pro",
         cwd=str(tmp_path),
         session_root=str(tmp_path / "sessions"),

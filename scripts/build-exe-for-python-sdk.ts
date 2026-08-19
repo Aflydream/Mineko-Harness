@@ -25,7 +25,7 @@ const DEFAULT_NODE_RANGE = 'node24'
 const PKG_SPEC = '@yao-pkg/pkg@6.21.0'
 const OUT_DIR = 'dist-exe'
 /** Python package destination; created when absent. */
-const PYTHON_RUNTIME_DIR = 'python/sdk-runtime/src/mineko_herness_runtime/runtime'
+const PYTHON_RUNTIME_DIR = 'python/sdk-runtime/src/mineko_harness_runtime/runtime'
 /** The deployed closure doubles as the node-mode carrier. */
 const PYTHON_NODE_SUBDIR = 'node'
 /** Legacy deploy may hoist peer-specialized workspace packages back here. */

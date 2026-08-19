@@ -17,8 +17,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SDK_DISTRIBUTION = "mineko-herness-sdk"
-RUNTIME_DISTRIBUTION = "mineko-herness-runtime-bin"
+SDK_DISTRIBUTION = "mineko-harness-sdk"
+RUNTIME_DISTRIBUTION = "mineko-harness-runtime-bin"
 PLATFORM_MANIFEST = ROOT / "python" / "sdk-runtime" / "platforms.json"
 
 
@@ -78,12 +78,12 @@ def main() -> None:
         if args.package == "sdk":
             stage_sdk(staging, wheel_version)
             environment = None
-            expected = output_dir / f"mineko_herness_sdk-{wheel_version}-py3-none-any.whl"
+            expected = output_dir / f"mineko_harness_sdk-{wheel_version}-py3-none-any.whl"
         else:
             platform_tag, executable_name = PLATFORMS[args.platform]
             stage_runtime(staging, wheel_version, args.runtime_exe.resolve(), executable_name)
             environment = {"MNH_RUNTIME_PLATFORM_TAG": platform_tag}
-            expected = output_dir / f"mineko_herness_runtime_bin-{wheel_version}-py3-none-{platform_tag}.whl"
+            expected = output_dir / f"mineko_harness_runtime_bin-{wheel_version}-py3-none-{platform_tag}.whl"
         command = ["uv", "build", "--wheel", "--out-dir", str(output_dir), str(staging)]
         subprocess.run(command, cwd=ROOT, env=None if environment is None else {**os.environ, **environment}, check=True)
     if not expected.is_file():
@@ -193,8 +193,8 @@ def stage_sdk(destination: Path, version: str) -> None:
     pyproject = destination / "pyproject.toml"
     rewrite_version(pyproject, version)
     text, count = re.subn(
-        r'"mineko-herness-runtime-bin==[^"]+"',
-        f'"mineko-herness-runtime-bin=={version}"',
+        r'"mineko-harness-runtime-bin==[^"]+"',
+        f'"mineko-harness-runtime-bin=={version}"',
         pyproject.read_text(),
         count=1,
     )
@@ -207,7 +207,7 @@ def stage_runtime(destination: Path, version: str, executable: Path, executable_
     copy_package(ROOT / "python" / "sdk-runtime", destination)
     stage_license_files(destination, include_notices=True)
     rewrite_version(destination / "pyproject.toml", version)
-    runtime_dir = destination / "src" / "mineko_herness_runtime" / "runtime"
+    runtime_dir = destination / "src" / "mineko_harness_runtime" / "runtime"
     runtime_dir.mkdir(parents=True, exist_ok=True)
     for suffix in runtime_suffixes(executable_name):
         shutil.copy2(Path(f"{executable}{suffix}"), runtime_dir / f"{executable_name}{suffix}")

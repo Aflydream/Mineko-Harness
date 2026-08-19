@@ -138,14 +138,14 @@ const sharedTheme: Pick<DefaultTheme.Config, 'search' | 'socialLinks' | 'editLin
     },
   },
   socialLinks: [
-    { icon: 'github', link: 'https://github.com/aflydream/mineko-herness' },
+    { icon: 'github', link: 'https://github.com/aflydream/mineko-harness' },
   ],
   editLink: {
     pattern: ({ frontmatter }: PageData) => {
       const data: unknown = frontmatter
       const editSource: unknown = typeof data === 'object' && data !== null ? Reflect.get(data, 'editSource') : undefined
       if (typeof editSource !== 'string') throw new Error('Projected documentation page has no editSource frontmatter.')
-      return `https://github.com/aflydream/mineko-herness/edit/main/${editSource}`
+      return `https://github.com/aflydream/mineko-harness/edit/main/${editSource}`
     },
     text: '在 GitHub 上编辑此页',
   },
@@ -212,11 +212,11 @@ const scrollbarScript = `
  * @returns Markup placed beside the navigation-bar home link.
  */
 function siteTitle(): string {
-  return '<span class="mnh-lockup"><span class="mnh-product-name">MiNeko Herness</span></span>'
+  return '<span class="mnh-lockup"><span class="mnh-product-name">MiNeko Harness</span></span>'
 }
 
 export default withMermaid({
-  title: 'MiNeko Herness',
+  title: 'MiNeko Harness',
   description: '用于构建 Agent Harness 的插件化 SDK',
   base,
   head: [
@@ -273,7 +273,7 @@ export default withMermaid({
             const data: unknown = frontmatter
             const editSource: unknown = typeof data === 'object' && data !== null ? Reflect.get(data, 'editSource') : undefined
             if (typeof editSource !== 'string') throw new Error('Projected documentation page has no editSource frontmatter.')
-            return `https://github.com/aflydream/mineko-herness/edit/main/${editSource}`
+            return `https://github.com/aflydream/mineko-harness/edit/main/${editSource}`
           },
           text: 'Edit this page on GitHub',
         },
@@ -288,7 +288,7 @@ export default withMermaid({
     publicDir: resolve(import.meta.dirname, '../public'),
     plugins: [
       {
-        name: 'mineko-herness-doc-projector',
+        name: 'mineko-harness-doc-projector',
         configureServer: watchCanonicalDocs,
       },
     ],

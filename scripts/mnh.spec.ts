@@ -13,12 +13,12 @@ describe('repository mnh launcher', () => {
         args: ['pnpm.cjs', 'install'],
       },
       {
-        label: 'Building MiNeko Herness',
+        label: 'Building MiNeko Harness',
         command: process.execPath,
         args: ['pnpm.cjs', 'run', 'build'],
       },
       {
-        label: 'Starting MiNeko Herness Web',
+        label: 'Starting MiNeko Harness Web',
         command: process.execPath,
         args: ['apps/cli/lib/bin.js', 'web', '--port', '3090'],
       },
