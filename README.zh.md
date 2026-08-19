@@ -92,3 +92,8 @@ pnpm run desktop
 欢迎提交 Issue 和 PR。Bug、功能、研究和任务都可以使用仓库现有的 Issue 模板。PR 应保持在 Windows 桌面端范围内，关联同一仓库的 Issue，说明用户可见变化，并附上针对性的验证结果。提交前请阅读[贡献指南](CONTRIBUTING.md)。
 
 MiNeko Herness 按 [MIT 许可证](LICENSE)发布。第三方包、内置源码及其许可证记录在 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)中。
+
+## 社区
+- [linux.do](linux,do)
+- QQ 群组
+> 暂未设立，即将推出
