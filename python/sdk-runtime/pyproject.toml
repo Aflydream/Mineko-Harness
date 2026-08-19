@@ -13,7 +13,7 @@ authors = [{ name = "Aflydream" }]
 
 [project.urls]
 Homepage = "https://github.com/aflydream/mineko-herness"
-Documentation = "https://github.com/aflydream/mineko-herness/blob/master/python/sdk-runtime/README.md"
+Documentation = "https://github.com/aflydream/mineko-herness/blob/main/python/sdk-runtime/README.md"
 Issues = "https://github.com/aflydream/mineko-herness/issues"
 Source = "https://github.com/aflydream/mineko-herness"
 

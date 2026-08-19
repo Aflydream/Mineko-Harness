@@ -375,7 +375,7 @@ function referencedImages(): string[] {
       route: page.route,
       pages: docsPages,
       repoRoot: root,
-      repositoryRef: 'master',
+      repositoryRef: 'main',
       placeImage: (absPath) => {
         const real = publishableImage(absPath, root)
         if (real !== undefined) found.add(real)
@@ -401,7 +401,7 @@ export function projectDocs(): void {
   const routes = new Set<string>()
   /** Projected path to the repository file that claimed it, pages and images alike. */
   const claimed = new Map<string, string>()
-  const repositoryRef = process.env.GITHUB_SHA ?? 'master'
+  const repositoryRef = process.env.GITHUB_SHA ?? 'main'
   rmSync(generatedRoot, { recursive: true, force: true })
 
   /** Reserve one projected path, refusing a second source for it. */

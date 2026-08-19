@@ -18,7 +18,7 @@ Use the [Issue templates](https://github.com/Aflydream/Mineko-Harness/issues/new
 
 ## Open a Pull Request
 
-- Fork the repository and create a focused branch from `master`.
+- Fork the repository and create a focused branch from `main`.
 - Open a Draft PR early when feedback would help, then mark it ready when the change is complete.
 - Reference at least one same-repository Issue in the PR body. Use `Fixes #NN` when the PR should close it, or `Related to #NN` when it only provides context.
 - Explain the user-visible change and include the narrowest relevant verification. For desktop changes, run `pnpm run build` and the focused desktop check when available.

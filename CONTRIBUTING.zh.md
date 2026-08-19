@@ -18,7 +18,7 @@ Bug、功能请求、研究和任务请使用 [Issue 模板](https://github.com/
 
 ## 提交 PR
 
-- Fork 仓库，并从 `master` 创建范围明确的分支。
+- Fork 仓库，并从 `main` 创建范围明确的分支。
 - 需要提前获得反馈时可以先提交 Draft PR，完成后再标记为 ready。
 - PR 正文至少关联一个同仓库 Issue。PR 应解决 Issue 时使用 `Fixes #NN`，仅提供上下文时使用 `Related to #NN`。
 - 说明用户可见变化，并附上范围最小的相关验证。桌面端变更应在条件允许时运行 `pnpm run build` 和针对性的桌面检查。
