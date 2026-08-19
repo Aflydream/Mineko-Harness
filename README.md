@@ -92,3 +92,6 @@ The [model setup guide](docs/user/guide/providers.md) covers built-in providers 
 Issues and pull requests are welcome. Use the repository's Issue templates for bugs, features, research, and tasks. Pull requests should stay within the Windows desktop scope, reference a same-repository Issue, describe the user-visible change, and include focused verification. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening one.
 
 MiNeko Herness is distributed under the [MIT License](LICENSE). Third-party packages, vendored sources, and license notices are recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+## Community
+- linux.do
