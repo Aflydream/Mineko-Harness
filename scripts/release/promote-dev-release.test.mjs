@@ -6,7 +6,7 @@ import { test } from 'node:test'
 
 const repositoryRoot = join(import.meta.dirname, '../..')
 
-test('promote workflow is manual, dev-only, and calls the Windows release workflow', () => {
+test('promote workflow creates a PR first and releases only after main receives the merge', () => {
   const workflow = yaml.load(readFileSync(join(repositoryRoot, '.github/workflows/promote-dev-release.yml'), 'utf8'))
 
   assert.deepEqual(workflow.on, {
@@ -19,41 +19,46 @@ test('promote workflow is manual, dev-only, and calls the Windows release workfl
         },
       },
     },
+    push: {
+      branches: ['main'],
+    },
   })
-  assert.deepEqual(workflow.permissions, { contents: 'write' })
+  assert.deepEqual(workflow.permissions, { contents: 'write', 'pull-requests': 'write' })
 
-  const promote = workflow.jobs.promote
-  assert.equal(promote['runs-on'], 'ubuntu-24.04')
-  assert.equal(promote.outputs.tag, '${{ steps.release.outputs.tag }}')
-  assert.equal(promote.steps[0].if, "github.ref != 'refs/heads/dev'")
+  const createPr = workflow.jobs['create-promotion-pr']
+  assert.equal(createPr.if, "github.event_name == 'workflow_dispatch'")
+  assert.equal(createPr['runs-on'], 'ubuntu-24.04')
+  assert.equal(createPr.steps[0].if, "github.ref != 'refs/heads/dev'")
 
-  const checkout = promote.steps.find(step => step.uses === 'actions/checkout@v6')
+  const checkout = createPr.steps.find(step => step.uses === 'actions/checkout@v6')
   assert.deepEqual(checkout.with, {
     ref: 'dev',
     'fetch-depth': 0,
-    'persist-credentials': true,
+    'persist-credentials': false,
   })
 
-  const prepare = promote.steps.find(step => step.name === 'Prepare the requested version')
-  assert.equal(prepare.run.includes('prepare-desktop-version.mjs --version'), true)
+  const verify = createPr.steps.find(step => step.name === 'Verify the existing dev commit is release-ready')
+  assert.equal(verify.run.includes('desktop-release.mjs'), true)
 
-  const promotionPush = promote.steps.find(step => step.name === 'Promote the prepared commit to dev and main')
-  assert.equal(
-    promotionPush.run,
-    'git push --atomic origin HEAD:refs/heads/dev HEAD:refs/heads/main',
-  )
+  const create = createPr.steps.find(step => step.name === 'Create or update the promotion PR')
+  assert.equal(create.run.includes('gh pr create'), true)
+  assert.equal(create.run.includes('gh pr edit'), true)
+  assert.equal(create.run.includes('git push'), false)
+  assert.equal(create.run.includes('git commit'), false)
 
-  const tag = promote.steps.find(step => step.name === 'Create the release tag')
+  const release = workflow.jobs['release-after-merge']
+  assert.equal(release.if, "github.event_name == 'push' && github.ref == 'refs/heads/main'")
+  const findPromotion = release.steps.find(step => step.name === 'Find the merged dev promotion PR')
+  assert.equal(findPromotion.run.includes('commits/$MERGE_SHA/pulls'), true)
+  const tag = release.steps.find(step => step.name === 'Create the release tag on the merged main commit')
   assert.equal(tag.run.includes('git push origin "$TAG"'), true)
 
-  assert.deepEqual(workflow.jobs.release, {
-    name: 'Build and publish Windows release',
-    needs: 'promote',
-    uses: './.github/workflows/desktop-release.yml',
-    with: {
-      ref: '${{ needs.promote.outputs.tag }}',
-      tag: '${{ needs.promote.outputs.tag }}',
-    },
-    secrets: 'inherit',
+  const publish = workflow.jobs['publish-windows-release']
+  assert.equal(publish.if, "needs.release-after-merge.outputs.enabled == 'true'")
+  assert.equal(publish.needs, 'release-after-merge')
+  assert.equal(publish.uses, './.github/workflows/desktop-release.yml')
+  assert.deepEqual(publish.with, {
+    ref: '${{ needs.release-after-merge.outputs.merge_sha }}',
+    tag: '${{ needs.release-after-merge.outputs.tag }}',
   })
 })

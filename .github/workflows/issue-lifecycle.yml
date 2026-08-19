@@ -44,15 +44,31 @@ jobs:
         with:
           ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false
+      - name: Check project automation configuration
+        id: configuration
+        shell: bash
+        env:
+          CLIENT_ID: ${{ vars.MNH_ISSUE_APP_CLIENT_ID }}
+          PRIVATE_KEY: ${{ secrets.MNH_ISSUE_APP_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          if [[ -n "$CLIENT_ID" && -n "$PRIVATE_KEY" ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Issue lifecycle automation is disabled until MNH_ISSUE_APP_CLIENT_ID and MNH_ISSUE_APP_PRIVATE_KEY are configured."
+          fi
       - name: Create project token
         id: app-token
+        if: steps.configuration.outputs.enabled == 'true'
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1
         with:
           client-id: ${{ vars.MNH_ISSUE_APP_CLIENT_ID }}
           private-key: ${{ secrets.MNH_ISSUE_APP_PRIVATE_KEY }}
-          owner: mineko-herness
-          repositories: mineko-herness
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
       - name: Handle repository event
+        if: steps.configuration.outputs.enabled == 'true'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: node .github/issue-management/policy.mjs lifecycle
