@@ -1,0 +1,83 @@
+{
+  "name": "@aflydream/mnh-client-runtime",
+  "description": "Client core services: SlotRegistry, SessionRuntime (scope tree + object layer)",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/client/runtime"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "mnh": {
+    "client": {
+      "inject": [
+        "@aflydream/mnh-client-connection",
+        "@aflydream/mnh-typert-registry",
+        "@aflydream/mnh-api-remotes"
+      ],
+      "platform": "web",
+      "immediately": true
+    }
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@aflydream/mnh-agent": "workspace:^",
+    "@aflydream/mnh-attachment": "workspace:^",
+    "@aflydream/mnh-client-connection": "workspace:^",
+    "@aflydream/mnh-commands": "workspace:^",
+    "@aflydream/mnh-client-ui-slots": "workspace:^",
+    "@aflydream/mnh-host-apiproxy": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-llm-retry": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-session-projection": "workspace:^",
+    "@aflydream/mnh-session-title": "workspace:^",
+    "@aflydream/mnh-tools": "workspace:^",
+    "immer": "^10.1.1",
+    "react": "^18.2.0",
+    "zustand": "~4.4.7"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "workspace:^",
+    "@aflydream/mnh-api-remotes": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-typert-protocol": "workspace:^",
+    "@aflydream/mnh-typert-registry": "workspace:^"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "workspace:^",
+    "@aflydream/mnh-api-remotes": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-timeout": "workspace:^",
+    "@aflydream/mnh-typert-protocol": "workspace:^",
+    "@aflydream/mnh-typert-registry": "workspace:^",
+    "@types/react": "~18.3.1"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/client.js",
+    "lib/types/**/*.d.ts"
+  ]
+}

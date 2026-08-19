@@ -1,0 +1,82 @@
+{
+  "name": "@aflydream/mnh-client-ui-workflow-run",
+  "description": "Durable workflow-run Conversation Node and nested member disclosure for mnh web",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/client/ui-workflow-run"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "mnh": {
+    "client": {
+      "inject": [
+        "@aflydream/mnh-client-locale",
+        "@aflydream/mnh-client-runtime",
+        "@aflydream/mnh-client-ui-conversation"
+      ],
+      "platform": "web"
+    }
+  },
+  "scripts": {
+    "bundle": "tsdown",
+    "watch": "tsdown --watch"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/client.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.2.0"
+  },
+  "peerDependencies": {
+    "@aflydream/mnh-client-locale": "workspace:^",
+    "@aflydream/mnh-client-runtime": "workspace:^",
+    "@aflydream/mnh-client-ui-conversation": "workspace:^",
+    "@aflydream/mnh-client-ui-primitives": "workspace:^",
+    "@aflydream/mnh-client-ui-slots": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-tool-workflow": "workspace:^",
+    "@aflydream/mnh-workflow": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@aflydream/mnh-client-locale": "workspace:^",
+    "@aflydream/mnh-client-runtime": "workspace:^",
+    "@aflydream/mnh-client-test-runtime": "workspace:^",
+    "@aflydream/mnh-client-ui-conversation": "workspace:^",
+    "@aflydream/mnh-client-ui-primitives": "workspace:^",
+    "@aflydream/mnh-client-ui-slots": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-tool-workflow": "workspace:^",
+    "@aflydream/mnh-workflow": "workspace:^",
+    "@types/react": "~18.3.1",
+    "@deepseek-ai/cordis": "workspace:^"
+  }
+}

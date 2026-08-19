@@ -1,0 +1,63 @@
+{
+  "name": "@aflydream/mnh-client-hmr",
+  "description": "Dev-only hot-reload driver for script-loaded client entries: SSE rebuilt frames → invalidate/prefetch → fiber swap through the vendored Loader entry",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/client/hmr"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "mnh": {
+    "client": {
+      "inject": [],
+      "platform": "web",
+      "immediately": true
+    }
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@deepseek-ai/schemastery": "workspace:^"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
+    "@aflydream/mnh-client-modules": "workspace:^",
+    "@aflydream/mnh-host-webserver": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
+    "@aflydream/mnh-client-modules": "workspace:^",
+    "@aflydream/mnh-host-webserver": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/client.js",
+    "lib/types/**/*.d.ts"
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "name": "@aflydream/mnh-client-ui-settings-plugins",
+  "description": "Plugins settings section with feature-owned tabs and configurable host-plane plugin cards",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/client/ui-settings-plugins"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "mnh": {
+    "client": {
+      "inject": [
+        "@aflydream/mnh-client-connection",
+        "@aflydream/mnh-client-locale",
+        "@aflydream/mnh-client-runtime",
+        "@aflydream/mnh-client-ui-settings",
+        "@aflydream/mnh-api-remotes"
+      ],
+      "platform": "web"
+    }
+  },
+  "scripts": {
+    "bundle": "tsdown",
+    "watch": "tsdown --watch"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "workspace:^",
+    "@aflydream/mnh-api-remotes": "workspace:^",
+    "@aflydream/mnh-client-connection": "workspace:^",
+    "@aflydream/mnh-client-locale": "workspace:^",
+    "@aflydream/mnh-client-runtime": "workspace:^",
+    "@aflydream/mnh-client-ui-primitives": "workspace:^",
+    "@aflydream/mnh-client-ui-settings": "workspace:^",
+    "@aflydream/mnh-client-ui-slots": "workspace:^",
+    "@aflydream/mnh-client-web-react": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "workspace:^",
+    "@aflydream/mnh-api-remotes": "workspace:^",
+    "@aflydream/mnh-client-connection": "workspace:^",
+    "@aflydream/mnh-client-locale": "workspace:^",
+    "@aflydream/mnh-client-runtime": "workspace:^",
+    "@aflydream/mnh-client-test-runtime": "workspace:^",
+    "@aflydream/mnh-client-ui-primitives": "workspace:^",
+    "@aflydream/mnh-client-ui-settings": "workspace:^",
+    "@aflydream/mnh-client-ui-slots": "workspace:^",
+    "@aflydream/mnh-client-web-react": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@types/react": "~18.3.1",
+    "react": "^18.2.0"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/client.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "dependencies": {
+    "clsx": "^2.0.0"
+  }
+}

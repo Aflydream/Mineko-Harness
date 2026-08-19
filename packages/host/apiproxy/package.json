@@ -1,0 +1,94 @@
+{
+  "name": "@aflydream/mnh-host-apiproxy",
+  "description": "API gateway: the ApiProxy contract (api/), the fetch carrier pair (fetch/), and the host-side gateway plugin providing ctx.apiProxy",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/host/apiproxy"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json",
+    "./api": {
+      "types": "./lib/types/api/index.d.ts",
+      "default": "./lib/types/api/index.js"
+    },
+    "./api/*": {
+      "types": "./lib/types/api/*.d.ts",
+      "default": "./lib/types/api/*.js"
+    },
+    "./client": {
+      "types": "./lib/types/fetch/client.d.ts",
+      "default": "./lib/types/fetch/client.js"
+    }
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@aflydream/mnh-attachment": "workspace:^",
+    "@aflydream/mnh-agent": "workspace:^",
+    "@aflydream/mnh-agent-default-model": "workspace:^",
+    "@aflydream/mnh-api-remotes": "workspace:^",
+    "@aflydream/mnh-brand": "workspace:^",
+    "@aflydream/mnh-commands": "workspace:^",
+    "@aflydream/mnh-credentials": "workspace:^",
+    "@aflydream/mnh-goal": "workspace:^",
+    "@aflydream/mnh-host-directory-picker": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-native-command": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-session-persistence": "workspace:^",
+    "@aflydream/mnh-session-projection": "workspace:^",
+    "@aflydream/mnh-session-projection-cache": "workspace:^",
+    "@aflydream/mnh-session-query": "workspace:^",
+    "@aflydream/mnh-session-title": "workspace:^",
+    "@aflydream/mnh-settings": "workspace:^",
+    "@aflydream/mnh-skill": "workspace:^",
+    "@aflydream/mnh-subagent": "workspace:^",
+    "@aflydream/mnh-jobs": "workspace:^",
+    "@aflydream/mnh-tools": "workspace:^",
+    "@aflydream/mnh-user-approval": "workspace:^",
+    "@aflydream/mnh-user-questions": "workspace:^",
+    "@aflydream/mnh-workspace": "workspace:^",
+    "@deepseek-ai/schemastery": "workspace:^",
+    "fflate": "^0.8.2",
+    "zod": "^4.4.3"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "workspace:^",
+    "@aflydream/mnh-agent-presets": "workspace:^",
+    "@aflydream/mnh-cordis-host-runner": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "workspace:^",
+    "@aflydream/mnh-agent-presets": "workspace:^",
+    "@aflydream/mnh-cordis-host-runner": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-storage": "workspace:^",
+    "@aflydream/mnh-storage-domain": "workspace:^",
+    "@aflydream/mnh-typert-protocol": "workspace:^",
+    "@aflydream/mnh-typert-registry": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  }
+}

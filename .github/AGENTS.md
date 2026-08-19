@@ -1,0 +1,3 @@
+# AGENTS.md — GitHub Actions
+
+Run jobs on Windows runners (`windows-*` labels) under native `pwsh`. The pull-request `windows` job is the required native blocking lane on `windows-2025`; `windows-native` runs the broader inventory on the hosted larger runner (or the self-hosted `[self-hosted, mnh-win-ci, windows]` pool under `MNH_CI_FAILOVER_WINDOWS=selfhosted`) but reports independently. The master `serial-windows` standby continuously validates the self-hosted failover target — see the [failover runbook](../AgentGuide/development.md). The optional local `pnpm run check:windows-wine` compatibility probe remains available, but Wine is not used as the Windows CI gate.

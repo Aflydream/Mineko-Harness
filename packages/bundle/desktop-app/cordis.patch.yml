@@ -1,0 +1,36 @@
+# The desktop layer reuses the complete browser roster and replaces only its
+# physical carrier. No webserver is mounted, so the Electron shell owns all
+# resources and API requests through a transferred MessagePort.
+
+- id: web-startup
+  disabled: true
+
+- id: webserver
+  disabled: true
+
+- id: web-runtime
+  disabled: true
+
+- id: client-hmr
+  disabled: true
+
+- id: directory-picker
+  disabled: true
+
+- insert:
+    - id: desktop-bridge
+      name: '@aflydream/mnh-host-desktop-bridge'
+    - id: desktop-directory-picker-backend
+      name: '@aflydream/mnh-host-directory-picker-browse'
+    - id: desktop-directory-picker-surface
+      name: '@aflydream/mnh-client-ui-directory-picker-browse'
+
+- id: connection
+  inject: []
+  config:
+    trustedHosts: []
+
+# Electron serves the graph through mnh:// and registers the route after the
+# host settles; the node half must not wait for the disabled WebServer.
+- id: modules
+  inject: []

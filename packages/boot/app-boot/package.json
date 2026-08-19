@@ -1,0 +1,66 @@
+{
+  "name": "@aflydream/mnh-app-boot",
+  "description": "Shared boot glue for the app bins: .env loading, fail-loud Loader guards, snapshot-aware config resolution, and the Loader boot sequence",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/boot/app-boot"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "js-yaml": "^4.2.0"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis-plugin-group": "workspace:^",
+    "@deepseek-ai/cordis-plugin-hmr": "workspace:^",
+    "@deepseek-ai/cordis-plugin-include": "workspace:^",
+    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
+    "@aflydream/mnh-launch-environment": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-home-paths": "workspace:^",
+    "@aflydream/mnh-system-prompt": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis-plugin-hmr": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis-plugin-group": "workspace:^",
+    "@deepseek-ai/cordis-plugin-hmr": "workspace:^",
+    "@deepseek-ai/cordis-plugin-include": "workspace:^",
+    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
+    "@deepseek-ai/cordis-plugin-timer": "workspace:^",
+    "@aflydream/mnh-launch-environment": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-home-paths": "workspace:^",
+    "@aflydream/mnh-system-prompt": "workspace:^",
+    "@types/js-yaml": "^4.0.9",
+    "@deepseek-ai/cordis": "workspace:^"
+  }
+}

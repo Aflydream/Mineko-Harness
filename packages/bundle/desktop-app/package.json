@@ -1,0 +1,40 @@
+{
+  "name": "@aflydream/mnh-desktop-app",
+  "description": "Electron desktop carrier layer over the shared Web client bundle",
+  "version": "0.1.0-rc.5",
+  "publishConfig": { "access": "public" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/bundle/desktop-app"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": { "types": "./lib/types/index.d.ts", "default": "./lib/index.js" },
+    "./invariant": { "types": "./lib/types/invariant.d.ts", "default": "./lib/invariant.js" },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": ["lib/index.js", "lib/invariant.js", "cordis.patch.yml", "lib/types/**/*.d.ts"],
+  "license": "MIT",
+  "mnh": { "bundle": { "patch": "./cordis.patch.yml" } },
+  "dependencies": {
+    "@aflydream/mnh-web-app": "workspace:^",
+    "@aflydream/mnh-host-desktop-bridge": "workspace:^",
+    "@aflydream/mnh-host-directory-picker-browse": "workspace:^",
+    "@aflydream/mnh-client-ui-directory-picker-browse": "workspace:^"
+  },
+  "peerDependencies": {
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^",
+    "@deepseek-ai/cordis-plugin-loader": "workspace:^"
+  },
+  "devDependencies": {
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^",
+    "@deepseek-ai/cordis-plugin-loader": "workspace:^"
+  }
+}

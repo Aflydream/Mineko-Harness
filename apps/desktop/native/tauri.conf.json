@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "MiNeko Herness",
+  "version": "0.1.0-rc.5",
+  "identifier": "com.aflydream.minekoherness",
+  "build": {
+    "frontendDist": "../../web/dist"
+  },
+  "app": {
+    "windows": [],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": false,
+    "icon": [
+      "icons/icon.ico"
+    ]
+  }
+}

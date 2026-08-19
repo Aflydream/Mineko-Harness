@@ -1,0 +1,115 @@
+{
+  "name": "@aflydream/mnh-client-ui-conversation",
+  "description": "Conversation domain: skeleton, ordered chat flow, composer with the Host-backed busy-Enter preference, and details host",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/client/ui-conversation"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "mnh": {
+    "client": {
+      "inject": [
+        "@aflydream/mnh-client-connection",
+        "@aflydream/mnh-client-locale",
+        "@aflydream/mnh-client-runtime",
+        "@aflydream/mnh-client-ui-settings",
+        "@aflydream/mnh-api-remotes",
+        "@aflydream/mnh-client-ui-layout"
+      ],
+      "platform": "web"
+    }
+  },
+  "scripts": {
+    "bundle": "tsdown",
+    "watch": "tsdown --watch"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@aflydream/mnh-settings": "workspace:^",
+    "clsx": "^2.0.0",
+    "@deepseek-ai/schemastery": "workspace:^"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "workspace:^",
+    "@aflydream/mnh-agent": "workspace:^",
+    "@aflydream/mnh-api-remotes": "workspace:^",
+    "@aflydream/mnh-attachment": "workspace:^",
+    "@aflydream/mnh-brand": "workspace:^",
+    "@aflydream/mnh-client-connection": "workspace:^",
+    "@aflydream/mnh-client-locale": "workspace:^",
+    "@aflydream/mnh-client-runtime": "workspace:^",
+    "@aflydream/mnh-client-ui-attachment": "workspace:^",
+    "@aflydream/mnh-client-ui-primitives": "workspace:^",
+    "@aflydream/mnh-client-ui-settings": "workspace:^",
+    "@aflydream/mnh-client-ui-input-trigger": "workspace:^",
+    "@aflydream/mnh-client-ui-slots": "workspace:^",
+    "@aflydream/mnh-commands": "workspace:^",
+    "@aflydream/mnh-compaction": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-llm-retry": "workspace:^",
+    "@aflydream/mnh-session-stats": "workspace:^",
+    "@aflydream/mnh-token-meter": "workspace:^",
+    "@aflydream/mnh-tools": "workspace:^",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "workspace:^",
+    "@aflydream/mnh-agent": "workspace:^",
+    "@aflydream/mnh-api-remotes": "workspace:^",
+    "@aflydream/mnh-attachment": "workspace:^",
+    "@aflydream/mnh-brand": "workspace:^",
+    "@aflydream/mnh-client-connection": "workspace:^",
+    "@aflydream/mnh-client-locale": "workspace:^",
+    "@aflydream/mnh-client-runtime": "workspace:^",
+    "@aflydream/mnh-client-test-runtime": "workspace:^",
+    "@aflydream/mnh-client-ui-layout": "workspace:^",
+    "@aflydream/mnh-client-ui-attachment": "workspace:^",
+    "@aflydream/mnh-client-ui-primitives": "workspace:^",
+    "@aflydream/mnh-client-ui-settings": "workspace:^",
+    "@aflydream/mnh-client-ui-input-trigger": "workspace:^",
+    "@aflydream/mnh-client-ui-slots": "workspace:^",
+    "@aflydream/mnh-commands": "workspace:^",
+    "@aflydream/mnh-compaction": "workspace:^",
+    "@aflydream/mnh-goal": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-llm-retry": "workspace:^",
+    "@aflydream/mnh-permission-presets": "workspace:^",
+    "@aflydream/mnh-plan-mode": "workspace:^",
+    "@aflydream/mnh-session-projection": "workspace:^",
+    "@aflydream/mnh-session-stats": "workspace:^",
+    "@aflydream/mnh-token-meter": "workspace:^",
+    "@aflydream/mnh-tool-todo": "workspace:^",
+    "@aflydream/mnh-tools": "workspace:^",
+    "@types/react": "~18.3.1",
+    "react": "^18.2.0"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/client.js",
+    "lib/types/**/*.d.ts"
+  ]
+}

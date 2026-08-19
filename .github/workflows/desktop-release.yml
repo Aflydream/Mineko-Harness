@@ -1,0 +1,155 @@
+# Build one Windows x64 NSIS installer. Manual dispatch is always a dry run;
+# pushing the matching v<version> tag publishes the validated artifact.
+name: Release (Windows desktop)
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  PRIMARY_NODE_VERSION: '24'
+  MNH_TELEMETRY_DISABLED: '1'
+
+jobs:
+  build:
+    name: Build and validate NSIS installer
+    runs-on: windows-2025
+    timeout-minutes: 60
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      tag: ${{ steps.release.outputs.tag }}
+      artifact_name: ${{ steps.release.outputs.artifact_name }}
+      bundle_name: ${{ steps.release.outputs.bundle_name }}
+      release_title: ${{ steps.release.outputs.release_title }}
+      prerelease: ${{ steps.release.outputs.prerelease }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/setup@v2
+        with:
+          dest: ${{ runner.temp }}/setup-pnpm
+          install: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.PRIMARY_NODE_VERSION }}
+          cache: pnpm
+
+      - name: Resolve and verify desktop release metadata
+        id: release
+        shell: pwsh
+        run: >-
+          node scripts/release/desktop-release.mjs
+          --notes-out .artifacts/desktop/RELEASE_NOTES.md
+          --github-output $env:GITHUB_OUTPUT
+
+      - name: Install (immutable)
+        run: pnpm install --frozen-lockfile
+
+      - name: Build application
+        run: pnpm run build
+
+      - name: Run built desktop smoke
+        run: pnpm run test:desktop:built
+
+      - name: Package Windows installer
+        env:
+          # electron-builder accepts a base64 certificate, file, or URL. Both
+          # repository secrets are optional; an unset pair produces an unsigned installer.
+          CSC_LINK: ${{ secrets.WINDOWS_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CSC_KEY_PASSWORD }}
+        run: pnpm --filter @aflydream/mnh-desktop run package:win
+
+      - name: Smoke-test NSIS install and uninstall
+        shell: pwsh
+        env:
+          ARTIFACT_NAME: ${{ steps.release.outputs.artifact_name }}
+        run: scripts/release/smoke-desktop-installer.ps1 -SetupPath "release/$env:ARTIFACT_NAME"
+
+      - name: Collect installer and checksum
+        shell: pwsh
+        env:
+          ARTIFACT_NAME: ${{ steps.release.outputs.artifact_name }}
+          EXPECT_SIGNED: ${{ secrets.WINDOWS_CSC_LINK != '' }}
+        run: |
+          $setups = @(Get-ChildItem -LiteralPath release -File -Filter 'MiNeko-Herness-Setup-*.exe')
+          if ($setups.Count -ne 1) {
+            throw "Expected exactly one NSIS Setup executable, found $($setups.Count)."
+          }
+          if ($setups[0].Name -cne $env:ARTIFACT_NAME) {
+            throw "Expected $env:ARTIFACT_NAME, found $($setups[0].Name)."
+          }
+          if ($env:EXPECT_SIGNED -eq 'true') {
+            $signature = Get-AuthenticodeSignature -LiteralPath $setups[0].FullName
+            if ($signature.Status -ne 'Valid') {
+              throw "Authenticode signature is $($signature.Status), expected Valid."
+            }
+          }
+          Copy-Item -LiteralPath $setups[0].FullName -Destination ".artifacts/desktop/$env:ARTIFACT_NAME"
+          $hash = (Get-FileHash -LiteralPath ".artifacts/desktop/$env:ARTIFACT_NAME" -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  $env:ARTIFACT_NAME" | Set-Content -LiteralPath .artifacts/desktop/SHA256SUMS -Encoding ascii
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ steps.release.outputs.bundle_name }}
+          path: .artifacts/desktop/*
+          if-no-files-found: error
+          retention-days: 7
+
+  release:
+    name: Publish GitHub Release
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: ${{ needs.build.outputs.bundle_name }}
+          path: dist
+
+      - name: Verify downloaded release artifact
+        env:
+          ARTIFACT_NAME: ${{ needs.build.outputs.artifact_name }}
+        run: |
+          set -euo pipefail
+          expected="$(printf '%s\n' RELEASE_NOTES.md SHA256SUMS "$ARTIFACT_NAME" | sort)"
+          actual="$(find dist -maxdepth 1 -type f -printf '%f\n' | sort)"
+          [ "$actual" = "$expected" ] || {
+            echo "::error::Desktop release artifact contains unexpected files."
+            diff -u <(printf '%s\n' "$expected") <(printf '%s\n' "$actual")
+            exit 1
+          }
+          cd dist
+          sha256sum -c SHA256SUMS
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ needs.build.outputs.tag }}
+          RELEASE_TITLE: ${{ needs.build.outputs.release_title }}
+          PRERELEASE: ${{ needs.build.outputs.prerelease }}
+          ARTIFACT_NAME: ${{ needs.build.outputs.artifact_name }}
+        run: |
+          set -euo pipefail
+          options=(--verify-tag --title "$RELEASE_TITLE" --notes-file dist/RELEASE_NOTES.md)
+          if [ "$PRERELEASE" = true ]; then
+            options+=(--prerelease)
+          fi
+          gh release create "$RELEASE_TAG" \
+            "dist/$ARTIFACT_NAME" \
+            dist/SHA256SUMS \
+            "${options[@]}"

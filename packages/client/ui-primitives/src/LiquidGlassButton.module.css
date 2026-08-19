@@ -1,0 +1,161 @@
+.button {
+  --mnh-liquid-x: 50%;
+  --mnh-liquid-y: 50%;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 999px;
+  isolation: isolate;
+  overflow: hidden;
+  box-sizing: border-box;
+  color: var(--dsw-alias-label-primary);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.64), rgba(255, 255, 255, 0.22)),
+    rgba(226, 231, 238, 0.34);
+  box-shadow:
+    0 10px 30px rgba(33, 40, 52, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(55, 63, 77, 0.12);
+  backdrop-filter: blur(18px) saturate(145%);
+  -webkit-backdrop-filter: blur(18px) saturate(145%);
+  cursor: pointer;
+  transform: translateZ(0);
+  transition:
+    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 280ms ease,
+    box-shadow 280ms ease;
+}
+
+.button::before {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  content: '';
+  background:
+    radial-gradient(80px 56px at var(--mnh-liquid-x) var(--mnh-liquid-y), rgba(255, 255, 255, 0.48), transparent 72%),
+    linear-gradient(120deg, rgba(255, 255, 255, 0.24), transparent 46%, rgba(130, 145, 169, 0.12));
+  opacity: 0.92;
+  transition: opacity 280ms ease;
+}
+
+.button::after {
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: inherit;
+  content: '';
+  pointer-events: none;
+}
+
+.liquid {
+  position: absolute;
+  top: calc(var(--mnh-liquid-y) - 42px);
+  left: calc(var(--mnh-liquid-x) - 54px);
+  width: 108px;
+  height: 84px;
+  border-radius: 48% 52% 62% 38%;
+  background:
+    radial-gradient(circle at 68% 28%, rgba(255, 255, 255, 0.64), transparent 24%),
+    radial-gradient(circle at 38% 68%, rgba(255, 255, 255, 0.28), transparent 58%);
+  filter: blur(8px);
+  mix-blend-mode: screen;
+  opacity: 0.58;
+  pointer-events: none;
+  transform: rotate(-14deg) scale(0.86);
+  transition: top 360ms cubic-bezier(0.22, 1, 0.36, 1), left 360ms cubic-bezier(0.22, 1, 0.36, 1), transform 360ms cubic-bezier(0.22, 1, 0.36, 1), opacity 280ms ease;
+}
+
+.edge {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  gap: 6px;
+}
+
+.icon,
+.trailing {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.button:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 14px 34px rgba(33, 40, 52, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94),
+    inset 0 -1px 0 rgba(55, 63, 77, 0.12);
+  transform: translateY(-1px) scale(1.012);
+}
+
+.button:hover:not(:disabled) .liquid {
+  opacity: 0.82;
+  transform: rotate(-8deg) scale(1.08);
+}
+
+.button:active:not(:disabled) {
+  box-shadow:
+    0 4px 14px rgba(33, 40, 52, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    inset 0 -1px 0 rgba(55, 63, 77, 0.18);
+  transform: translateY(1px) scale(0.975);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--dsw-alias-state-business-primary);
+  outline-offset: 3px;
+}
+
+.button:disabled {
+  cursor: default;
+  opacity: 0.62;
+}
+
+body[data-ds-dark-theme] .button {
+  border-color: rgba(255, 255, 255, 0.22);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05)),
+    rgba(20, 23, 30, 0.48);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+}
+
+body[data-ds-dark-theme] .button::before {
+  background:
+    radial-gradient(80px 56px at var(--mnh-liquid-x) var(--mnh-liquid-y), rgba(255, 255, 255, 0.22), transparent 72%),
+    linear-gradient(120deg, rgba(255, 255, 255, 0.1), transparent 46%, rgba(93, 111, 140, 0.18));
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .button {
+    background: var(--dsw-alias-button-floating-fill);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .button::before,
+  .liquid {
+    transition: none;
+  }
+}

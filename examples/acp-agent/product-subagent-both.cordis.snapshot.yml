@@ -1,0 +1,38 @@
+# Keyless twin of product-subagent-both.cordis.yml: preserve both product
+# tools while replacing only the external model adapter.
+- id: base
+  name: '@deepseek-ai/cordis-plugin-include'
+  config:
+    path: ./cordis.yml
+    patches:
+      - id: llm-deepseek
+        name: '@aflydream/mnh-llm-deepseek'
+        disabled: true
+      - insert:
+          - id: llm-replay
+            name: '@aflydream/mnh-llm-replay'
+            config:
+              providers:
+                - id: deepseek-official
+                  name: DeepSeek
+                  models:
+                    - id: deepseek-v4-flash
+                    - id: deepseek-v4-pro
+          - id: subagent-codex
+            name: '@aflydream/mnh-subagent-codex'
+          - id: subagent-claude-code
+            name: '@aflydream/mnh-subagent-claude-code'
+          - id: tool-subagent-codex
+            name: '@aflydream/mnh-tool-subagent'
+            config:
+              provider: codex
+              toolName: subagent_codex
+              enableRunInBackground: false
+              maxDepth: provider-managed
+          - id: tool-subagent-claude-code
+            name: '@aflydream/mnh-tool-subagent'
+            config:
+              provider: claude-code
+              toolName: subagent_claude_code
+              enableRunInBackground: false
+              maxDepth: provider-managed

@@ -1,0 +1,158 @@
+/* New Session hero: product identity, title, and workspace chip above the
+   shared InputBar card. */
+
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 0 24px;
+}
+
+/* Cap matches the InputBar card. Glow may paint past the sides. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  width: 100%;
+  max-width: var(--mnh-composer-card-max-width);
+  overflow: visible;
+}
+
+.identity {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 500;
+  text-align: center;
+  letter-spacing: 0.2px;
+}
+
+.logo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+body[data-ds-dark-theme] .logo {
+  filter: invert(1);
+}
+
+.brandPrimary {
+  font-weight: 650;
+  color: var(--dsw-alias-label-primary);
+}
+
+.brandSecondary {
+  color: var(--dsw-alias-label-tertiary);
+}
+
+.headline {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  line-height: 32px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  color: var(--dsw-alias-label-primary);
+}
+
+/* Workspace row sits above the input card. */
+.body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  overflow: visible;
+}
+
+.body > * {
+  position: relative;
+  z-index: 1;
+}
+
+.body > .workspaceRow {
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding-left: 8px;
+}
+
+/* Folder + label + chevron — standalone interactive pill */
+.workspace {
+  max-width: min(100%, 360px);
+  min-height: 32px;
+  padding: 0 10px 0 8px;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.workspace:disabled {
+  cursor: default;
+  opacity: 0.85;
+}
+
+.folder {
+  flex: none;
+  color: var(--dsw-static-deepseek-500);
+}
+
+.workspaceLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron {
+  flex: none;
+  color: var(--dsw-alias-label-caption);
+}
+
+.workspace[aria-expanded='true'] .chevron {
+  transform: rotate(180deg);
+}
+
+/* Dialog field */
+.modalInput {
+  box-sizing: border-box;
+  width: 100%;
+  height: 44px;
+  padding: 7px 14px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 22px;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  color: var(--dsw-alias-label-primary);
+}
+
+.modalInput::placeholder {
+  color: var(--dsw-alias-label-caption);
+}
+
+.modalInput:disabled {
+  color: var(--dsw-alias-label-dimmed);
+}
+
+.modalAction {
+  min-width: 72px;
+}
+
+.modalError {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dsw-alias-state-error-primary);
+}

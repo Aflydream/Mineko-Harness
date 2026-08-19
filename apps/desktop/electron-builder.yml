@@ -1,0 +1,44 @@
+appId: com.aflydream.minekoherness
+productName: MiNeko Herness
+electronVersion: 43.4.0
+asar: true
+npmRebuild: false
+forceCodeSigning: false
+directories:
+  output: ../../release
+  buildResources: ../../apps/desktop/assets
+files:
+  - '**/*'
+  - '!logo.png'
+  - '!**/*.map'
+  - '!node_modules/.cache/**'
+extraResources:
+  - from: mineko.ico
+    to: mineko.ico
+asarUnpack:
+  - '**/node_modules/node-pty/**/*'
+win:
+  executableName: MiNekoHerness
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: mineko.ico
+  requestedExecutionLevel: asInvoker
+nsis:
+  artifactName: MiNeko-Herness-Setup-${version}.${ext}
+  oneClick: false
+  perMachine: false
+  allowElevation: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: MiNeko Herness
+  uninstallDisplayName: MiNeko Herness
+  deleteAppDataOnUninstall: false
+  differentialPackage: false
+  runAfterFinish: true
+  displayLanguageSelector: true
+  installerLanguages:
+    - en_US
+    - zh_CN

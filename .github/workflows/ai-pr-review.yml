@@ -1,0 +1,62 @@
+name: AI PR review
+
+# This workflow intentionally uses pull_request_target so fork PRs can receive
+# a review without exposing the API key to PR code. It checks out only the
+# default branch and reads the PR diff through the GitHub API; it never runs the
+# pull request's scripts, installs its dependencies, or executes its files.
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number to review
+        required: true
+        type: number
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ai-pr-review-${{ github.event.pull_request.number || inputs.pr_number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Review pull request with AI
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out trusted default branch
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Check AI review configuration
+        id: configuration
+        env:
+          AI_REVIEW_API_KEY: ${{ secrets.AI_REVIEW_API_KEY || secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "${AI_REVIEW_API_KEY:-}" ]; then
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::AI PR review is disabled because the AI_REVIEW_API_KEY repository secret is not configured."
+          else
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Review diff and publish GitHub review
+        if: steps.configuration.outputs.enabled == 'true'
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ inputs.pr_number || github.event.pull_request.number }}
+          AI_REVIEW_API_KEY: ${{ secrets.AI_REVIEW_API_KEY || secrets.OPENAI_API_KEY }}
+          AI_REVIEW_API_URL: ${{ vars.AI_REVIEW_API_URL || 'https://api.openai.com/v1/responses' }}
+          AI_REVIEW_MODEL: ${{ vars.AI_REVIEW_MODEL || 'gpt-5.2-codex' }}
+          AI_REVIEW_REASONING_EFFORT: ${{ vars.AI_REVIEW_REASONING_EFFORT || 'medium' }}
+        run: node scripts/ai-review-pr.mjs

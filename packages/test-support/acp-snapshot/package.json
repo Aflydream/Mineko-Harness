@@ -1,0 +1,49 @@
+{
+  "name": "@aflydream/mnh-acp-snapshot",
+  "description": "ACP test kit: shared subprocess launcher, snapshot scenario harness, expected-output normalizers, and suite factory",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/test-support/acp-snapshot"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@agentclientprotocol/sdk": "0.25.1",
+    "@aflydream/mnh-loader-smoke": "workspace:*",
+    "vitest": "^4.1.8"
+  },
+  "peerDependencies": {
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  }
+}

@@ -1,0 +1,125 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 40px;
+}
+
+.backdrop.closing {
+  pointer-events: none;
+}
+
+/* Same mask recipe as the Modal primitive and the settings dialog. A separate
+   layer, not a background on .backdrop: backdrop-filter there would blur the
+   previewed image and the close control along with the page. */
+.mask {
+  position: absolute;
+  inset: 0;
+  background: var(--dsw-alias-bg-mask-1);
+  backdrop-filter: var(--dsw-mask-blur);
+  animation: lightbox-mask-in var(--ds-transition-duration) var(--ds-ease-in-out) both;
+}
+
+.image {
+  position: relative;
+  max-width: min(100%, 1600px);
+  max-height: calc(100vh - 80px);
+  object-fit: contain;
+  border-radius: 12px;
+  background: var(--dsw-specific-input-major);
+  box-shadow: var(--dsw-shadow-lv3);
+  animation: lightbox-image-in var(--ds-transition-duration-slow) var(--ds-ease-in-out) both;
+}
+
+.close {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--dsw-alias-border-l2-darkmode-thin);
+  border-radius: 999px;
+  background: var(--dsw-specific-input-major);
+  color: var(--dsw-alias-label-primary);
+  cursor: pointer;
+  animation: lightbox-control-in var(--ds-transition-duration) var(--ds-ease-in-out) both;
+}
+
+.closing .mask {
+  animation-name: lightbox-mask-out;
+}
+
+.closing .image {
+  animation-name: lightbox-image-out;
+}
+
+.closing .close {
+  animation-name: lightbox-control-out;
+}
+
+@keyframes lightbox-mask-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes lightbox-image-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes lightbox-control-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes lightbox-mask-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes lightbox-image-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@keyframes lightbox-control-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mask,
+  .image,
+  .close {
+    animation: none;
+  }
+}

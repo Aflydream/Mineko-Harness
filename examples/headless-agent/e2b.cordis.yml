@@ -1,0 +1,57 @@
+# POC overlay: keep the advanced headless agent and model-facing tools, but
+# place its filesystem and process substrate in one short-lived E2B sandbox;
+# the generic Bash, PTY, and LSP consumers compose above them.
+#
+# One-world invariant: e2b.cwd, sandbox-policy.workspaceRoot, and bash-local's
+# default workdir (implicit host process.cwd()) must all name the same remote
+# directory. Only e2b.cwd is created at sandbox open; dropping its !!js line
+# falls back to /home/user/workspace while Bash and PTY keep targeting the
+# host path, so every tool call fails with a remote spawn error.
+- id: base
+  name: '@deepseek-ai/cordis-plugin-include'
+  config:
+    path: ./advanced.cordis.yml
+    patches:
+      - id: subprocess
+        name: '@aflydream/mnh-subprocess-local'
+        disabled: true
+      - id: fs-local
+        name: '@aflydream/mnh-fs-local'
+        disabled: true
+      - insert:
+          - id: e2b
+            name: '@aflydream/mnh-e2b'
+            config:
+              cwd: !!js process.cwd()
+              timeoutMs: 300000
+          - id: subprocess-e2b
+            name: '@aflydream/mnh-subprocess-e2b'
+          - id: fs-e2b
+            name: '@aflydream/mnh-fs-e2b'
+          - id: sandbox-policy
+            name: '@aflydream/mnh-sandbox-policy'
+            config:
+              mode: danger-full-access
+              workspaceRoot: !!js process.cwd()
+          - id: pty
+            name: '@aflydream/mnh-terminal'
+          - id: terminal-bash
+            name: '@aflydream/mnh-terminal-bash'
+          - id: tool-terminal
+            name: '@aflydream/mnh-tool-terminal'
+          - id: lsp
+            name: '@aflydream/mnh-lsp'
+          - id: lsp-stdio
+            name: '@aflydream/mnh-lsp-stdio'
+            config:
+              servers:
+                typescript:
+                  command: npx
+                  args: [--yes, typescript-language-server@5.0.0, --stdio]
+                  extensionToLanguage:
+                    .ts: typescript
+                    .tsx: typescriptreact
+                    .js: javascript
+                    .jsx: javascriptreact
+          - id: tool-lsp
+            name: '@aflydream/mnh-tool-lsp'

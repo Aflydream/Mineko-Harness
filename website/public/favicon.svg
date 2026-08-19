@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .tile { fill: #111318; }
+    .letter { fill: #fff; }
+    @media (prefers-color-scheme: dark) {
+      .tile { fill: #f5f7fa; }
+      .letter { fill: #111318; }
+    }
+  </style>
+  <rect class="tile" width="32" height="32" rx="6" />
+  <path class="letter" d="M7 23V9h3.4l5.6 7.2L21.6 9H25v14h-3.2v-9.1L16 21.2l-5.8-7.3V23H7Z" />
+</svg>

@@ -1,0 +1,45 @@
+{
+  "name": "@aflydream/mnh-desktop",
+  "description": "MiNeko Herness Windows desktop shell",
+  "version": "0.1.0-rc.5",
+  "publishConfig": { "access": "public" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "apps/desktop"
+  },
+  "type": "module",
+  "main": "lib/main.js",
+  "exports": {
+    ".": { "types": "./lib/types/main.d.ts", "default": "./lib/main.js" },
+    "./launcher": { "types": "./lib/types/launcher.d.ts", "default": "./lib/launcher.js" },
+    "./package.json": "./package.json"
+  },
+  "files": ["lib/*.js", "lib/types/*.d.ts", "lib/preload.cjs"],
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -b",
+    "build:native": "cargo build --manifest-path native/Cargo.toml --release",
+    "stage:win": "node scripts/stage-release.mjs",
+    "package:win": "node scripts/stage-release.mjs && electron-builder --projectDir ../../.desktop-release/app --config ../../apps/desktop/electron-builder.yml --win nsis --x64 --publish never",
+    "start": "node ../../scripts/mnh.mjs desktop",
+    "test:e2e": "vitest run --config ../../vitest.desktop.config.ts"
+  },
+  "dependencies": {
+    "@aflydream/mnh-app-boot": "workspace:^",
+    "@aflydream/mnh-client-modules": "workspace:^",
+    "@aflydream/mnh-client-ui-theme": "workspace:^",
+    "@aflydream/mnh-home-paths": "workspace:^",
+    "@aflydream/mnh-host-desktop-bridge": "workspace:^",
+    "@aflydream/mnh-web-frontend": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "electron": "43.4.0",
+    "electron-builder": "26.15.3",
+    "playwright": "^1.49.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.8"
+  }
+}

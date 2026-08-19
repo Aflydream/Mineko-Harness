@@ -1,0 +1,100 @@
+{
+  "name": "@aflydream/mnh-agent-spine-demo",
+  "description": "The default executor-less/UI-less agent spine with fallback session titles, provider-routed retry, and optional persisted goals",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/examples/agent-spine-demo"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@deepseek-ai/cordis-plugin-timer": "workspace:^",
+    "@aflydream/mnh-agent": "workspace:^",
+    "@aflydream/mnh-agent-loop": "workspace:^",
+    "@aflydream/mnh-goal": "workspace:^",
+    "@aflydream/mnh-goal-round-driver": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-home-paths": "workspace:^",
+    "@aflydream/mnh-llm-retry": "workspace:^",
+    "@aflydream/mnh-scope": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-session-title": "workspace:^",
+    "@aflydream/mnh-skill": "workspace:^",
+    "@aflydream/mnh-skill-filesystem": "workspace:^",
+    "@aflydream/mnh-system-prompt": "workspace:^",
+    "@aflydream/mnh-jobs-local": "workspace:^",
+    "@aflydream/mnh-shell-env": "workspace:^",
+    "@aflydream/mnh-tool-bash": "workspace:^",
+    "@aflydream/mnh-tool-goal": "workspace:^",
+    "@aflydream/mnh-tool-skill": "workspace:^",
+    "@aflydream/mnh-tool-jobs": "workspace:^",
+    "@aflydream/mnh-tools": "workspace:^",
+    "@aflydream/mnh-agent-instructions": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis-plugin-timer": "workspace:^",
+    "@aflydream/mnh-agent": "workspace:^",
+    "@aflydream/mnh-agent-loop": "workspace:^",
+    "@aflydream/mnh-shell-env": "workspace:^",
+    "@aflydream/mnh-bash-local": "workspace:^",
+    "@aflydream/mnh-bash-sandbox": "workspace:^",
+    "@aflydream/mnh-fs-local": "workspace:^",
+    "@aflydream/mnh-fs-observation-policy": "workspace:^",
+    "@aflydream/mnh-fs-sandbox": "workspace:^",
+    "@aflydream/mnh-goal": "workspace:^",
+    "@aflydream/mnh-goal-round-driver": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-home-paths": "workspace:^",
+    "@aflydream/mnh-llm-retry": "workspace:^",
+    "@aflydream/mnh-subprocess-local": "workspace:^",
+    "@aflydream/mnh-sandbox-local": "workspace:^",
+    "@aflydream/mnh-sandbox-policy": "workspace:^",
+    "@aflydream/mnh-scope": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-session-title": "workspace:^",
+    "@aflydream/mnh-skill": "workspace:^",
+    "@aflydream/mnh-skill-filesystem": "workspace:^",
+    "@aflydream/mnh-system-prompt": "workspace:^",
+    "@aflydream/mnh-jobs": "workspace:^",
+    "@aflydream/mnh-jobs-local": "workspace:^",
+    "@aflydream/mnh-tool-bash": "workspace:^",
+    "@aflydream/mnh-tool-fs": "workspace:^",
+    "@aflydream/mnh-tool-goal": "workspace:^",
+    "@aflydream/mnh-tool-skill": "workspace:^",
+    "@aflydream/mnh-tool-jobs": "workspace:^",
+    "@aflydream/mnh-tools": "workspace:^",
+    "@aflydream/mnh-agent-instructions": "workspace:^",
+    "@aflydream/mnh-node-addon-landlock-run": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "workspace:^"
+  }
+}

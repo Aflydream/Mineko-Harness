@@ -1,0 +1,19 @@
+{
+  "id": "/",
+  "name": "MiNeko Herness",
+  "short_name": "MNH",
+  "description": "Plugin-based AI agent workspace",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#f9fafb",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "name": "@aflydream/mnh-session-telemetry-otel",
+  "description": "OpenTelemetry backend for the MiNeko Herness telemetry seam: hands captured session records to the OTel JS SDK's log pipeline",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/session/session-telemetry-otel"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.1",
+    "@opentelemetry/api-logs": "^0.220.0",
+    "@opentelemetry/exporter-logs-otlp-http": "^0.220.0",
+    "@opentelemetry/otlp-exporter-base": "^0.220.0",
+    "@opentelemetry/resources": "^2.9.0",
+    "@opentelemetry/sdk-logs": "^0.220.0",
+    "@deepseek-ai/schemastery": "workspace:^"
+  },
+  "peerDependencies": {
+    "@aflydream/mnh-command-feedback": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-session-telemetry": "workspace:^",
+    "@aflydream/mnh-anonymous-user-id": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
+    "@aflydream/mnh-command-feedback": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-session-telemetry": "workspace:^",
+    "@aflydream/mnh-anonymous-user-id": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  }
+}

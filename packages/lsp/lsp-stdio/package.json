@@ -1,0 +1,61 @@
+{
+  "name": "@aflydream/mnh-lsp-stdio",
+  "description": "Generic stdio language-server provider for the MiNeko Herness LSP capability seam (ctx.lsp) — spawns configured servers, translates JSON-RPC, and serves transient-open goToDefinition/findReferences/goToImplementation/hover queries in the host filesystem namespace",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/lsp/lsp-stdio"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@aflydream/mnh-brand": "workspace:^",
+    "@aflydream/mnh-fs": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-lsp": "workspace:^",
+    "@aflydream/mnh-subprocess": "workspace:^",
+    "@aflydream/mnh-timeout": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@aflydream/mnh-brand": "workspace:^",
+    "@aflydream/mnh-fs": "workspace:^",
+    "@aflydream/mnh-fs-local": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-lsp": "workspace:^",
+    "@aflydream/mnh-subprocess": "workspace:^",
+    "@aflydream/mnh-subprocess-local": "workspace:^",
+    "@aflydream/mnh-timeout": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^",
+    "typescript": "^6.0.3",
+    "typescript-language-server": "^5.0.0"
+  }
+}

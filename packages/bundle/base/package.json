@@ -1,0 +1,128 @@
+{
+  "name": "@aflydream/mnh-base",
+  "description": "The shared mnh core as a profile bundle: every profile's first patch layer, inserting the base plugin rows over the empty profile root",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/bundle/base"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "cordis.patch.yml",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "mnh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "dependencies": {
+    "@deepseek-ai/cordis-plugin-hmr": "workspace:^",
+    "@deepseek-ai/cordis-plugin-timer": "workspace:^",
+    "@aflydream/mnh-agent": "workspace:^",
+    "@aflydream/mnh-agent-default-model": "workspace:^",
+    "@aflydream/mnh-agent-loop": "workspace:^",
+    "@aflydream/mnh-attachment-local": "workspace:^",
+    "@aflydream/mnh-shell-env": "workspace:^",
+    "@aflydream/mnh-bash-sandbox": "workspace:^",
+    "@aflydream/mnh-command-compact": "workspace:^",
+    "@aflydream/mnh-command-feedback": "workspace:^",
+    "@aflydream/mnh-command-goal": "workspace:^",
+    "@aflydream/mnh-commands": "workspace:^",
+    "@aflydream/mnh-compaction-basic": "workspace:^",
+    "@aflydream/mnh-compaction-tool-result-pruner": "workspace:^",
+    "@aflydream/mnh-credentials-local": "workspace:^",
+    "@aflydream/mnh-fs-local": "workspace:^",
+    "@aflydream/mnh-fs-observation-policy": "workspace:^",
+    "@aflydream/mnh-fs-sandbox": "workspace:^",
+    "@aflydream/mnh-goal": "workspace:^",
+    "@aflydream/mnh-goal-round-driver": "workspace:^",
+    "@aflydream/mnh-api-gateway": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-llm-deepseek": "workspace:^",
+    "@aflydream/mnh-llm-pi-ai": "workspace:^",
+    "@aflydream/mnh-llm-retry": "workspace:^",
+    "@aflydream/mnh-permission-presets": "workspace:^",
+    "@aflydream/mnh-plan-mode": "workspace:^",
+    "@aflydream/mnh-pwsh-sandbox": "workspace:^",
+    "@aflydream/mnh-repeat-tool-reminder": "workspace:^",
+    "@aflydream/mnh-sandbox-local": "workspace:^",
+    "@aflydream/mnh-sandbox-policy": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-session-checkpoint-policy": "workspace:^",
+    "@aflydream/mnh-session-persistence-jsonl": "workspace:^",
+    "@aflydream/mnh-session-projection": "workspace:^",
+    "@aflydream/mnh-session-query-sqlite": "workspace:^",
+    "@aflydream/mnh-session-telemetry-otel": "workspace:^",
+    "@aflydream/mnh-session-title": "workspace:^",
+    "@aflydream/mnh-session-title-first-prompt-llm": "workspace:^",
+    "@aflydream/mnh-settings-file": "workspace:^",
+    "@aflydream/mnh-skill": "workspace:^",
+    "@aflydream/mnh-skill-badge": "workspace:^",
+    "@aflydream/mnh-skill-filesystem": "workspace:^",
+    "@aflydream/mnh-spill-local": "workspace:^",
+    "@aflydream/mnh-spill-policy": "workspace:^",
+    "@aflydream/mnh-subagent": "workspace:^",
+    "@aflydream/mnh-subagent-fork-in-process": "workspace:^",
+    "@aflydream/mnh-subagent-spawn-in-process": "workspace:^",
+    "@aflydream/mnh-subprocess-local": "workspace:^",
+    "@aflydream/mnh-system-prompt": "workspace:^",
+    "@aflydream/mnh-jobs-local": "workspace:^",
+    "@aflydream/mnh-tool-call-timeout-policy": "workspace:^",
+    "@aflydream/mnh-token-meter": "workspace:^",
+    "@aflydream/mnh-tool-bash": "workspace:^",
+    "@aflydream/mnh-tool-fs": "workspace:^",
+    "@aflydream/mnh-tool-fs-search": "workspace:^",
+    "@aflydream/mnh-tool-goal": "workspace:^",
+    "@aflydream/mnh-tool-pwsh": "workspace:^",
+    "@aflydream/mnh-tool-ralph": "workspace:^",
+    "@aflydream/mnh-tool-skill": "workspace:^",
+    "@aflydream/mnh-tool-str-replace-editor": "workspace:^",
+    "@aflydream/mnh-tool-subagent": "workspace:^",
+    "@aflydream/mnh-tool-subagent-control": "workspace:^",
+    "@aflydream/mnh-tool-subagent-report": "workspace:^",
+    "@aflydream/mnh-tool-jobs": "workspace:^",
+    "@aflydream/mnh-tool-todo": "workspace:^",
+    "@aflydream/mnh-tool-web": "workspace:^",
+    "@aflydream/mnh-tool-workflow": "workspace:^",
+    "@aflydream/mnh-tools": "workspace:^",
+    "@aflydream/mnh-typert-loader": "workspace:^",
+    "@aflydream/mnh-typert-registry": "workspace:^",
+    "@aflydream/mnh-user-approval": "workspace:^",
+    "@aflydream/mnh-user-questions": "workspace:^",
+    "@aflydream/mnh-web": "workspace:^",
+    "@aflydream/mnh-web-search-deepseek": "workspace:^",
+    "@aflydream/mnh-workflow-worker-thread": "workspace:^",
+    "@aflydream/mnh-agent-instructions": "workspace:^"
+  },
+  "peerDependencies": {
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  }
+}
