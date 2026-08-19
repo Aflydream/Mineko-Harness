@@ -1,0 +1,102 @@
+# Promote a manually approved dev snapshot to main and publish its Windows release.
+name: Promote dev release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release version without the leading v, for example 0.1.0 or 0.1.0-rc.6
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: promote-dev-release
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    name: Promote dev to main
+    runs-on: ubuntu-24.04
+    outputs:
+      tag: ${{ steps.release.outputs.tag }}
+    steps:
+      - name: Require the dev branch
+        if: github.ref != 'refs/heads/dev'
+        run: |
+          echo "::error::Run this workflow from the dev branch. Selected ref: $GITHUB_REF"
+          exit 1
+
+      - uses: actions/checkout@v6
+        with:
+          ref: dev
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Prepare the requested version
+        id: release
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          node scripts/release/prepare-desktop-version.mjs --version "$VERSION"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Verify the changed files
+        run: |
+          git diff --check
+          git diff -- package.json apps/cli/package.json apps/desktop/package.json
+
+      - name: Commit the version synchronization on dev
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json apps/cli/package.json apps/desktop/package.json
+          if git diff --cached --quiet; then
+            echo "The requested version is already committed on dev."
+          else
+            git commit -m "chore(release): prepare v$VERSION"
+          fi
+
+      - name: Confirm main can be fast-forwarded
+        run: |
+          git fetch --no-tags origin main
+          if ! git merge-base --is-ancestor origin/main HEAD; then
+            echo "::error::main contains commits that are not in dev. Merge main into dev first."
+            exit 1
+          fi
+
+      - name: Confirm the release tag is unused
+        env:
+          TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          if git ls-remote --exit-code --refs origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "::error::Release tag $TAG already exists. Choose a new version."
+            exit 1
+          fi
+
+      - name: Promote the prepared commit to dev and main
+        run: git push --atomic origin HEAD:refs/heads/dev HEAD:refs/heads/main
+
+      - name: Create the release tag
+        env:
+          TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          if git ls-remote --exit-code --refs origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "::error::Release tag $TAG already exists. Choose a new version."
+            exit 1
+          fi
+          git tag -a "$TAG" -m "Release $TAG"
+          git push origin "$TAG"
+
+  release:
+    name: Build and publish Windows release
+    needs: promote
+    uses: ./.github/workflows/desktop-release.yml
+    with:
+      ref: ${{ needs.promote.outputs.tag }}
+      tag: ${{ needs.promote.outputs.tag }}
+    secrets: inherit

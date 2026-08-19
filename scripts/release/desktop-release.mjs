@@ -13,7 +13,7 @@ const versionPattern = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/
  * @returns {{ version: string, tag: string, artifactName: string, bundleName: string, releaseTitle: string, prerelease: boolean, notes: string }} Validated release metadata.
  */
 export function prepareDesktopRelease({ root = repositoryRoot, eventName, refName }) {
-  if (eventName !== 'push' && eventName !== 'workflow_dispatch') {
+  if (eventName !== 'push' && eventName !== 'workflow_dispatch' && eventName !== 'workflow_call') {
     throw new Error(`desktop release does not accept GitHub event ${JSON.stringify(eventName)}`)
   }
 
@@ -32,7 +32,7 @@ export function prepareDesktopRelease({ root = repositoryRoot, eventName, refNam
   }
 
   const tag = `v${version}`
-  if (eventName === 'push' && refName !== tag) {
+  if ((eventName === 'push' || eventName === 'workflow_call') && refName !== tag) {
     throw new Error(`desktop release tag must be ${tag}, got ${refName || '(empty)'}`)
   }
 
@@ -129,8 +129,8 @@ function parseArguments(args) {
 /** Validate metadata and write the workflow outputs consumed by later jobs. */
 function main() {
   const { notesOut, githubOutput } = parseArguments(process.argv.slice(2))
-  const eventName = process.env.GITHUB_EVENT_NAME ?? ''
-  const refName = process.env.GITHUB_REF_NAME ?? ''
+  const eventName = process.env.MNH_RELEASE_EVENT_NAME ?? process.env.GITHUB_EVENT_NAME ?? ''
+  const refName = process.env.MNH_RELEASE_REF_NAME ?? process.env.GITHUB_REF_NAME ?? ''
   const release = prepareDesktopRelease({ eventName, refName })
 
   mkdirSync(dirname(notesOut), { recursive: true })

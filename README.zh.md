@@ -94,6 +94,6 @@ pnpm run desktop
 MiNeko Herness 按 [MIT 许可证](LICENSE)发布。第三方包、内置源码及其许可证记录在 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)中。
 
 ## 社区
-- [linux.do](linux,do)
+- [linux.do](https://linux.do/)
 - QQ 群组
 > 暂未设立，即将推出

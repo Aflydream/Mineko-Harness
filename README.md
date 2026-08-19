@@ -94,6 +94,6 @@ Issues and pull requests are welcome. Use the repository's Issue templates for b
 MiNeko Herness is distributed under the [MIT License](LICENSE). Third-party packages, vendored sources, and license notices are recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Community
-- [linux.do](linux.do)
+- [linux.do](https://linux.do/)
 - QQ
 > COMING SOON

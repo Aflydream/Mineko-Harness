@@ -34,6 +34,12 @@ test('manual dispatch is a dry run from any branch', () => {
   assert.equal(release.tag, 'v0.1.0-rc.5')
 })
 
+test('reusable workflow calls validate and publish the exact prepared tag', () => {
+  const release = prepareDesktopRelease({ root: fixture(), eventName: 'workflow_call', refName: 'v0.1.0-rc.5' })
+  assert.equal(release.tag, 'v0.1.0-rc.5')
+  assert.equal(release.prerelease, true)
+})
+
 test('rejects a tag that does not exactly name the repository version', () => {
   assert.throws(
     () => prepareDesktopRelease({ root: fixture(), eventName: 'push', refName: 'desktop-v0.1.0-rc.5' }),
@@ -63,14 +69,38 @@ test('keeps manual dispatch dry-run and tag publication artifact-first', () => {
   assert.deepEqual(workflow.on, {
     push: { tags: ['v*'] },
     workflow_dispatch: null,
+    workflow_call: {
+      inputs: {
+        ref: {
+          description: 'Git ref containing the prepared release',
+          required: true,
+          type: 'string',
+        },
+        tag: {
+          description: 'Exact release tag, for example v0.1.0',
+          required: true,
+          type: 'string',
+        },
+      },
+    },
   })
   assert.deepEqual(workflow.permissions, { contents: 'read' })
   assert.equal(workflow.jobs.build['runs-on'], 'windows-2025')
-  assert.equal(workflow.jobs.release.if, "github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')")
+  assert.equal(
+    workflow.jobs.release.if,
+    "(github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || github.event_name == 'workflow_call'",
+  )
   assert.deepEqual(workflow.jobs.release.permissions, { contents: 'write' })
   assert.equal(workflow.jobs.release.needs, 'build')
 
   const buildSteps = workflow.jobs.build.steps
+  const checkout = buildSteps.find(step => step.uses === 'actions/checkout@v6')
+  assert.equal(checkout.with.ref, "${{ inputs.ref || github.ref }}")
+  const metadata = buildSteps.find(step => step.name === 'Resolve and verify desktop release metadata')
+  assert.deepEqual(metadata.env, {
+    MNH_RELEASE_EVENT_NAME: '${{ github.event_name }}',
+    MNH_RELEASE_REF_NAME: '${{ inputs.tag || github.ref_name }}',
+  })
   const packageStep = buildSteps.find(step => step.name === 'Package Windows installer')
   assert.equal(packageStep.run, 'pnpm --filter @aflydream/mnh-desktop run package:win')
   assert.deepEqual(packageStep.env, {

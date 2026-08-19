@@ -2,7 +2,7 @@
 # packages under vendor/, each on its own version line. This sequence releases
 # independently of mnh and of the native packages.
 #
-# Pack runs without credentials on every pull request and master push.
+# Pack runs without credentials on every pull request and main push.
 # Publication is a manual dispatch from a vendor-* tag; a vendor release can
 # carry several versions, so each package has its own tag.
 name: Release (vendor)
@@ -10,7 +10,7 @@ name: Release (vendor)
 on:
   pull_request:
   push:
-    branches: [master]
+    branches: [main]
   workflow_dispatch:
     inputs:
       publish:
