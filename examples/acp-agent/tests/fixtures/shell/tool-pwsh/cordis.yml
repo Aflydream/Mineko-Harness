@@ -1,0 +1,27 @@
+# Minimal tool-pwsh composition: real app boot path, real pwsh executor, real
+# foreground + background tool calls; driven by the package's loader.spec.ts.
+- id: system-prompt
+  name: '@aflydream/mnh-system-prompt'
+
+- id: tools
+  name: '@aflydream/mnh-tools'
+
+- id: subprocess
+  name: '@aflydream/mnh-subprocess-local'
+
+- id: bash
+  name: '@aflydream/mnh-pwsh-local'
+  config:
+    graceMs: 200
+
+- id: shell-env
+  name: '@aflydream/mnh-shell-env'
+
+- id: tasks
+  name: '@aflydream/mnh-jobs-local'
+
+- id: tool-jobs
+  name: '@aflydream/mnh-tool-jobs'
+
+- id: tool-pwsh
+  name: '@aflydream/mnh-tool-pwsh'

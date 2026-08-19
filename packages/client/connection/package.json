@@ -1,0 +1,69 @@
+{
+  "name": "@aflydream/mnh-client-connection",
+  "description": "Wire consumer layer: HTTP-up/WebSocket-down client, ConnectionController dual streams with reconnect, and fixture api",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/client/connection"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "mnh": {
+    "client": {
+      "inject": [],
+      "platform": "web",
+      "immediately": true
+    }
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@aflydream/mnh-attachment": "workspace:^",
+    "@aflydream/mnh-host-apiproxy": "workspace:^",
+    "@aflydream/mnh-commands": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-tools": "workspace:^",
+    "@deepseek-ai/schemastery": "workspace:^",
+    "ws": "^8.21.0"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/client.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "peerDependencies": {
+    "@aflydream/mnh-host-webserver": "workspace:^",
+    "@aflydream/mnh-host-desktop-bridge": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@aflydream/mnh-host-webserver": "workspace:^",
+    "@aflydream/mnh-host-desktop-bridge": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@types/ws": "^8.18.1",
+    "@deepseek-ai/cordis": "workspace:^"
+  }
+}

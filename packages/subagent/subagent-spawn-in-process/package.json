@@ -1,0 +1,60 @@
+{
+  "name": "@aflydream/mnh-subagent-spawn-in-process",
+  "description": "In-process spawn subagent backend: runs a fresh child agent on ctx.agents",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/subagent/subagent-spawn-in-process"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-subagent": "workspace:^",
+    "@aflydream/mnh-subagent-in-process-driver": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
+    "@aflydream/mnh-agent": "workspace:^",
+    "@aflydream/mnh-agent-loop": "workspace:^",
+    "@aflydream/mnh-agent-loop-testkit": "workspace:^",
+    "@aflydream/mnh-bash-local": "workspace:^",
+    "@aflydream/mnh-subprocess-local": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-llm-deepseek": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-subagent": "workspace:^",
+    "@aflydream/mnh-subagent-in-process-driver": "workspace:^",
+    "@aflydream/mnh-tool-bash": "workspace:^",
+    "@aflydream/mnh-tool-subagent": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  }
+}

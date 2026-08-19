@@ -1,0 +1,6 @@
+# Bilingual-pair consistency record (AgentGuide/reference/i18n/README.md): the git blob hash of each
+# side as of the last confirmed-consistent state. Both languages carry equal authority;
+# after editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write AgentGuide/reference/cordis-api/fiber.md
+fiber.md: c7b10630e1224757f8c9922e9e0c35cd9fb5fbe4
+fiber.zh.md: e7110f959a122476318362b8e859a5cd7735eadd

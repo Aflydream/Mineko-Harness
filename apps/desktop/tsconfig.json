@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { "rootDir": "src", "outDir": "lib/types", "types": ["node", "electron"] },
+  "include": ["src"],
+  "references": [
+    { "path": "../../vendor/cordis" },
+    { "path": "../../packages/boot/app-boot" },
+    { "path": "../../packages/client/modules" },
+    { "path": "../../packages/client/ui-theme" },
+    { "path": "../../packages/host/desktop-bridge" }
+  ]
+}

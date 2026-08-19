@@ -1,0 +1,96 @@
+{
+  "name": "@aflydream/mnh-api-remotes",
+  "description": "Remote BFF assembly and Host Agent/Session lookup policy",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/api/remotes"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./types": {
+      "types": "./lib/types/types.d.ts",
+      "default": "./lib/types/types.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "mnh": {
+    "client": {
+      "inject": [
+        "@aflydream/mnh-api-gateway"
+      ],
+      "platform": "web",
+      "immediately": true
+    }
+  },
+  "scripts": {
+    "bundle": "tsdown",
+    "watch": "tsdown --watch"
+  },
+  "license": "MIT",
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/client.js",
+    "lib/types/**/*.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "dependencies": {
+    "@aflydream/mnh-typert-protocol": "workspace:^"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "workspace:^",
+    "@aflydream/mnh-agent": "workspace:^",
+    "@aflydream/mnh-api-gateway": "workspace:^",
+    "@aflydream/mnh-commands": "workspace:^",
+    "@aflydream/mnh-credentials": "workspace:^",
+    "@aflydream/mnh-goal": "workspace:^",
+    "@aflydream/mnh-cordis-host-runner": "workspace:^",
+    "@aflydream/mnh-host-plugin-inventory": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-agent-presets": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-message-feedback": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-session-persistence": "workspace:^",
+    "@aflydream/mnh-settings": "workspace:^",
+    "@aflydream/mnh-typert-registry": "workspace:^"
+  },
+  "devDependencies": {
+    "@aflydream/mnh-agent": "workspace:^",
+    "@aflydream/mnh-api-gateway": "workspace:^",
+    "@aflydream/mnh-commands": "workspace:^",
+    "@aflydream/mnh-credentials": "workspace:^",
+    "@aflydream/mnh-goal": "workspace:^",
+    "@aflydream/mnh-cordis-host-runner": "workspace:^",
+    "@aflydream/mnh-host-plugin-inventory": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-agent-presets": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-message-feedback": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-session-persistence": "workspace:^",
+    "@aflydream/mnh-settings": "workspace:^",
+    "@aflydream/mnh-typert-registry": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  }
+}

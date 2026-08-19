@@ -1,0 +1,15 @@
+{
+  "excluded": [
+    "AgentGuide/README.md",
+    "AgentGuide/architecture.md",
+    "AgentGuide/conventions.md",
+    "AgentGuide/development.md",
+    "AgentGuide/desktop.md",
+    "AgentGuide/repository-map.md",
+    "AgentGuide/reference/AGENTS.md",
+    "AgentGuide/reference/cordis-api/inherited.md",
+    "AgentGuide/reference/i18n/style-samples.md",
+    "AgentGuide/reference/i18n/terminology.md",
+    "AgentGuide/reference/i18n/translation-prompt.md"
+  ]
+}

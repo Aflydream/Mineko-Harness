@@ -1,0 +1,106 @@
+{
+  "name": "@aflydream/mnh-subagent",
+  "description": "Abstract subagent seam (ctx.subagents): named-provider registry for delegating to child agents",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/subagent/subagent"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./client": {
+      "types": "./lib/types/client.d.ts",
+      "default": "./lib/types/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "peerDependencies": {
+    "@aflydream/mnh-agent": "workspace:^",
+    "@aflydream/mnh-agent-presets": "workspace:^",
+    "@aflydream/mnh-brand": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-sandbox": "workspace:^",
+    "@aflydream/mnh-sandbox-policy": "workspace:^",
+    "@aflydream/mnh-scope": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-session-persistence": "workspace:^",
+    "@aflydream/mnh-session-projection": "workspace:^",
+    "@aflydream/mnh-session-projection-cache": "workspace:^",
+    "@aflydream/mnh-jobs": "workspace:^",
+    "@aflydream/mnh-tools": "workspace:^",
+    "@aflydream/mnh-user-approval": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "peerDependenciesMeta": {
+    "@aflydream/mnh-agent-presets": {
+      "optional": true
+    },
+    "@aflydream/mnh-sandbox": {
+      "optional": true
+    },
+    "@aflydream/mnh-sandbox-policy": {
+      "optional": true
+    },
+    "@aflydream/mnh-session-persistence": {
+      "optional": true
+    },
+    "@aflydream/mnh-session-projection": {
+      "optional": true
+    },
+    "@aflydream/mnh-session-projection-cache": {
+      "optional": true
+    },
+    "@aflydream/mnh-jobs": {
+      "optional": true
+    },
+    "@aflydream/mnh-user-approval": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@aflydream/mnh-agent": "workspace:^",
+    "@aflydream/mnh-agent-presets": "workspace:^",
+    "@aflydream/mnh-brand": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-sandbox": "workspace:^",
+    "@aflydream/mnh-sandbox-policy": "workspace:^",
+    "@aflydream/mnh-scope": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-session-persistence": "workspace:^",
+    "@aflydream/mnh-session-projection": "workspace:^",
+    "@aflydream/mnh-session-projection-cache": "workspace:^",
+    "@aflydream/mnh-storage": "workspace:^",
+    "@aflydream/mnh-storage-domain": "workspace:^",
+    "@aflydream/mnh-jobs": "workspace:^",
+    "@aflydream/mnh-tools": "workspace:^",
+    "@aflydream/mnh-user-approval": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  }
+}

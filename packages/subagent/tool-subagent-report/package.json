@@ -1,0 +1,61 @@
+{
+  "name": "@aflydream/mnh-tool-subagent-report",
+  "description": "Child-scoped report tool over ctx.subagents continuations",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/subagent/tool-subagent-report"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-subagent": "workspace:^",
+    "@aflydream/mnh-system-prompt": "workspace:^",
+    "@aflydream/mnh-tools": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@aflydream/mnh-agent": "workspace:^",
+    "@aflydream/mnh-agent-loop": "workspace:^",
+    "@aflydream/mnh-agent-loop-testkit": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-session-persistence": "workspace:^",
+    "@aflydream/mnh-session-persistence-jsonl": "workspace:^",
+    "@aflydream/mnh-subagent": "workspace:^",
+    "@aflydream/mnh-subagent-spawn-in-process": "workspace:^",
+    "@aflydream/mnh-system-prompt": "workspace:^",
+    "@aflydream/mnh-tool-subagent-control": "workspace:^",
+    "@aflydream/mnh-tools": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  }
+}

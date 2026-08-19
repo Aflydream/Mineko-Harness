@@ -1,0 +1,62 @@
+{
+  "name": "@aflydream/mnh-subagent-codex",
+  "description": "One-shot Codex subagent provider over the official app-server protocol",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "packages/subagent/subagent-codex"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-sdk-protocol": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-subagent": "workspace:^",
+    "@aflydream/mnh-subprocess": "workspace:^",
+    "@aflydream/mnh-timeout": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
+    "@aflydream/mnh-agent": "workspace:^",
+    "@aflydream/mnh-invariants": "workspace:^",
+    "@aflydream/mnh-llm": "workspace:^",
+    "@aflydream/mnh-loader-smoke": "workspace:^",
+    "@aflydream/mnh-sdk-protocol": "workspace:^",
+    "@aflydream/mnh-session": "workspace:^",
+    "@aflydream/mnh-subagent": "workspace:^",
+    "@aflydream/mnh-subprocess": "workspace:^",
+    "@aflydream/mnh-subprocess-local": "workspace:^",
+    "@aflydream/mnh-timeout": "workspace:^",
+    "@openai/codex": "0.147.0",
+    "@deepseek-ai/cordis": "workspace:^"
+  }
+}

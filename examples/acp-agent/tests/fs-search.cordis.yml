@@ -1,0 +1,32 @@
+# Minimal live counterpart for the glob-sampling snapshot composition.
+- id: llm-deepseek
+  name: '@aflydream/mnh-llm-deepseek'
+  config:
+    models:
+      - id: deepseek-v4-pro
+
+- id: subprocess
+  name: '@aflydream/mnh-subprocess-local'
+
+- id: bash
+  name: '@aflydream/mnh-bash-local'
+
+- id: acp-agent
+  name: '@aflydream/mnh-acp-demo'
+  config:
+    provider: deepseek-official
+    model: deepseek-v4-pro
+    persistenceRoot: !!js process.env.MNH_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
+    persistenceCompression: !!js "process.env.MNH_SNAPSHOT === undefined ? 'zstd' : 'none'"
+    workspaceContext: false
+    skills:
+      enabled: false
+    toolJobs: false
+    goals: false
+    persona: You are a concise snapshot agent working in {{cwd}}.
+
+- id: tool-fs-search
+  name: '@aflydream/mnh-tool-fs-search'
+  config:
+    sampleOverCapGlobResults: true
+    globMaxResults: 4

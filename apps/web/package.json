@@ -1,0 +1,51 @@
+{
+  "name": "@aflydream/mnh-web-frontend",
+  "description": "Web application entry: vite build over the @aflydream/mnh-client-web shell library; dist/ served by apps/cli's mnh web",
+  "version": "0.1.0-rc.5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "directory": "apps/web"
+  },
+  "type": "module",
+  "exports": {
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.map"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "watch": "vite build --watch"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@aflydream/mnh-client-web": "workspace:^",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis-plugin-group": "workspace:^",
+    "@aflydream/mnh-client-modules": "workspace:^",
+    "@aflydream/mnh-client-ui-primitives": "workspace:^",
+    "@aflydream/mnh-client-ui-slots": "workspace:^",
+    "@aflydream/mnh-client-web-react": "workspace:^",
+    "@aflydream/mnh-cmdline": "workspace:^",
+    "@aflydream/mnh-pwsh-local": "workspace:^",
+    "@types/node": "^22.0.0",
+    "@types/react": "~18.3.1",
+    "@types/react-dom": "~18.3.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "playwright": "^1.49.0",
+    "typescript": "^6.0.3",
+    "vite": "^6.0.0",
+    "vitest": "^4.1.8",
+    "fflate": "^0.8.2"
+  }
+}

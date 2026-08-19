@@ -1,0 +1,57 @@
+# One-world invariant (same pairing as examples/headless-agent/e2b.cordis.yml):
+# e2b.cwd and sandbox-policy.workspaceRoot must name the same remote directory,
+# which is also bash-local's implicit default workdir.
+- id: e2b
+  name: '@aflydream/mnh-e2b'
+  config:
+    cwd: !!js process.cwd()
+    timeoutMs: 180000
+
+- id: subprocess-e2b
+  name: '@aflydream/mnh-subprocess-e2b'
+
+- id: bash
+  name: '@aflydream/mnh-bash-local'
+  config:
+    timeoutMs: 30000
+
+- id: fs-e2b
+  name: '@aflydream/mnh-fs-e2b'
+
+- id: agents
+  name: '@aflydream/mnh-agent'
+
+- id: sandbox-policy
+  name: '@aflydream/mnh-sandbox-policy'
+  config:
+    mode: danger-full-access
+    workspaceRoot: !!js process.cwd()
+
+- id: pty
+  name: '@aflydream/mnh-terminal'
+
+- id: terminal-bash
+  name: '@aflydream/mnh-terminal-bash'
+  config:
+    pollIntervalMs: 25
+    exactProbeAfterMs: 150
+    idleSilenceMs: 2000
+    handoffGraceMs: 500
+    timeoutMs: 5000
+    disposeGraceMs: 1000
+
+- id: lsp
+  name: '@aflydream/mnh-lsp'
+
+- id: lsp-stdio
+  name: '@aflydream/mnh-lsp-stdio'
+  config:
+    servers:
+      fixture:
+        command: node
+        args:
+          - !!js process.cwd() + '/fixture-lsp.mjs'
+        extensionToLanguage:
+          .ts: typescript
+        shutdownTimeoutMs: 1000
+        killGraceMs: 500
