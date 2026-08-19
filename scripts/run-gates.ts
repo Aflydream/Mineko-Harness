@@ -7,7 +7,7 @@
  */
 import { spawn } from 'node:child_process'
 import { availableParallelism } from 'node:os'
-import { resolve } from 'node:path'
+import { extname, resolve } from 'node:path'
 import { performance } from 'node:perf_hooks'
 import { COVERAGE_EXEMPT_ENV, coverageExemptHeavySuites } from './coverage-exempt.ts'
 
@@ -73,6 +73,7 @@ type GateExecutor = (gate: Gate) => Promise<GateResult>
 type ResultObserver = (result: GateResult) => void
 
 const root = resolve(import.meta.dirname, '..')
+const NODE_SCRIPT_EXTENSIONS = new Set(['.cjs', '.js', '.mjs'])
 if (import.meta.main) {
   process.exitCode = await main(process.argv.slice(2))
 }
@@ -180,8 +181,17 @@ function pnpmInvocation(args: string[]): Pick<Gate, 'command' | 'args'> {
   if (entrypoint === undefined || entrypoint === '') {
     throw new Error('run-gates: npm_execpath is unavailable; invoke the runner through a pnpm package script.')
   }
-  // Windows cannot spawn the pnpm.cmd shim directly; the JavaScript entrypoint keeps every host shell-free.
-  return { command: process.execPath, args: [entrypoint, ...args] }
+  // Corepack and local pnpm installations expose a JavaScript entrypoint.
+  // pnpm/setup exposes a native `pnpm`/`pnpm.exe` executable instead; passing
+  // that binary to Node produces the MZ/SyntaxError seen on Windows CI.
+  const extension = extname(entrypoint).toLowerCase()
+  if (NODE_SCRIPT_EXTENSIONS.has(extension)) {
+    return { command: process.execPath, args: [entrypoint, ...args] }
+  }
+  if (extension === '.cmd') {
+    return { command: process.execPath, args: [entrypoint.replace(/\.cmd$/i, '.cjs'), ...args] }
+  }
+  return { command: entrypoint, args }
 }
 
 /**

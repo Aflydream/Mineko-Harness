@@ -1,4 +1,7 @@
-# Promote a manually approved dev snapshot to main and publish its Windows release.
+# Create a human-reviewed dev -> main PR, then start the Windows release only
+# after that PR is merged. The PR path never changes source files or branches.
+# The publish job explicitly calls desktop-release.yml because a tag pushed with
+# GITHUB_TOKEN does not create a second workflow run.
 name: Promote dev release
 
 on:
@@ -8,20 +11,23 @@ on:
         description: Release version without the leading v, for example 0.1.0 or 0.1.0-rc.6
         required: true
         type: string
+  push:
+    branches:
+      - main
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
-  group: promote-dev-release
+  group: promote-dev-release-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  promote:
-    name: Promote dev to main
+  create-promotion-pr:
+    if: github.event_name == 'workflow_dispatch'
+    name: Create dev to main promotion PR
     runs-on: ubuntu-24.04
-    outputs:
-      tag: ${{ steps.release.outputs.tag }}
     steps:
       - name: Require the dev branch
         if: github.ref != 'refs/heads/dev'
@@ -33,70 +39,172 @@ jobs:
         with:
           ref: dev
           fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate the requested release version
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          node --input-type=module <<'NODE'
+          const version = process.env.VERSION ?? ''
+          if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(version)) {
+            console.error('::error::Use a semantic version without the leading v, for example 0.1.0 or 0.1.0-rc.6.')
+            process.exit(1)
+          }
+          NODE
+
+      - name: Verify the existing dev commit is release-ready
+        env:
+          EXPECTED_VERSION: ${{ inputs.version }}
+          MNH_RELEASE_EVENT_NAME: workflow_dispatch
+          MNH_RELEASE_REF_NAME: dev
+        run: |
+          mkdir -p .artifacts/release
+          node scripts/release/desktop-release.mjs \
+            --notes-out .artifacts/release/RELEASE_NOTES.md \
+            --github-output "$RUNNER_TEMP/mnh-release-metadata"
+          actual_version="$(sed -n 's/^version=//p' "$RUNNER_TEMP/mnh-release-metadata" | tail -n 1)"
+          if [[ "$actual_version" != "$EXPECTED_VERSION" ]]; then
+            echo "::error::The dev commit reports version $actual_version, but the Action requested $EXPECTED_VERSION. Update and commit the manifests and CHANGELOG on dev first."
+            exit 1
+          fi
+
+      - name: Create or update the promotion PR
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+          DEV_COMMIT: ${{ github.sha }}
+        run: |
+          title="chore(release): promote dev to main (v$VERSION)"
+          body="$(cat <<EOF
+          <!-- mnh-release-version: $VERSION -->
+          ## Release promotion
+
+          This pull request promotes the existing \`dev\` history to \`main\` for the Windows desktop release \`v$VERSION\`.
+
+          The release version and human-written \`CHANGELOG.md\` entry are already present in the dev commit. This Action does not edit files, create a source commit, push either branch, or merge the pull request.
+
+          **Required next step:** review this pull request and use GitHub's normal **Merge pull request** action manually. The merge push to \`main\` will create the release tag and start the Windows release workflow.
+
+          Dev commit checked: \`$DEV_COMMIT\`
+          EOF
+          )"
+
+          existing_pr="$(gh pr list --repo "$GH_REPO" --base main --head dev --state open --json number --jq '.[0].number')"
+          if [[ -n "$existing_pr" ]]; then
+            gh pr edit "$existing_pr" --repo "$GH_REPO" --title "$title" --body "$body"
+            echo "Updated existing promotion PR #$existing_pr."
+          else
+            gh pr create --repo "$GH_REPO" --base main --head dev --title "$title" --body "$body"
+          fi
+
+  release-after-merge:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Start main Windows release
+    runs-on: ubuntu-24.04
+    outputs:
+      enabled: ${{ steps.promotion.outputs.enabled }}
+      merge_sha: ${{ github.sha }}
+      tag: ${{ steps.metadata.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
           persist-credentials: true
 
-      - name: Prepare the requested version
-        id: release
+      - name: Find the merged dev promotion PR
+        id: promotion
         env:
-          VERSION: ${{ inputs.version }}
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+          MERGE_SHA: ${{ github.sha }}
         run: |
-          node scripts/release/prepare-desktop-version.mjs --version "$VERSION"
-          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+          gh api \
+            --header 'Accept: application/vnd.github+json' \
+            --header 'X-GitHub-Api-Version: 2022-11-28' \
+            "repos/$GH_REPO/commits/$MERGE_SHA/pulls" \
+            > "$RUNNER_TEMP/mnh-merged-pulls.json"
 
-      - name: Verify the changed files
-        run: |
-          git diff --check
-          git diff -- package.json apps/cli/package.json apps/desktop/package.json
+          node --input-type=module <<'NODE'
+          import { appendFileSync, readFileSync } from 'node:fs'
 
-      - name: Commit the version synchronization on dev
+          const pullRequests = JSON.parse(readFileSync(`${process.env.RUNNER_TEMP}/mnh-merged-pulls.json`, 'utf8'))
+          const candidate = pullRequests.find((pullRequest) => (
+            pullRequest.base?.ref === 'main' &&
+            pullRequest.head?.ref === 'dev' &&
+            pullRequest.state === 'closed' &&
+            pullRequest.merged_at
+          ))
+
+          if (!candidate) {
+            console.log('This main push was not caused by a merged dev promotion PR; no release will be started.')
+            appendFileSync(process.env.GITHUB_OUTPUT, 'enabled=false\n')
+            process.exit(0)
+          }
+
+          const titleMatch = /^chore\(release\): promote dev to main \(v(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)\)$/.exec(candidate.title ?? '')
+          if (!titleMatch) {
+            console.log(`Merged PR #${candidate.number} is not a release promotion; no release will be started.`)
+            appendFileSync(process.env.GITHUB_OUTPUT, 'enabled=false\n')
+            process.exit(0)
+          }
+
+          const marker = /<!--\s*mnh-release-version:\s*(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)\s*-->/i.exec(candidate.body ?? '')
+          if (!marker || marker[1] !== titleMatch[1]) {
+            console.error(`::error::Merged promotion PR #${candidate.number} has no matching release version marker.`)
+            process.exit(1)
+          }
+
+          appendFileSync(process.env.GITHUB_OUTPUT, `enabled=true\nversion=${titleMatch[1]}\npr=${candidate.number}\n`)
+          NODE
+
+      - name: Verify the merged main commit is release-ready
+        id: metadata
+        if: steps.promotion.outputs.enabled == 'true'
         env:
-          VERSION: ${{ inputs.version }}
+          EXPECTED_VERSION: ${{ steps.promotion.outputs.version }}
+          MNH_RELEASE_EVENT_NAME: workflow_dispatch
+          MNH_RELEASE_REF_NAME: main
+        run: |
+          mkdir -p .artifacts/release
+          node scripts/release/desktop-release.mjs \
+            --notes-out .artifacts/release/RELEASE_NOTES.md \
+            --github-output "$RUNNER_TEMP/mnh-release-metadata"
+          actual_version="$(sed -n 's/^version=//p' "$RUNNER_TEMP/mnh-release-metadata" | tail -n 1)"
+          if [[ "$actual_version" != "$EXPECTED_VERSION" ]]; then
+            echo "::error::The merged main commit reports version $actual_version, but promotion PR #${{ steps.promotion.outputs.pr }} requested $EXPECTED_VERSION. No tag was created."
+            exit 1
+          fi
+          echo "tag=v$actual_version" >> "$GITHUB_OUTPUT"
+
+      - name: Confirm the release tag is unused
+        if: steps.promotion.outputs.enabled == 'true'
+        env:
+          TAG: ${{ steps.metadata.outputs.tag }}
+        run: |
+          if git ls-remote --exit-code --refs origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "::error::Release tag $TAG already exists. No tag was created."
+            exit 1
+          fi
+
+      - name: Create the release tag on the merged main commit
+        if: steps.promotion.outputs.enabled == 'true'
+        env:
+          TAG: ${{ steps.metadata.outputs.tag }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add package.json apps/cli/package.json apps/desktop/package.json
-          if git diff --cached --quiet; then
-            echo "The requested version is already committed on dev."
-          else
-            git commit -m "chore(release): prepare v$VERSION"
-          fi
-
-      - name: Confirm main can be fast-forwarded
-        run: |
-          git fetch --no-tags origin main
-          if ! git merge-base --is-ancestor origin/main HEAD; then
-            echo "::error::main contains commits that are not in dev. Merge main into dev first."
-            exit 1
-          fi
-
-      - name: Confirm the release tag is unused
-        env:
-          TAG: ${{ steps.release.outputs.tag }}
-        run: |
-          if git ls-remote --exit-code --refs origin "refs/tags/$TAG" >/dev/null 2>&1; then
-            echo "::error::Release tag $TAG already exists. Choose a new version."
-            exit 1
-          fi
-
-      - name: Promote the prepared commit to dev and main
-        run: git push --atomic origin HEAD:refs/heads/dev HEAD:refs/heads/main
-
-      - name: Create the release tag
-        env:
-          TAG: ${{ steps.release.outputs.tag }}
-        run: |
-          if git ls-remote --exit-code --refs origin "refs/tags/$TAG" >/dev/null 2>&1; then
-            echo "::error::Release tag $TAG already exists. Choose a new version."
-            exit 1
-          fi
-          git tag -a "$TAG" -m "Release $TAG"
+          git tag -a "$TAG" "$GITHUB_SHA" -m "Release $TAG"
           git push origin "$TAG"
 
-  release:
+  publish-windows-release:
+    if: needs.release-after-merge.outputs.enabled == 'true'
     name: Build and publish Windows release
-    needs: promote
+    needs: release-after-merge
     uses: ./.github/workflows/desktop-release.yml
     with:
-      ref: ${{ needs.promote.outputs.tag }}
-      tag: ${{ needs.promote.outputs.tag }}
+      ref: ${{ needs.release-after-merge.outputs.merge_sha }}
+      tag: ${{ needs.release-after-merge.outputs.tag }}
     secrets: inherit

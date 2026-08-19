@@ -62,24 +62,24 @@ Pull requests run the repository CI, and a merge into `main` starts the same CI 
 
 ### Approved release from `dev`
 
-When `dev` is ready, first add the human-written release section to `CHANGELOG.md` on `dev`. The section must use the version you intend to publish and contain at least one `###` subsection. Then open **Actions → Promote dev release → Run workflow**, select the `dev` branch, and enter the version without `v`:
+When `dev` is ready, first commit the human-written release section to `CHANGELOG.md` on `dev`. The section must use the version you intend to publish and contain at least one `###` subsection. The root, CLI, and desktop manifests must already carry that same version in your commit. Then open **Actions → Promote dev release → Run workflow**, select the `dev` branch, and enter the version without `v`:
 
 ```text
 0.1.0       stable release
 0.1.0-rc.6  prerelease
 ```
 
-The workflow validates the changelog, updates the root, CLI, and desktop manifests, commits that version synchronization on `dev`, fast-forwards `main` when `main` is an ancestor of `dev`, creates the matching tag, and calls the Windows release workflow. A stable version has no hyphen and becomes an ordinary GitHub Release; a version containing a hyphen is marked as a prerelease. The workflow stops instead of overwriting history when `main` has diverged, the tag already exists, or the repository does not allow the workflow token to update `main`.
+The workflow validates the existing `dev` commit, then creates or updates a normal `dev` → `main` pull request. It does not edit files, create a bot commit, push either branch, or merge the PR. Review the PR and click GitHub's normal **Merge pull request** button yourself. The resulting push to `main` verifies the merged version, creates the matching tag, and explicitly starts the Windows release workflow. A stable version has no hyphen and becomes an ordinary GitHub Release; a version containing a hyphen is marked as a prerelease. If `main` has diverged, resolve that in `dev` before running the Action; if the tag already exists or the merged metadata does not match, no tag is created.
 
-The direct promotion path requires `main` to permit the repository Actions token to push. If branch protection requires a pull request, merge `dev` into `main` through that policy first, then use the manual tag path below.
+Use GitHub's normal merge option for this promotion PR rather than deleting or bypassing the branch flow. Ordinary pushes to `main` are ignored by the release guard; only a merged PR with the generated release title and hidden version marker can create a release tag.
 
-### Manual tag path
+### Manual tag fallback
 
-After the version and its `CHANGELOG.md` entry are merged, push one matching tag:
+If you intentionally publish outside the generated promotion PR, after the version and its `CHANGELOG.md` entry are merged, push one matching tag:
 
 ```sh
 git tag v0.1.0
 git push origin v0.1.0
 ```
 
-The desktop workflow accepts only `v<version>` tags, such as `v0.1.0` or `v0.1.0-rc.6`. The root, CLI, and desktop manifests must carry the same semantic version, and the changelog must contain one dated section for it. The workflow builds and smoke-tests the Windows x64 installer, verifies its checksum, and creates a GitHub Release with the changelog changes, download table, slogan, and pre-release status when applicable. Manual dispatch of the desktop workflow itself is a dry run; the `Promote dev release` workflow is the explicit publishing path.
+The desktop workflow accepts only `v<version>` tags, such as `v0.1.0` or `v0.1.0-rc.6`. The root, CLI, and desktop manifests must carry the same semantic version, and the changelog must contain one dated section for it. The workflow builds and smoke-tests the Windows x64 installer, verifies its checksum, and creates a GitHub Release with the changelog changes, download table, slogan, and pre-release status when applicable. Manual dispatch of the desktop workflow itself is a dry run; the `Promote dev release` workflow is the normal publishing path.

@@ -159,6 +159,27 @@ describe('Oxlint gate', () => {
   })
 })
 
+describe('pnpm runner resolution', () => {
+  it.each(['/private/pnpm', 'C:\\runner\\temp\\pnpm.exe'])(
+    'executes a native pnpm entrypoint directly: %s',
+    (entrypoint) => {
+      const subject = withEnv(
+        'npm_execpath',
+        entrypoint,
+        () => gatesForMode('node-compat').find(item => item.id === 'source-worker-smoke'),
+      )!
+
+      expect(subject.command).toBe(entrypoint)
+      expect(subject.args).toEqual([
+        'exec',
+        'vitest',
+        'run',
+        'packages/workflow/workflow-worker-thread/tests/source-worker.compat.spec.ts',
+      ])
+    },
+  )
+})
+
 describe('Typert contract preparation', () => {
   it('prepares primary source consumers once before they run', () => {
     const subject = withEnv('MNH_OXLINT_THREADS', undefined, () =>

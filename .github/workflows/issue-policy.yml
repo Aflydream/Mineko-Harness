@@ -21,6 +21,23 @@ jobs:
         with:
           ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false
+      - name: Bind trusted policy to this repository
+        env:
+          REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'
+
+          const [organization, repository] = process.env.REPOSITORY.split('/', 2)
+          if (!organization || !repository) throw new Error(`Invalid repository: ${process.env.REPOSITORY}`)
+          const path = '.github/issue-management/config.json'
+          const config = JSON.parse(fs.readFileSync(path, 'utf8'))
+          config.organization = organization
+          config.repository = repository
+          fs.writeFileSync(path, `${JSON.stringify(config, null, 2)}\n`)
+          NODE
       - name: Validate pull request
         env:
           GITHUB_TOKEN: ${{ github.token }}
