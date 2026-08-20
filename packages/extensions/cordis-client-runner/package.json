@@ -55,7 +55,7 @@
     "@aflydream/mnh-client-ui-theme": "workspace:^",
     "@aflydream/mnh-invariants": "workspace:^",
     "@deepseek-ai/cordis": "workspace:^",
-    "react": "^18.2.0"
+    "react": "^19.2.8"
   },
   "devDependencies": {
     "@deepseek-ai/cordis-plugin-loader": "workspace:^",
@@ -66,9 +66,9 @@
     "@aflydream/mnh-client-ui-slots": "workspace:^",
     "@aflydream/mnh-client-ui-theme": "workspace:^",
     "@aflydream/mnh-invariants": "workspace:^",
-    "@types/react": "~18.3.1",
+    "@types/react": "~19.2.17",
     "@deepseek-ai/cordis": "workspace:^",
-    "react": "^18.2.0"
+    "react": "^19.2.8"
   },
   "files": [
     "lib/index.js",

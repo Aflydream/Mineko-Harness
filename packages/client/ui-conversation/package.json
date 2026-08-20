@@ -73,7 +73,7 @@
     "@aflydream/mnh-session-stats": "workspace:^",
     "@aflydream/mnh-token-meter": "workspace:^",
     "@aflydream/mnh-tools": "workspace:^",
-    "react": "^18.2.0"
+    "react": "^19.2.8"
   },
   "devDependencies": {
     "@deepseek-ai/cordis": "workspace:^",
@@ -103,8 +103,8 @@
     "@aflydream/mnh-token-meter": "workspace:^",
     "@aflydream/mnh-tool-todo": "workspace:^",
     "@aflydream/mnh-tools": "workspace:^",
-    "@types/react": "~18.3.1",
-    "react": "^18.2.0"
+    "@types/react": "~19.2.17",
+    "react": "^19.2.8"
   },
   "files": [
     "lib/index.js",

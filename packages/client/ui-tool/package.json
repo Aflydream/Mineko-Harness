@@ -56,7 +56,7 @@
     "@aflydream/mnh-client-ui-primitives": "workspace:^",
     "@aflydream/mnh-client-ui-slots": "workspace:^",
     "@aflydream/mnh-invariants": "workspace:^",
-    "react": "^18.2.0"
+    "react": "^19.2.8"
   },
   "devDependencies": {
     "@deepseek-ai/cordis": "workspace:^",
@@ -71,8 +71,8 @@
     "@aflydream/mnh-client-web-react": "workspace:^",
     "@aflydream/mnh-invariants": "workspace:^",
     "@testing-library/react": "^16.1.0",
-    "@types/react": "~18.3.1",
-    "react": "^18.2.0",
+    "@types/react": "~19.2.17",
+    "react": "^19.2.8",
     "react-dom": "^18.2.0"
   },
   "files": [

@@ -54,7 +54,7 @@
     "@aflydream/mnh-invariants": "workspace:^",
     "@aflydream/mnh-plan-mode": "workspace:^",
     "@deepseek-ai/cordis": "workspace:^",
-    "react": "^18.2.0"
+    "react": "^19.2.8"
   },
   "devDependencies": {
     "@aflydream/mnh-api-remotes": "workspace:^",
@@ -67,9 +67,9 @@
     "@aflydream/mnh-client-web-react": "workspace:^",
     "@aflydream/mnh-invariants": "workspace:^",
     "@aflydream/mnh-plan-mode": "workspace:^",
-    "@types/react": "~18.3.1",
+    "@types/react": "~19.2.17",
     "@deepseek-ai/cordis": "workspace:^",
-    "react": "^18.2.0"
+    "react": "^19.2.8"
   },
   "files": [
     "lib/index.js",
