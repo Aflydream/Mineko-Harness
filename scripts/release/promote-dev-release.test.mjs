@@ -60,5 +60,6 @@ test('promote workflow creates a PR first and releases only after main receives 
   assert.deepEqual(publish.with, {
     ref: '${{ needs.release-after-merge.outputs.merge_sha }}',
     tag: '${{ needs.release-after-merge.outputs.tag }}',
+    publish: true,
   })
 })
