@@ -39,7 +39,7 @@
   "dependencies": {
     "@aflydream/mnh-host-directory-picker": "workspace:^",
     "@aflydream/mnh-native-command": "workspace:^",
-    "koffi": "^3.1.0"
+    "koffi": "^3.1.2"
   },
   "peerDependencies": {
     "@aflydream/mnh-invariants": "workspace:^",
