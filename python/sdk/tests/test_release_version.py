@@ -75,13 +75,13 @@ def test_stage_sdk_keeps_distribution_module_and_runtime_pin_distinct(tmp_path: 
     build_python_release.stage_sdk(destination, "1.2.3")
 
     pyproject = (destination / "pyproject.toml").read_text()
-    assert 'name = "mineko-herness-sdk"' in pyproject
+    assert 'name = "mineko-harness-sdk"' in pyproject
     assert 'version = "1.2.3"' in pyproject
     assert 'license = "MIT"' in pyproject
-    assert '"mineko-herness-runtime-bin==1.2.3"' in pyproject
+    assert '"mineko-harness-runtime-bin==1.2.3"' in pyproject
     assert 'license-files = ["LICENSE"]' in pyproject
     assert (destination / "LICENSE").read_bytes() == (ROOT / "LICENSE").read_bytes()
-    assert (destination / "src" / "mineko_herness" / "__init__.py").is_file()
+    assert (destination / "src" / "mineko_harness" / "__init__.py").is_file()
 
 
 @pytest.mark.parametrize(("target", "with_helper"), [("linux-x64", False), ("macos-arm64", True)])
@@ -101,7 +101,7 @@ def test_stage_runtime_copies_platform_payload(
 
     build_python_release.stage_runtime(destination, "1.2.3", executable, executable.name)
 
-    runtime_dir = destination / "src" / "mineko_herness_runtime" / "runtime"
+    runtime_dir = destination / "src" / "mineko_harness_runtime" / "runtime"
     assert {path.name: path.read_bytes() for path in runtime_dir.glob("mnh-jsonrpc-agent-pkg-*")} == expected
     pyproject = (destination / "pyproject.toml").read_text()
     assert 'license = "MIT"' in pyproject

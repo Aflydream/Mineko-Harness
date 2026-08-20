@@ -12,7 +12,7 @@ it('ships install metadata with the built web application', async () => {
   const manifest: unknown = JSON.parse(await readFile(join(DIST_ROOT, 'manifest.webmanifest'), 'utf8'))
   expect(manifest).toEqual({
     id: '/',
-    name: 'MiNeko Herness',
+    name: 'MiNeko Harness',
     short_name: 'MNH',
     description: 'Plugin-based AI agent workspace',
     start_url: '/',

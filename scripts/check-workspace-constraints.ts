@@ -40,7 +40,7 @@ const publicLandlockPackages = new Set([
 const publicationSourceAllowlist: Readonly<Record<string, readonly string[]>> = {
   '@aflydream/mnh-node-addon-landlock-run': ['src/main.c'],
 }
-const repositoryUrl = 'git+https://github.com/aflydream/mineko-herness.git'
+const repositoryUrl = 'git+https://github.com/aflydream/mineko-harness.git'
 /** Directories whose packages this repository publishes: one release member each. */
 const releaseMemberDirectory = /^(?:packages\/[^/]+\/[^/]+|apps\/[^/]+|vendor\/[^/]+)$/
 

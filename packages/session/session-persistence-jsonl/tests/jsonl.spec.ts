@@ -161,7 +161,7 @@ describe('JsonlSessionPersistence: format helpers', () => {
   })
 
   it('projectKey normalizes project paths into bounded readable names', () => {
-    expect(projectKey('/Users/qyj/work/mineko-herness')).toBe('--Users-qyj-work-mineko-herness--')
+    expect(projectKey('/Users/qyj/work/mineko-harness')).toBe('--Users-qyj-work-mineko-harness--')
     expect(projectKey('/a/b-c')).toBe(projectKey('/a-b/c'))
     expect(projectKey('C:\\work\\agent')).toBe('--C-work-agent--')
     expect(projectKey('/开发/~agent')).toBe('--~5F00~53D1-~007Eagent--')

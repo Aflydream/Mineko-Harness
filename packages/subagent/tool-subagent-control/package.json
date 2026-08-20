@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-tool-subagent-control",
   "description": "Globally named send_message, interrupt_agent, and list_agents tools over ctx.subagents continuations",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/subagent/tool-subagent-control"
   },
   "type": "module",

@@ -32,7 +32,6 @@ function declare(slots: SlotRegistry): () => void {
       name: 'root',
       children: {
         'settings.section': { kind: 'list', scope: 'root' },
-        'settings.onboarding': { kind: 'list', scope: 'root' },
       },
     } as never,
     () => null,
@@ -59,16 +58,12 @@ describe('ui-settings-models apply', () => {
     expect(typeof injected.controller.load).toBe('function')
     expect(typeof injected.useSnapshot).toBe('function')
     expect(injected.api).toBeDefined()
-    expect(before.slots.entries('settings.onboarding')).toHaveLength(0)
-
     const after = await bench()
     await after.ctx.plugin({ inject: [...inject], apply }).await()
     expect(after.slots.entries('settings.section')).toHaveLength(0)
-    expect(after.slots.entries('settings.onboarding')).toHaveLength(0)
     declare(after.slots)
     await Promise.resolve()
     expect(after.slots.entries('settings.section')[0]!.component).toBe(ModelsSection)
-    expect(after.slots.entries('settings.onboarding')).toHaveLength(0)
     // The self-inflicted ledger notifications hit the duplicate guard.
     expect(after.slots.entries('settings.section')).toHaveLength(1)
   })
@@ -103,11 +98,9 @@ describe('ui-settings-models apply', () => {
     // disposer variable goes stale.
     redeclare()
     expect(b.slots.entries('settings.section')).toHaveLength(0)
-    expect(b.slots.entries('settings.onboarding')).toHaveLength(0)
     declare(b.slots)
     await Promise.resolve()
     expect(b.slots.entries('settings.section')[0]!.component).toBe(ModelsSection)
-    expect(b.slots.entries('settings.onboarding')).toHaveLength(0)
     // The locale path also recovers through the same ledger re-check.
     b.locale.setLocale('en')
     expect(resolveSlotLabel(b.slots.entries('settings.section')[0]!.options.label)).toBe('Models')
@@ -122,7 +115,6 @@ describe('ui-settings-models apply', () => {
     expect(b.locale.bind('settings.models')('nav')).toBe('模型')
     await fiber.dispose()
     expect(b.slots.entries('settings.section')).toHaveLength(0)
-    expect(b.slots.entries('settings.onboarding')).toHaveLength(0)
     // The (ns, locale) seats are free again — the dictionary disposers ran.
     expect(() => b.locale.register('settings.models', 'zh', {})).not.toThrow()
     expect(() => b.locale.register('settings.models', 'en', {})).not.toThrow()

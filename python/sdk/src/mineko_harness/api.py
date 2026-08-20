@@ -11,8 +11,8 @@ from .models import JsonObject, Notification
 
 
 @dataclass(slots=True)
-class MiNekoHernessConfig:
-    """Configuration for launching the local MiNeko Herness SDK runtime.
+class MiNekoHarnessConfig:
+    """Configuration for launching the local MiNeko Harness SDK runtime.
 
     The runtime inherits the caller's environment by default, so existing
     DEEPSEEK_API_KEY and DEEPSEEK_BASE_URL settings keep working. Use ``env`` to
@@ -45,18 +45,18 @@ class RunResult:
     session_root: str | None = None
 
 
-class MiNekoHerness:
-    """Reusable synchronous SDK for running MiNeko Herness agent turns.
+class MiNekoHarness:
+    """Reusable synchronous SDK for running MiNeko Harness agent turns.
 
     The runtime subprocess starts lazily and remains owned by this instance
     across calls to :meth:`run`. Use the instance as a context manager, or call
     :meth:`close` explicitly when finished, so the subprocess is always reaped.
     """
 
-    def __init__(self, config: MiNekoHernessConfig | None = None, **kwargs: object) -> None:
+    def __init__(self, config: MiNekoHarnessConfig | None = None, **kwargs: object) -> None:
         if config is not None and kwargs:
-            raise TypeError("pass either MiNekoHernessConfig or keyword options, not both")
-        self.config = config or MiNekoHernessConfig(**kwargs)
+            raise TypeError("pass either MiNekoHarnessConfig or keyword options, not both")
+        self.config = config or MiNekoHarnessConfig(**kwargs)
         cwd = str(Path(self.config.cwd or Path.cwd()).resolve())
         runtime_cwd = str(Path(self.config.runtime_cwd).resolve()) if self.config.runtime_cwd is not None else cwd
         self._cwd = cwd
@@ -83,7 +83,7 @@ class MiNekoHerness:
         )
         self._initialized = False
 
-    def __enter__(self) -> "MiNekoHerness":
+    def __enter__(self) -> "MiNekoHarness":
         self.start()
         return self
 
@@ -125,7 +125,7 @@ class MiNekoHerness:
 
 
 class Session:
-    def __init__(self, harness: MiNekoHerness, session_id: str) -> None:
+    def __init__(self, harness: MiNekoHarness, session_id: str) -> None:
         self.harness = harness
         self.id = session_id
 

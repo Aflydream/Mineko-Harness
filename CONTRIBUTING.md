@@ -2,7 +2,7 @@
 
 English | [中文](CONTRIBUTING.zh.md)
 
-MiNeko Herness welcomes external Issues and pull requests. The project is a Windows-only desktop project; macOS and Linux desktop releases are not planned.
+MiNeko Harness welcomes external Issues and pull requests. The project is a Windows-only desktop project; macOS and Linux desktop releases are not planned.
 
 ## Project scope
 
@@ -32,4 +32,4 @@ Maintainers review correctness, Windows compatibility, performance, security bou
 
 Plugins, tutorials, bug reports, design ideas, and performance measurements are welcome. If a proposal needs a broader platform or architecture decision, describe the problem and the trade-offs in an Issue before implementing it.
 
-MiNeko Herness is distributed under the [MIT License](LICENSE). Third-party packages, vendored sources, and license notices are recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+MiNeko Harness is distributed under the [MIT License](LICENSE). Third-party packages, vendored sources, and license notices are recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

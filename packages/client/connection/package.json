@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-client-connection",
   "description": "Wire consumer layer: HTTP-up/WebSocket-down client, ConnectionController dual streams with reconnect, and fixture api",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/client/connection"
   },
   "type": "module",

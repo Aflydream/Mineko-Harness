@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-tool-terminal",
   "description": "Six model-facing persistent PTY tools with owner isolation and generic background-job integration",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/terminal/tool-terminal"
   },
   "type": "module",

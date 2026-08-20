@@ -59,10 +59,6 @@ it('keeps the browser responsive while rendering 100,000 reasoning chunks', asyn
     onTestFailed(() => saveFailureShot(activePage, 'web-stress-reasoning-chunks'))
     await activePage.goto(`${scaffold.baseUrl}?fixture`, { waitUntil: 'load' })
     await activePage.waitForSelector('[class*="frame"]', { timeout: 30_000 })
-    // Fixture settings deliberately reject writes, so its welcome notice
-    // cannot acknowledge. Hide only that test overlay; the assembled chat
-    // tree beneath it remains mounted and exercises the production renderer.
-    await activePage.addStyleTag({ content: '[class*="onboardingOverlay"] { display: none !important; }' })
     await activePage.locator('[data-sample="bash"]').first().waitFor({ timeout: 30_000 })
 
     await activePage.evaluate(() => {

@@ -178,7 +178,7 @@ describe('parsePyprojectRequirements', () => {
       'docs = ["sphinx>=7"]',
       '',
       '[tool.hatch.build.targets.wheel]',
-      'packages = ["src/mineko_herness"]',
+      'packages = ["src/mineko_harness"]',
       '',
       '[tool.pytest.ini_options]',
       'testpaths = ["tests"]',
@@ -230,8 +230,8 @@ describe('parsePyprojectRequirements', () => {
 describe('collectPythonDependencies', () => {
   it('excludes normalized local project names without exempting a third-party prefix', () => {
     const pyprojects = [
-      '[project]\nname = "mineko-herness-runtime-bin"\ndependencies = ["pydantic"]\n',
-      '[project]\nname = "mineko-herness-sdk"\ndependencies = ["MiNeko.Herness_Runtime-Bin", "mineko-unrelated"]\n',
+      '[project]\nname = "mineko-harness-runtime-bin"\ndependencies = ["pydantic"]\n',
+      '[project]\nname = "mineko-harness-sdk"\ndependencies = ["MiNeko.Harness_Runtime-Bin", "mineko-unrelated"]\n',
     ]
     expect(() => collectPythonDependencies(pyprojects)).toThrow(
       'python dependency mineko-unrelated is missing from PYTHON_METADATA',

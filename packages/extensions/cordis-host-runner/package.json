@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-cordis-host-runner",
   "description": "Dynamic package definition registry, host-half sandbox lifecycle, and invoke handler table for model-mounted dual-half packages",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/extensions/cordis-host-runner"
   },
   "type": "module",

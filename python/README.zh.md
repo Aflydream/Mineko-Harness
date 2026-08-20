@@ -1,15 +1,15 @@
-# MiNeko Herness Python SDK
+# MiNeko Harness Python SDK
 
 [English](README.md) | 中文
 
-用于以子进程方式驱动 MiNeko Herness 的 Python 包。客户端 SDK 通过 stdio 使用按行分隔的 JSON-RPC 与内置运行时通信。
+用于以子进程方式驱动 MiNeko Harness 的 Python 包。客户端 SDK 通过 stdio 使用按行分隔的 JSON-RPC 与内置运行时通信。
 
 ## 包
 
 | 目录 | 分发名／模块 | 职责 |
 |---|---|---|
-| [sdk](sdk/README.md) | `mineko-herness-sdk` / `mineko_herness` | 高层轮次 API 与低层 JSON-RPC 客户端 |
-| [sdk-runtime](sdk-runtime/README.md) | `mineko-herness-runtime-bin` / `mineko_herness_runtime` | 内置运行时二进制与默认 agent（智能体）配置 |
+| [sdk](sdk/README.md) | `mineko-harness-sdk` / `mineko_harness` | 高层轮次 API 与低层 JSON-RPC 客户端 |
+| [sdk-runtime](sdk-runtime/README.md) | `mineko-harness-runtime-bin` / `mineko_harness_runtime` | 内置运行时二进制与默认 agent（智能体）配置 |
 
 ## 行为
 

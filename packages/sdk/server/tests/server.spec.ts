@@ -125,7 +125,7 @@ describe('HarnessSdkJsonRpcServer', () => {
         model: 'dsagent-model',
         maxTokens: 321,
       }) as { serverInfo: { name: string } }
-      expect(init.serverInfo.name).toBe('mineko-herness-sdk-runtime')
+      expect(init.serverInfo.name).toBe('mineko-harness-sdk-runtime')
 
       const receipt = await server.handleRequest('session/prompt', {
         sessionId: 'main',
@@ -859,7 +859,7 @@ describe('HarnessSdkJsonRpcServer', () => {
 
       await expect(server.handleRequest('does/not/exist', {}))
         .rejects
-        .toThrow('unknown MiNeko Herness SDK runtime method: does/not/exist')
+        .toThrow('unknown MiNeko Harness SDK runtime method: does/not/exist')
 
       await server.shutdown()
     } finally {

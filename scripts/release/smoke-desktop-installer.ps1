@@ -33,7 +33,7 @@ function Get-ProcessTreeIds([int] $RootProcessId) {
 }
 
 $setup = Resolve-Path $SetupPath
-$workingRoot = Join-Path $env:TEMP "mineko-herness-installer-smoke-$([Guid]::NewGuid().ToString('N'))"
+$workingRoot = Join-Path $env:TEMP "mineko-harness-installer-smoke-$([Guid]::NewGuid().ToString('N'))"
 # Keep the NSIS /D value free of spaces: NSIS treats it as one unquoted option.
 # The product identity itself is verified separately through the installed exe,
 # archive, window title, and shortcut metadata.
@@ -49,8 +49,8 @@ try {
 
   # Keep this aligned with win.executableName in electron-builder.yml. The
   # product name is user-facing; the executable identity is intentionally
-  # the compact taskbar-safe MiNekoHerness name.
-  $application = Join-Path $installRoot 'MiNekoHerness.exe'
+  # the compact taskbar-safe MiNekoHarness name.
+  $application = Join-Path $installRoot 'MiNekoHarness.exe'
   $asar = Join-Path $installRoot 'resources/app.asar'
   $uninstallers = @(Get-ChildItem -LiteralPath $installRoot -File -Filter 'Uninstall*.exe')
   if (!(Test-Path -LiteralPath $application -PathType Leaf)) {
@@ -77,7 +77,7 @@ try {
     }
     $window = $applicationProcess.MainWindowHandle
     if ($window -eq 0 -or ![NativeWindow]::IsWindowVisible($window) -or
-      !$applicationProcess.Responding -or $applicationProcess.MainWindowTitle -ne 'MiNeko Herness') {
+      !$applicationProcess.Responding -or $applicationProcess.MainWindowTitle -ne 'MiNeko Harness') {
       continue
     }
     try {
@@ -132,7 +132,7 @@ try {
     throw 'NSIS uninstaller left application files behind.'
   }
   if (!(Test-Path -LiteralPath (Join-Path $runtimeRoot 'desktop') -PathType Container)) {
-    throw 'NSIS uninstaller removed MiNeko Herness user data.'
+    throw 'NSIS uninstaller removed MiNeko Harness user data.'
   }
 
   Write-Host 'Desktop installer smoke passed: install, launch, zero listeners, normal exit, uninstall, and user-data retention.'

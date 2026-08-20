@@ -59,7 +59,7 @@ export interface Config {
   toolOrder?: string[]
   /** Tool-registry config — its presentation `mode` (forwarded through agent-spine-demo; see mnh-tools). */
   tools?: ToolsConfig
-  /** MiNeko Herness home directory exposed to bash and used for local skill discovery. */
+  /** MiNeko Harness home directory exposed to bash and used for local skill discovery. */
   mnhHome?: string
   /** Fallback session-title limits forwarded through agent-spine-demo. */
   sessionTitle?: NonNullable<agentCore.Config['sessionTitle']>
@@ -247,7 +247,7 @@ export interface Config {
   toolOrder?: SystemPromptConfig['toolOrder']
   /** The tool registry's config — its presentation `mode` (see mnh-tools' `Config`). */
   tools?: ToolsConfig
-  /** MiNeko Herness home directory shared by shell context and local skill discovery. */
+  /** MiNeko Harness home directory shared by shell context and local skill discovery. */
   mnhHome?: string
   /** Deterministic fallback and accepted-title limits; omission uses the bundle's example policy. */
   sessionTitle?: SessionTitleConfig
@@ -1846,7 +1846,7 @@ export interface Config {
 ```ts config-catalog
 /** Plugin config (all optional — the built-in facts resolve without defaults). */
 export interface Config {
-  /** MiNeko Herness home directory exposed as `MNH_HOME`; defaults to `$MNH_HOME` or `~/.mnh`. */
+  /** MiNeko Harness home directory exposed as `MNH_HOME`; defaults to `$MNH_HOME` or `~/.mnh`. */
   mnhHome?: string
 }
 ```
@@ -1880,7 +1880,7 @@ export interface Config {
   providerName?: string
   /** Whether project and user roots are included around custom roots. */
   includeDefaultRoots?: boolean
-  /** MiNeko Herness config root. Defaults to `$MNH_HOME` or `~/.mnh`. */
+  /** MiNeko Harness config root. Defaults to `$MNH_HOME` or `~/.mnh`. */
   mnhHome?: string
   /** Shared agent config root. Defaults to `$MNH_AGENTS_HOME` or `~/.agents`. */
   agentsHome?: string
@@ -2230,7 +2230,7 @@ export interface Config {
 ```ts config-catalog
 /** Plugin config: the deployment-authored fragment of the system prompt (see {@link Config.persona} for its contract). */
 export interface Config {
-  /** Include the fixed MiNeko Herness identity before the deployment persona (default true). */
+  /** Include the fixed MiNeko Harness identity before the deployment persona (default true). */
   includeHarnessIdentity?: boolean
   /** Include dynamic runtime-context snapshots in model history (default true). */
   includeRuntimeContext?: boolean

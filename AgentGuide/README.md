@@ -1,6 +1,6 @@
-# MiNeko Herness Agent Guide
+# MiNeko Harness Agent Guide
 
-This directory is the maintained entry point for coding agents working in MiNeko Herness. It describes the current repository, its ownership rules, and the shortest path from a user request to the correct implementation and verification.
+This directory is the maintained entry point for coding agents working in MiNeko Harness. It describes the current repository, its ownership rules, and the shortest path from a user request to the correct implementation and verification.
 
 ## Start here
 
@@ -16,7 +16,7 @@ The user request is the product authority for the active task. Repository guidan
 
 | Measure | Current value |
 |---|---:|
-| Product version | `0.1.0-rc.5` |
+| Product version | `0.1.0` |
 | Supported Node.js | `^22.19.0` or `>=24.0.0` |
 | Package manager | `pnpm@11.7.0` |
 | Harness packages | 221 |
@@ -29,7 +29,7 @@ The counts are a navigation aid, not a compatibility promise. [`package.json`](.
 
 ## Product invariants
 
-- MiNeko Herness is a plugin-based Agent Harness on vendored Cordis. Product behavior belongs in plugins and capability providers, not in a growing central loop.
+- MiNeko Harness is a plugin-based Agent Harness on vendored Cordis. Product behavior belongs in plugins and capability providers, not in a growing central loop.
 - `pnpm run desktop` is the default Windows development entry point. Electron owns the desktop window; Node.js runs the Harness host, plugins, tools, sessions, and model adapters.
 - The desktop renderer is the complete built client served through the private `mnh://` protocol. Desktop startup does not open a Web server or TCP listener.
 - Model and reasoning choices come from adapter-owned catalogs. The interface exposes only the reasoning levels declared by the selected model.

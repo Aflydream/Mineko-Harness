@@ -36,7 +36,7 @@ describe.skipIf(process.platform !== 'win32')('desktop built smoke', () => {
     delete env.ELECTRON_RUN_AS_NODE
     running = await electron.launch({ executablePath: ELECTRON, args: [MAIN], env })
     expect(await running.evaluate(({ app }) => app.getPath('userData'))).toBe(resolve(home, 'desktop'))
-    expect(await running.evaluate(({ app }) => app.getName())).toBe('MiNeko Herness')
+    expect(await running.evaluate(({ app }) => app.getName())).toBe('MiNeko Harness')
     const page = await running.firstWindow()
     await page.waitForURL('mnh://app/')
     await page.waitForLoadState('domcontentloaded')

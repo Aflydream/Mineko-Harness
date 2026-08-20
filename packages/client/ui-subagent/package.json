@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-client-ui-subagent",
   "description": "Subagent conversation catalog, continuation routing UI, and '@' reference source",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/client/ui-subagent"
   },
   "type": "module",

@@ -6,9 +6,9 @@
 
 ## ① 架构叙述
 
-> This document describes the architecture of the MiNeko Herness — a project modified from **DeepSeek Harness**. The governing principle, from the microkernel design discussion: **everything is a plugin**. The core is deliberately tiny — a handful of abstract services plus one concrete loop plugin (`mnh-agent-loop`) — and every product feature is a plugin against the extension API described here, without modifying the loop.
+> This document describes the architecture of the MiNeko Harness — a project modified from **DeepSeek Harness**. The governing principle, from the microkernel design discussion: **everything is a plugin**. The core is deliberately tiny — a handful of abstract services plus one concrete loop plugin (`mnh-agent-loop`) — and every product feature is a plugin against the extension API described here, without modifying the loop.
 
-本文介绍 MiNeko Herness 整体架构，它是基于 **DeepSeek Harness** 改造的项目。微内核设计讨论中确立了核心设计准则：**一切皆插件**。内核刻意做得极精简，仅包含少量抽象服务，外加一个实体循环插件 `mnh-agent-loop`。所有产品功能均基于本文定义的扩展接口开发为独立插件，无需改动主循环逻辑。
+本文介绍 MiNeko Harness 整体架构，它是基于 **DeepSeek Harness** 改造的项目。微内核设计讨论中确立了核心设计准则：**一切皆插件**。内核刻意做得极精简，仅包含少量抽象服务，外加一个实体循环插件 `mnh-agent-loop`。所有产品功能均基于本文定义的扩展接口开发为独立插件，无需改动主循环逻辑。
 
 > Dependency rule: extension plugins depend on interfaces, never on `mnh-agent-loop` (the loop is swappable); the sanctioned exception is the composition bundle `mnh-agent-spine-demo`, whose job is assembling the concrete spine.
 

@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-sandbox-local",
-  "description": "Local process-sandbox backends for the MiNeko Herness sandbox seam: bwrap, the npm-distributed landlock-run launcher, macOS Seatbelt, or the Windows ACL restricted-token runner — functionally probed, fail-closed",
-  "version": "0.1.0-rc.5",
+  "description": "Local process-sandbox backends for the MiNeko Harness sandbox seam: bwrap, the npm-distributed landlock-run launcher, macOS Seatbelt, or the Windows ACL restricted-token runner — functionally probed, fail-closed",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/sandbox/sandbox-local"
   },
   "type": "module",

@@ -3,28 +3,28 @@ requires = ["hatchling==1.30.1"]
 build-backend = "hatchling.build"
 
 [project]
-name = "mineko-herness-runtime-bin"
+name = "mineko-harness-runtime-bin"
 version = "0.0.0.dev0"
-description = "Pinned MiNeko Herness runtime for the Python SDK"
+description = "Pinned MiNeko Harness runtime for the Python SDK"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 authors = [{ name = "Aflydream" }]
 
 [project.urls]
-Homepage = "https://github.com/aflydream/mineko-herness"
-Documentation = "https://github.com/aflydream/mineko-herness/blob/main/python/sdk-runtime/README.md"
-Issues = "https://github.com/aflydream/mineko-herness/issues"
-Source = "https://github.com/aflydream/mineko-herness"
+Homepage = "https://github.com/aflydream/mineko-harness"
+Documentation = "https://github.com/aflydream/mineko-harness/blob/main/python/sdk-runtime/README.md"
+Issues = "https://github.com/aflydream/mineko-harness/issues"
+Source = "https://github.com/aflydream/mineko-harness"
 
 # Include the injected executable and default config; exclude the dev-only node
 # closure from wheels and sdists.
 [tool.hatch.build]
-artifacts = ["src/mineko_herness_runtime/runtime/mnh-jsonrpc-agent-*"]
-exclude = ["src/mineko_herness_runtime/runtime/node"]
+artifacts = ["src/mineko_harness_runtime/runtime/mnh-jsonrpc-agent-*"]
+exclude = ["src/mineko_harness_runtime/runtime/node"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/mineko_herness_runtime"]
+packages = ["src/mineko_harness_runtime"]
 
 [tool.hatch.build.targets.wheel.hooks.custom]
 

@@ -1,6 +1,6 @@
 // Keyless browser e2e: the shipped DeepSeek adapter stays mounted while its
 // credential is absent. The app remains usable, and the key is configured
-// from Settings without a startup takeover or model call.
+// from Settings without a model call.
 import { randomBytes } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
@@ -14,7 +14,7 @@ import {
 } from './scaffold.ts'
 import { ZH_BROWSER_LOCALE, connectFreshWorkspaceZh, saveFailureShot } from './support.ts'
 
-const SNAPSHOT_DIR = fileURLToPath(new URL('./snapshots/onboarding-deepseek-config', import.meta.url))
+const SNAPSHOT_DIR = fileURLToPath(new URL('./snapshots/deepseek-settings', import.meta.url))
 const MODELS_EXPECTED = join(SNAPSHOT_DIR, 'models.expected.md')
 const MODE = webSnapshotMode()
 
@@ -41,9 +41,8 @@ describe.skipIf(MODE === 'record')('web e2e: Models settings and DeepSeek config
     await scaffold?.close()
   })
 
-  it('starts without a credential modal and stores a key from Models settings', async () => {
-    onTestFailed(() => saveFailureShot(page, 'web-e2e-onboarding-deepseek-config'))
-    expect(await page.getByRole('dialog', { name: '添加一个 API Key 开始使用' }).count()).toBe(0)
+  it('starts normally without a credential and stores a key from Models settings', async () => {
+    onTestFailed(() => saveFailureShot(page, 'web-e2e-deepseek-settings-config'))
     expect(await page.locator('#root').evaluate(root => (root as HTMLElement).inert)).toBe(false)
 
     await page.getByRole('button', { name: '设置', exact: true }).click()
@@ -80,8 +79,7 @@ describe.skipIf(MODE === 'record')('web e2e: Models settings and DeepSeek config
     await page.reload({ waitUntil: 'load' })
     acknowledgeReloadConnectionLoss(tripwire, secondReloadWarnings)
     await page.waitForSelector('[class*="frame"]', { timeout: 15_000 })
-    expect(await page.getByRole('dialog', { name: '添加一个 API Key 开始使用' }).count()).toBe(0)
-
+    expect(await page.locator('#root').evaluate(root => (root as HTMLElement).inert)).toBe(false)
     expect((await page.content()).includes(secret)).toBe(false)
     expect((await page.locator('body').ariaSnapshot()).includes(secret)).toBe(false)
     expect(browserConsole.some(line => line.includes(secret))).toBe(false)
@@ -91,7 +89,7 @@ describe.skipIf(MODE === 'record')('web e2e: Models settings and DeepSeek config
 
 
   it('configures arbitrary DeepSeek models and prompts after the selected model is removed', async () => {
-    onTestFailed(() => saveFailureShot(page, 'web-e2e-onboarding-deepseek-models'))
+    onTestFailed(() => saveFailureShot(page, 'web-e2e-deepseek-settings-models'))
     // Opened here rather than inherited: the credential test reloads the page
     // after configuring the key, so nothing carries an open dialog across.
     await page.getByRole('button', { name: '设置', exact: true }).click()

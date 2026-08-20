@@ -3,7 +3,7 @@
 
 # Third-Party Notices
 
-MiNeko Herness is licensed under [MIT](LICENSE). It depends on the third-party software listed below. Each project remains under its own license; nothing in this file changes those terms.
+MiNeko Harness is licensed under [MIT](LICENSE). It depends on the third-party software listed below. Each project remains under its own license; nothing in this file changes those terms.
 
 This file lists **direct** dependencies declared by the workspace and the explicitly disclosed official Claude platform payload closure. It is generated from the workspace manifests by `scripts/gen-third-party-notices.ts`: a pre-commit hook regenerates it whenever a staged file changes one of its inputs, and `scripts/gen-third-party-notices.spec.ts` asserts in the test lane that the committed bytes match. Deleting a manifest runs no hook, so that case is caught by the assertion instead. Run `pnpm run verify-third-party-notices` for the standalone check.
 
@@ -170,7 +170,7 @@ External packages **directly declared** only by repository tooling, test infrast
 | [`vitepress-plugin-mermaid`](https://github.com/emersonbottero/vitepress-plugin-mermaid) | MIT |
 | [`vitest`](https://github.com/vitest-dev/vitest) | MIT |
 
-`eslint-plugin-sonarjs` (LGPL-3.0-only) and `lightningcss` (MPL-2.0) run only as development tooling; their code is not linked into or distributed with any MiNeko Herness artifact.
+`eslint-plugin-sonarjs` (LGPL-3.0-only) and `lightningcss` (MPL-2.0) run only as development tooling; their code is not linked into or distributed with any MiNeko Harness artifact.
 
 ## Python SDK dependencies (`python/`)
 
@@ -179,7 +179,7 @@ Direct dependencies of the `pyproject.toml` manifests, plus `uv` as the developm
 | Package | License | Role |
 | --- | --- | --- |
 | [`hatchling`](https://github.com/pypa/hatch) | MIT | build backend |
-| [`pydantic`](https://github.com/pydantic/pydantic) | MIT | runtime dependency of `mineko-herness-sdk` |
+| [`pydantic`](https://github.com/pydantic/pydantic) | MIT | runtime dependency of `mineko-harness-sdk` |
 | [`pytest`](https://github.com/pytest-dev/pytest) | MIT | test-only |
 | [`uv`](https://github.com/astral-sh/uv) | MIT / Apache-2.0 | development workflow tool |
 

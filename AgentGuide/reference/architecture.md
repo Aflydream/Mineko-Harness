@@ -1,4 +1,4 @@
-# MiNeko Herness Architecture
+# MiNeko Harness Architecture
 
 English | [中文](architecture.zh.md)
 

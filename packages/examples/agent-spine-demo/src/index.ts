@@ -104,7 +104,7 @@ export interface Config {
   toolOrder?: SystemPromptConfig['toolOrder']
   /** The tool registry's config — its presentation `mode` (see mnh-tools' `Config`). */
   tools?: ToolsConfig
-  /** MiNeko Herness home directory shared by shell context and local skill discovery. */
+  /** MiNeko Harness home directory shared by shell context and local skill discovery. */
   mnhHome?: string
   /** Deterministic fallback and accepted-title limits; omission uses the bundle's example policy. */
   sessionTitle?: SessionTitleConfig

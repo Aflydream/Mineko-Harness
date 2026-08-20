@@ -9,7 +9,7 @@ use tauri::{
 };
 use url::Url;
 
-const PRODUCT_NAME: &str = "MiNeko Herness";
+const PRODUCT_NAME: &str = "MiNeko Harness";
 
 fn requested_url() -> Result<Url, String> {
     let mut args = env::args().skip(1);
@@ -24,7 +24,7 @@ fn requested_url() -> Result<Url, String> {
             break;
         }
     }
-    let raw = value.ok_or_else(|| "MiNeko Herness requires --url <loopback-url>".to_owned())?;
+    let raw = value.ok_or_else(|| "MiNeko Harness requires --url <loopback-url>".to_owned())?;
     let url = Url::parse(&raw).map_err(|error| format!("invalid desktop URL: {error}"))?;
     if url.scheme() != "http"
         || url.host_str() != Some("127.0.0.1")
@@ -82,5 +82,5 @@ fn main() {
             Ok(())
         })
         .run(tauri::generate_context!())
-        .expect("error while running MiNeko Herness native shell");
+        .expect("error while running MiNeko Harness native shell");
 }

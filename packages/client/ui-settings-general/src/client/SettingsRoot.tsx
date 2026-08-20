@@ -8,9 +8,6 @@
  * open state and the active section id are component-local viewing state;
  * opening measures the trigger so CSS can expand the panel from that point;
  * closing retains the modal until CSS returns it there.
- * the onboarding coordinator mounts exactly one ordered registrant while the
- * sessions-derived empty-Hero fact is active. Visible dialog chrome belongs
- * to the step, so a mounted-but-deciding step paints nothing here.
  */
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
@@ -145,11 +142,10 @@ function SettingsPanel({ rows, renderSlot, activeId, closing, origin, onSelect, 
  * @returns the settings shell element tree.
  */
 export function SettingsRoot(props: SettingsRootComponentProps) {
-  const { wide, useSections, useOnboardingSteps, useSessions, renderSlot } = props
+  const { wide, useSections, renderSlot } = props
   const [panelPhase, setPanelPhase] = useState<'closed' | 'open' | 'closing'>('closed')
   const [activeId, setActiveId] = useState<string | undefined>(undefined)
   const [panelOrigin, setPanelOrigin] = useState<PanelOrigin>({ left: 0, top: 0, width: 1, height: 1 })
-  const [completedOnboarding, setCompletedOnboarding] = useState<ReadonlySet<string>>(() => new Set())
   const trigger = useRef<HTMLButtonElement | null>(null)
   const openFromTrigger = useCallback(() => {
     const rect = trigger.current?.getBoundingClientRect()
@@ -170,34 +166,10 @@ export function SettingsRoot(props: SettingsRootComponentProps) {
     }
     setPanelPhase(phase => phase === 'closed' ? phase : 'closing')
   }, [finishClose])
-  const openSection = useCallback((id: string) => {
-    setActiveId(id)
-    openFromTrigger()
-  }, [openFromTrigger])
-
   // The ledger tick keeps the nav rows fresh: registrants re-register with
   // freshly localized text on locale change, and the trigger/header/close
   // seats re-render through their own outlets' subscriptions.
   const rows = useSections(s => s)
-  const onboardingSteps = useOnboardingSteps(s => s)
-  const onboardingActive = useSessions(state =>
-    state.phase === 'ready'
-    && (state.current === undefined || state.byId[state.current]?.blank === true))
-  const onboardingStep = onboardingActive
-    ? onboardingSteps.find(step => !completedOnboarding.has(step.id))
-    : undefined
-
-  useEffect(() => {
-    if (onboardingActive) return
-    setCompletedOnboarding(new Set())
-  }, [onboardingActive])
-
-  const completeOnboardingStep = useCallback((id: string) => {
-    setCompletedOnboarding((previous) => {
-      if (previous.has(id)) return previous
-      return new Set([...previous, id])
-    })
-  }, [])
 
   return (
     <>
@@ -223,14 +195,6 @@ export function SettingsRoot(props: SettingsRootComponentProps) {
           onClosed={finishClose}
         />
       )}
-      {/* Dialog chrome and `#root` inert ownership live inside each step's
-          visible branch. A step still deciding (private facts loading)
-          renders null, so nothing paints or blocks while it decides. */}
-      {onboardingStep !== undefined && renderSlot('settings.onboarding', {
-        stepId: onboardingStep.id,
-        complete: () => { completeOnboardingStep(onboardingStep.id) },
-        openSection,
-      }, { only: onboardingStep.id })}
     </>
   )
 }

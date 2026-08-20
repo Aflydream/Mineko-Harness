@@ -82,12 +82,12 @@ describe('DeepSeekAdapter against a mock server', () => {
     })
     // App attribution and DeepSeek request identity are independent wire facts.
     expect(server.headers[0]?.['user-agent']).toBe(userAgent())
-    expect(server.headers[0]?.['x-mineko-herness-user-id']).toBe(getOrCreateAnonymousUserId())
-    expect(server.headers[0]).not.toHaveProperty('x-mineko-herness-session-id')
+    expect(server.headers[0]?.['x-mineko-harness-user-id']).toBe(getOrCreateAnonymousUserId())
+    expect(server.headers[0]).not.toHaveProperty('x-mineko-harness-session-id')
     expect(server.headers[0]).not.toHaveProperty('http-referer')
     expect(server.headers[0]).not.toHaveProperty('x-openrouter-title')
     expect(server.headers[0]).not.toHaveProperty('x-openrouter-categories')
-    expect(server.headers[0]).not.toHaveProperty('x-mineko-herness-compact')
+    expect(server.headers[0]).not.toHaveProperty('x-mineko-harness-compact')
   })
 
   it('streams raw chunks through ctx.llm.stream', async () => {
@@ -121,8 +121,8 @@ describe('DeepSeekAdapter against a mock server', () => {
       sessionId: SessionId('child-session'),
     })
 
-    expect(server.headers[0]?.['x-mineko-herness-session-id']).toBe('child-session')
-    expect(server.headers[0]?.['x-mineko-herness-user-id']).toBe(getOrCreateAnonymousUserId())
+    expect(server.headers[0]?.['x-mineko-harness-session-id']).toBe('child-session')
+    expect(server.headers[0]?.['x-mineko-harness-user-id']).toBe(getOrCreateAnonymousUserId())
   })
 
   it('marks the auxiliary compaction call on the wire', async () => {
@@ -138,7 +138,7 @@ describe('DeepSeekAdapter against a mock server', () => {
       purpose: 'compaction',
     })
 
-    expect(server.headers[0]?.['x-mineko-herness-compact']).toBe('1')
+    expect(server.headers[0]?.['x-mineko-harness-compact']).toBe('1')
   })
 
   it('switches dynamically from the configured high default through off to max', async () => {
@@ -915,8 +915,8 @@ describe('plugin registration and config', () => {
     const ctx = new Context()
     await ctx.plugin(LlmRuntime)
     await ctx.plugin(LlmDeepSeek, { baseURL: 'http://127.0.0.1:1' })
-    // First-boot onboarding: the route registers so models stay discoverable;
-    // only the request itself needs a key.
+    // The route remains discoverable without credentials; only a request
+    // requires a key.
     expect(ctx.llm.listProviders()).toEqual([{ id: 'deepseek-official', name: 'DeepSeek' }])
     await expect(ctx.llm.listModels('deepseek-official')).resolves.toHaveLength(2)
     const first = await assemble(ctx, { model: 'deepseek-v4-flash', messages: [] })

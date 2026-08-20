@@ -21,16 +21,16 @@ wheels = [
 ]
 
 [[package]]
-name = "mineko-herness-runtime-bin"
+name = "mineko-harness-runtime-bin"
 version = "0.0.0.dev0"
 source = { editable = "../sdk-runtime" }
 
 [[package]]
-name = "mineko-herness-sdk"
+name = "mineko-harness-sdk"
 version = "0.0.0.dev0"
 source = { editable = "." }
 dependencies = [
-    { name = "mineko-herness-runtime-bin" },
+    { name = "mineko-harness-runtime-bin" },
     { name = "pydantic" },
 ]
 
@@ -41,7 +41,7 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "mineko-herness-runtime-bin", editable = "../sdk-runtime" },
+    { name = "mineko-harness-runtime-bin", editable = "../sdk-runtime" },
     { name = "pydantic", specifier = ">=2.12,<3" },
 ]
 

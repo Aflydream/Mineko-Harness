@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-storage-domain",
-  "description": "Domain data form (ctx.storage.domain): schema-validated, event-emitting KV domains over storage backends for the MiNeko Herness",
-  "version": "0.1.0-rc.5",
+  "description": "Domain data form (ctx.storage.domain): schema-validated, event-emitting KV domains over storage backends for the MiNeko Harness",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/storage/storage-domain"
   },
   "type": "module",

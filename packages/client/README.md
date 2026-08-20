@@ -40,7 +40,7 @@ The browser side of the mnh web GUI: shell boot, browser-host communication, sha
 | [`ui-agent-preset/`](ui-agent-preset/README.md) | Selects a session's agent preset and authors preset compositions. |
 | [`ui-settings/`](ui-settings/README.md) | Hosts the settings interface and its extension areas. |
 | [`ui-settings-general/`](ui-settings-general/README.md) | Provides the general settings section. |
-| [`ui-settings-models/`](ui-settings-models/README.md) | Provides model-provider configuration and DeepSeek onboarding. |
+| [`ui-settings-models/`](ui-settings-models/README.md) | Provides model-provider and DeepSeek credential configuration. |
 | [`ui-settings-plugin-inventory/`](ui-settings-plugin-inventory/README.md) | Contributes the read-only Host Loader inventory tab to Plugins settings. |
 
 Each child reference owns its contract and detailed behavior. The [slot system standard](../../AgentGuide/architecture.md) and [web client architecture note](../../AgentGuide/architecture.md) own the cross-package composition and loading decisions.

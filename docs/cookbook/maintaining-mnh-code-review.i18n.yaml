@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write docs/cookbook/maintaining-mnh-code-review.md
-maintaining-mnh-code-review.md: 7843f7607c5a3fdb489bc0cd14ee0189c65da7e3
-maintaining-mnh-code-review.zh.md: 8f70506baa42f693e0160a65ba7a41b0b89ef417
+maintaining-mnh-code-review.md: 4304757e843d2d9870b50dae7be95a6dcf4e5b03
+maintaining-mnh-code-review.zh.md: e2a7515e8dad1b3b77fa2810e68190aed9a96dbf

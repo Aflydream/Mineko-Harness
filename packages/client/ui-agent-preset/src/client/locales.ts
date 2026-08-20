@@ -45,7 +45,7 @@ export const en: Record<AgentPresetSettingsKey, string> = {
     'Two-tool coding agent with persistent bash and str_replace_editor.',
   presetCordisName: 'Plugin Builder',
   presetCordisDescription:
-    'Built for creating and debugging MiNeko Herness plugins, with all Standard mode capabilities plus runtime inspection, plugin experiments, and agent-preset authoring guidance.',
+    'Built for creating and debugging MiNeko Harness plugins, with all Standard mode capabilities plus runtime inspection, plugin experiments, and agent-preset authoring guidance.',
   duplicate: 'Duplicate',
   duplicateUnavailable: 'This deployment has no writable preset directory',
   delete: 'Delete',
@@ -105,7 +105,7 @@ export const zh: Record<AgentPresetSettingsKey, string> = {
   presetMinimalName: '极简模式',
   presetMinimalDescription: '仅提供持久 bash 与 str_replace_editor 的双工具编码 Agent。',
   presetCordisName: '插件制作模式',
-  presetCordisDescription: '用于制作和调试 MiNeko Herness 插件：具备标准模式的全部能力，并提供运行时检查、插件实验和 Agent preset 创作指导。',
+  presetCordisDescription: '用于制作和调试 MiNeko Harness 插件：具备标准模式的全部能力，并提供运行时检查、插件实验和 Agent preset 创作指导。',
   duplicate: '复制',
   duplicateUnavailable: '此部署未配置可写的预设目录',
   delete: '删除',

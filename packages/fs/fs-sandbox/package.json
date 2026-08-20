@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-fs-sandbox",
-  "description": "Sandbox-enforcing implementation of the MiNeko Herness filesystem seam: fences write/edit by the per-call sandbox mode (read-only denies mutation, workspace-write contains it to the workspace + temp roots) while reads pass through",
-  "version": "0.1.0-rc.5",
+  "description": "Sandbox-enforcing implementation of the MiNeko Harness filesystem seam: fences write/edit by the per-call sandbox mode (read-only denies mutation, workspace-write contains it to the workspace + temp roots) while reads pass through",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/fs/fs-sandbox"
   },
   "type": "module",

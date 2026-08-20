@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-client-ui-tool",
   "description": "Client Tool call-tree renderer and keyed per-tool presentation slot",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/client/ui-tool"
   },
   "type": "module",

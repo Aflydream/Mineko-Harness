@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-workspace",
-  "description": "Workspace entity registry (ctx.workspaceRegistry): durable workspace records with validated session attachment over the domain data form for the MiNeko Herness",
-  "version": "0.1.0-rc.5",
+  "description": "Workspace entity registry (ctx.workspaceRegistry): durable workspace records with validated session attachment over the domain data form for the MiNeko Harness",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/workspace/workspace"
   },
   "type": "module",

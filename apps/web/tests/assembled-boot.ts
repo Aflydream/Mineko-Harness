@@ -82,7 +82,7 @@ export function installAssembledBootEnv(): void {
     // English here.
     Object.defineProperty(navigator, 'languages', { value: ['en-US'], configurable: true })
     Object.defineProperty(navigator, 'language', { value: 'en-US', configurable: true })
-    document.title = 'MiNeko Herness'
+    document.title = 'MiNeko Harness'
     vi.stubGlobal('ResizeObserver', ResizeObserverStub)
     vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) =>
       setTimeout(() => { callback(0) }, 0) as unknown as number)

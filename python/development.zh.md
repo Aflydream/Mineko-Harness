@@ -30,9 +30,9 @@ uv run --project python/sdk pytest
 交互式冒烟测试需要环境变量或仓库根目录 `.env` 中存在 `DEEPSEEK_API_KEY`：
 
 ```python
-from mineko_herness import MiNekoHerness
+from mineko_harness import MiNekoHarness
 
-with MiNekoHerness() as harness:
+with MiNekoHarness() as harness:
     print(harness.run("say hi").final_response)
 ```
 
@@ -47,7 +47,7 @@ with MiNekoHerness() as harness:
 
 ## 构建分发包
 
-根目录 `package.json` 的版本是两个 Python 分发包的权威版本。暂存脚本会将该版本注入两个 wheel 包，并将 SDK 固定到同版本的 `mineko-herness-runtime-bin`。
+根目录 `package.json` 的版本是两个 Python 分发包的权威版本。暂存脚本会将该版本注入两个 wheel 包，并将 SDK 固定到同版本的 `mineko-harness-runtime-bin`。
 
 纯 SDK wheel 包只需构建一次；每个原生平台分别构建一个运行时 wheel 包：
 
@@ -55,7 +55,7 @@ with MiNekoHerness() as harness:
 version="$(node -p "require('./package.json').version")"
 python scripts/build-python-release.py --package sdk --output-dir dist-python
 python scripts/build-python-release.py --package runtime --platform macos-arm64 --runtime-exe dist-exe/mnh-jsonrpc-agent-pkg-macos-arm64 --output-dir dist-python
-pip install --find-links dist-python mineko-herness-sdk=="$version"
+pip install --find-links dist-python mineko-harness-sdk=="$version"
 ```
 
 运行时分发包仅提供 wheel 包。发布流水线会连同纯 SDK wheel 包一起发布三个平台 wheel 包：Linux x64、Linux arm64 和 macOS 14 或更高版本的 arm64。只有与仓库版本匹配时，才接受 `python-v<repository-version>` 标签；`0.0.1-rc.1` 之类的仓库预发布版本在 wheel 包文件名和元数据中使用规范化的 PEP 440 写法，例如 `0.0.1rc1`。

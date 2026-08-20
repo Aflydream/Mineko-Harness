@@ -44,7 +44,7 @@ if (deployedManifest.version !== desktopManifest.version) {
 
 deployedManifest.main = 'release-main.mjs'
 deployedManifest.private = true
-deployedManifest.productName = 'MiNeko Herness'
+deployedManifest.productName = 'MiNeko Harness'
 deployedManifest.author = 'Aflydream'
 delete deployedManifest.bin
 delete deployedManifest.devDependencies

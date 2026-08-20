@@ -1193,7 +1193,7 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
     ],
     replaceRisk: 'none',
     example: 'return {\n  inject: [\'slots\'],\n  apply(ctx) {\n    ctx.slots.inject(\'settings.general.item\', () => ctx.slots.register(\n      { name: \'settings.general.item\', id: \'my-entry\', order: 100, label: \'My entry\' },\n      () => React.createElement(\'div\', null, \'hello\'),\n    ))\n  },\n}',
-    source: 'packages/client/ui-settings/src/client/contract/slots.ts:88',
+    source: 'packages/client/ui-settings/src/client/contract/slots.ts:77',
   },
   {
     key: 'settings.header',
@@ -1220,49 +1220,6 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
     replaceRisk: 'shadows-shipped-ui',
     example: 'return {\n  inject: [\'slots\'],\n  apply(ctx) {\n    ctx.slots.inject(\'settings.header\', () => ctx.slots.register(\n      { name: \'settings.header\' },\n      () => React.createElement(\'div\', null, \'hello\'),\n    ))\n  },\n}',
     source: 'packages/client/ui-settings/src/client/contract/slots.ts:29',
-  },
-  {
-    key: 'settings.onboarding',
-    kind: 'list',
-    scope: 'root',
-    summary: 'Root-scoped onboarding steps contributed by settings features.',
-    doc: 'Root-scoped onboarding steps contributed by settings features. The\nshell mounts one ordered step at a time; the active registrant either\ncompletes itself or keeps ownership until the user completes its sole\npath. Registrants own readiness, copy, dialog behavior, AND visible\nchrome: a step wraps its visible content in its modal surface (including\n`#root` inert ownership) and renders null while private facts are still\nloading. The shell paints no chrome of its own, so a mounted-but-deciding\nstep shows and blocks nothing.',
-    registerOptions: [
-      {
-        name: 'id',
-        requirement: 'required',
-        type: 'string',
-        doc: 'Your cell key. Use an id of your own: a fresh id is added beside the shipped entries, while reusing a shipped id puts you in THAT cell and replaces it. Owners that filter by id address you by it.',
-      },
-      {
-        name: 'order',
-        requirement: 'optional',
-        type: 'number',
-        doc: 'Position among the entries, ascending (default 0).',
-      },
-      {
-        name: 'label',
-        requirement: 'optional',
-        type: 'string | (() => string)',
-        doc: 'Display text where the owner projects one (nav rows, tabs). A thunk is re-read on every projection, so localized text follows the active locale without re-registering.',
-      },
-    ],
-    ownerProps: [
-      '/** Owner share of the currently active settings-backed onboarding step. */\nexport interface SettingsOnboardingOwnerProps {\n  /** Stable id of the step currently selected by the coordinator. */\n  stepId: string\n  /** Complete or skip this step and transfer ownership to the next entry. */\n  complete: () => void\n  /** Open the settings panel directly on one registered section. */\n  openSection: (id: string) => void\n}',
-    ],
-    ownerPropsReferences: [],
-    standardProps: [
-      'useSessions: SnapshotSelectorHook<SessionListState>',
-      'useWorkspaces: SnapshotSelectorHook<import(\'./workspaces/service.ts\').WorkspaceListState>',
-    ],
-    keyDomain: '',
-    hookContext: '',
-    slotInject: '',
-    declaredBy: 'an entry in \'sidebar.settings\' (client-ui-settings-general), so it exists while that entry is mounted',
-    occupants: [],
-    replaceRisk: 'none',
-    example: 'return {\n  inject: [\'slots\'],\n  apply(ctx) {\n    ctx.slots.inject(\'settings.onboarding\', () => ctx.slots.register(\n      { name: \'settings.onboarding\', id: \'my-entry\', order: 100, label: \'My entry\' },\n      () => React.createElement(\'div\', null, \'hello\'),\n    ))\n  },\n}',
-    source: 'packages/client/ui-settings/src/client/contract/slots.ts:73',
   },
   {
     key: 'settings.plugin.item',
@@ -1384,7 +1341,7 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
       },
     ],
     ownerProps: [
-      '/**\n * Owner share of a settings section entry. The shell owns modal visibility\n * and navigation; a section\'s data arrives through its own inject faces and\n * stores. `close` is the one shell affordance a section receives, for flows\n * that leave settings altogether (starting a session from a section) — the\n * onboarding coordinator\'s `openSection`/`complete` precedent, inverted.\n */\nexport interface SettingsSectionOwnerProps {\n  /** Close the settings panel (the shell owns the open state). */\n  close: () => void\n}',
+      '/**\n * Owner share of a settings section entry. The shell owns modal visibility\n * and navigation; a section\'s data arrives through its own inject faces and\n * stores. `close` is the one shell affordance a section receives, for flows\n * that leave settings altogether, such as starting a session from a section.\n */\nexport interface SettingsSectionOwnerProps {\n  /** Close the settings panel (the shell owns the open state). */\n  close: () => void\n}',
     ],
     ownerPropsReferences: [],
     standardProps: [

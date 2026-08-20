@@ -28,7 +28,7 @@
     "apps/web/tests/plugin-config.e2e.ts",
     "apps/web/tests/settings-chrome.e2e.ts",
     "apps/web/tests/models-settings.e2e.ts",
-    "apps/web/tests/onboarding-deepseek-config.e2e.ts",
+    "apps/web/tests/deepseek-settings.e2e.ts",
     "apps/web/tests/onboarding-usable-provider.e2e.ts",
     "apps/web/tests/remote-welcome.e2e.ts",
     "apps/web/tests/workspace-management.e2e.ts",

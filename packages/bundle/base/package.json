@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-base",
   "description": "The shared mnh core as a profile bundle: every profile's first patch layer, inserting the base plugin rows over the empty profile root",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/bundle/base"
   },
   "type": "module",

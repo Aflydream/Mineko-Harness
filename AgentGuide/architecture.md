@@ -1,6 +1,6 @@
 # Architecture
 
-MiNeko Herness is a Cordis application in which product behavior is assembled from plugins. Applications choose a profile and overlays; bundles select plugins; plugins contribute services, events, tools, client modules, or providers.
+MiNeko Harness is a Cordis application in which product behavior is assembled from plugins. Applications choose a profile and overlays; bundles select plugins; plugins contribute services, events, tools, client modules, or providers.
 
 ## Composition
 

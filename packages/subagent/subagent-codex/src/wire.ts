@@ -132,8 +132,8 @@ export class CodexAppServerWire {
   async initialize(signal: AbortSignal): Promise<void> {
     object(await this.guarded(this.transport.request('initialize', {
       clientInfo: {
-        name: 'mineko-herness',
-        title: 'MiNeko Herness',
+        name: 'mineko-harness',
+        title: 'MiNeko Harness',
         version: '0.0.1',
       },
       capabilities: {

@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-sdk-protocol",
-  "description": "Shared wire protocol for the MiNeko Herness SDK runtime: the newline-delimited JSON-RPC stdio transport and the named request, result, and notification types spoken between the runtime server and SDK clients",
-  "version": "0.1.0-rc.5",
+  "description": "Shared wire protocol for the MiNeko Harness SDK runtime: the newline-delimited JSON-RPC stdio transport and the named request, result, and notification types spoken between the runtime server and SDK clients",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/sdk/protocol"
   },
   "type": "module",

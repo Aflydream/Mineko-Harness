@@ -6,6 +6,6 @@ head:
       content: 0; url=./guide/quickstart
 ---
 
-# MiNeko Herness
+# MiNeko Harness
 
 [English](index.md) | 中文

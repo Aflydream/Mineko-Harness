@@ -11,12 +11,12 @@ import { run } from '../../../scripts/mnh.mjs'
 const scriptRoot = dirname(fileURLToPath(import.meta.url))
 const desktopRoot = resolve(scriptRoot, '..')
 const nativeManifest = join(desktopRoot, 'native', 'Cargo.toml')
-const nativeExecutable = join(desktopRoot, 'native', 'target', 'release', 'MiNekoHerness.exe')
+const nativeExecutable = join(desktopRoot, 'native', 'target', 'release', 'MiNekoHarness.exe')
 
 /** Ensure the current Rust sources have produced the native desktop executable. */
 export async function ensureNativeWindowsRuntime() {
   if (process.platform !== 'win32') {
-    throw new Error('the MiNeko Herness native desktop development runtime supports Windows only')
+    throw new Error('the MiNeko Harness native desktop development runtime supports Windows only')
   }
   await runChild('cargo', ['build', '--manifest-path', nativeManifest, '--release'])
   await access(nativeExecutable)

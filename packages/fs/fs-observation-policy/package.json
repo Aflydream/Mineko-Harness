@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-fs-observation-policy",
-  "description": "File-context policy plugin for the MiNeko Herness — observed-state, read-before-edit, and version-guarded write/edit added over the ctx.fs provider seam through the fs/* event gate (no service API)",
-  "version": "0.1.0-rc.5",
+  "description": "File-context policy plugin for the MiNeko Harness — observed-state, read-before-edit, and version-guarded write/edit added over the ctx.fs provider seam through the fs/* event gate (no service API)",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/fs/fs-observation-policy"
   },
   "type": "module",

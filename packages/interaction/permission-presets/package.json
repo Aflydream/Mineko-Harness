@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-permission-presets",
-  "description": "User-facing permission presets (ctx.permissionPresets) for the MiNeko Herness: one product-level Permissions select bundling the sandbox-mode and approval-policy knobs, written through to their own session events",
-  "version": "0.1.0-rc.5",
+  "description": "User-facing permission presets (ctx.permissionPresets) for the MiNeko Harness: one product-level Permissions select bundling the sandbox-mode and approval-policy knobs, written through to their own session events",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/interaction/permission-presets"
   },
   "type": "module",

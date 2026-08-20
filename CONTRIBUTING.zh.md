@@ -2,7 +2,7 @@
 
 [English](CONTRIBUTING.md) | 中文
 
-MiNeko Herness 欢迎外部 Issue 和 PR。本项目是仅面向 Windows 的桌面项目，目前没有 macOS 或 Linux 桌面版本计划。
+MiNeko Harness 欢迎外部 Issue 和 PR。本项目是仅面向 Windows 的桌面项目，目前没有 macOS 或 Linux 桌面版本计划。
 
 ## 项目范围
 
@@ -32,4 +32,4 @@ Bug、功能请求、研究和任务请使用 [Issue 模板](https://github.com/
 
 欢迎插件、教程、Bug 报告、设计想法和性能数据。如果提案涉及更广泛的平台或架构决策，请先在 Issue 中描述问题与取舍，再开始实现。
 
-MiNeko Herness 按 [MIT 许可证](LICENSE)发布。第三方包、内置源码及其许可证记录在 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 中。
+MiNeko Harness 按 [MIT 许可证](LICENSE)发布。第三方包、内置源码及其许可证记录在 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 中。

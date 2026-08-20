@@ -4,4 +4,4 @@
     - img
   - menuitem "Code mode All Standard mode capabilities, with tools exposed through the Code Mode SDK so the model can combine multi-step operations in one TypeScript program."
   - menuitem "Minimal mode Two-tool coding agent with persistent bash and str_replace_editor."
-  - menuitem "Plugin Builder Built for creating and debugging MiNeko Herness plugins, with all Standard mode capabilities plus runtime inspection, plugin experiments, and agent-preset authoring guidance."
+  - menuitem "Plugin Builder Built for creating and debugging MiNeko Harness plugins, with all Standard mode capabilities plus runtime inspection, plugin experiments, and agent-preset authoring guidance."

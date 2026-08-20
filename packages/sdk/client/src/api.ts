@@ -1,8 +1,8 @@
 /**
- * High-level run API over {@link HarnessClient}: `MiNekoHerness` owns one
+ * High-level run API over {@link HarnessClient}: `MiNekoHarness` owns one
  * runtime subprocess across many sessions; `HarnessSession.run` sends a
  * prompt and settles when the whole agent next becomes idle.
- * Mirrors the Python SDK's `MiNekoHerness`/`Session` pair.
+ * Mirrors the Python SDK's `MiNekoHarness`/`Session` pair.
  *
  * @module @aflydream/mnh-sdk-client/api
  */
@@ -11,15 +11,15 @@ import { randomUUID } from 'node:crypto'
 import { resolve } from 'node:path'
 import type { SessionEvent } from '@aflydream/mnh-session'
 import { HarnessClient, isRecord, SdkProtocolError } from './client.ts'
-import type { ContentBlock, MiNekoHernessOptions, HarnessClientOptions, HarnessNotification, RunResult } from './types.ts'
+import type { ContentBlock, MiNekoHarnessOptions, HarnessClientOptions, HarnessNotification, RunResult } from './types.ts'
 
 /**
- * Reusable SDK for running MiNeko Herness agent turns in a runtime
+ * Reusable SDK for running MiNeko Harness agent turns in a runtime
  * subprocess. The subprocess starts lazily on first use and stays owned by
  * this instance until {@link close}; always close (or `await using`) so the
  * child is reaped.
  */
-export class MiNekoHerness implements AsyncDisposable {
+export class MiNekoHarness implements AsyncDisposable {
   private clientInstance: HarnessClient
   private readonly launch: HarnessClientOptions
   private readonly cwd: string
@@ -30,7 +30,7 @@ export class MiNekoHerness implements AsyncDisposable {
   private closed = false
 
   /** @param options - runtime launch spec plus the session route (cwd/provider/model). */
-  constructor(options: MiNekoHernessOptions) {
+  constructor(options: MiNekoHarnessOptions) {
     this.launch = options.launch
     this.clientInstance = new HarnessClient(options.launch)
     // Absolute before the handshake: the child spawns relative to THIS
@@ -134,7 +134,7 @@ export class HarnessSession {
    * @param harness - the owning harness (supplies the client and handshake).
    * @param id - the wire session id this handle runs on.
    */
-  constructor(readonly harness: MiNekoHerness, readonly id: string) {}
+  constructor(readonly harness: MiNekoHarness, readonly id: string) {}
 
   /**
    * Queue one prompt, then observe the whole session through its next idle.

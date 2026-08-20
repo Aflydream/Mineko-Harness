@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-acp-snapshot",
   "description": "ACP test kit: shared subprocess launcher, snapshot scenario harness, expected-output normalizers, and suite factory",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/test-support/acp-snapshot"
   },
   "type": "module",

@@ -121,7 +121,7 @@ export class HarnessSdkJsonRpcServer {
       if (this.provider !== 'deepseek-official') throw new Error(`no adapter registered for provider "${this.provider}"`)
       this.llmFiber = await this.ctx.plugin(LlmDeepSeek, {})
     }
-    return { serverInfo: { name: 'mineko-herness-sdk-runtime', version: '0.0.1' } }
+    return { serverInfo: { name: 'mineko-harness-sdk-runtime', version: '0.0.1' } }
   }
 
   /**
@@ -196,7 +196,7 @@ export class HarnessSdkJsonRpcServer {
       case 'shutdown':
         return this.shutdown()
       default:
-        throw new Error(`unknown MiNeko Herness SDK runtime method: ${method}`)
+        throw new Error(`unknown MiNeko Harness SDK runtime method: ${method}`)
     }
   }
 

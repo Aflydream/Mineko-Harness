@@ -15,8 +15,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 
-from mineko_herness import MiNekoHerness
-from mineko_herness_runtime import bundled_default_config_path
+from mineko_harness import MiNekoHarness
+from mineko_harness_runtime import bundled_default_config_path
 
 
 class MockCompletionHandler(BaseHTTPRequestHandler):
@@ -55,7 +55,7 @@ def run_smoke(repo_root: Path, keep_sessions: bool) -> None:
     print(f"mock_base_url={base_url}")
 
     try:
-        with MiNekoHerness(
+        with MiNekoHarness(
             model="sdk-smoke-model",
             cwd=str(repo_root / "python/sdk"),
             runtime_cwd=str(repo_root),
@@ -104,7 +104,7 @@ def main() -> None:
         "--repo-root",
         type=Path,
         default=Path(__file__).resolve().parents[3],
-        help="Path to the mineko-herness checkout.",
+        help="Path to the mineko-harness checkout.",
     )
     parser.add_argument("--keep-sessions", action="store_true")
     args = parser.parse_args()

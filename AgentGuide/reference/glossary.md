@@ -2,7 +2,7 @@
 
 English | [中文](glossary.zh.md)
 
-Domain vocabulary for MiNeko Herness uses one canonical term per concept. Terms link to their entries with standard Markdown anchors; implementation detail stays in package READMEs and Agent Notes.
+Domain vocabulary for MiNeko Harness uses one canonical term per concept. Terms link to their entries with standard Markdown anchors; implementation detail stays in package READMEs and Agent Notes.
 
 ## capability-seam
 

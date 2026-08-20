@@ -9,11 +9,11 @@ describe('Windows desktop identity', () => {
   it('applies the product app id and icon to the Windows taskbar button', () => {
     const window = { setAppDetails: vi.fn() }
 
-    applyDesktopTaskbarIdentity(window, 'C:/MiNeko-Herness/mineko.ico', 'win32')
+    applyDesktopTaskbarIdentity(window, 'C:/MiNeko-Harness/mineko.ico', 'win32')
 
     expect(window.setAppDetails).toHaveBeenCalledWith({
       appId: DESKTOP_APP_USER_MODEL_ID,
-      appIconPath: 'C:/MiNeko-Herness/mineko.ico',
+      appIconPath: 'C:/MiNeko-Harness/mineko.ico',
     })
   })
 
@@ -26,7 +26,7 @@ describe('Windows desktop identity', () => {
   })
 
   it('keeps the runtime display name stable', () => {
-    expect(DESKTOP_APP_NAME).toBe('MiNeko Herness')
-    expect(DESKTOP_APP_USER_MODEL_ID).toBe('com.aflydream.minekoherness')
+    expect(DESKTOP_APP_NAME).toBe('MiNeko Harness')
+    expect(DESKTOP_APP_USER_MODEL_ID).toBe('com.aflydream.minekoharness')
   })
 })

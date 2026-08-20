@@ -1,6 +1,6 @@
 # AGENTS.md
 
-MiNeko Herness is a plugin-based Agent Harness on vendored Cordis. Before changing code, start with [AgentGuide/README.md](AgentGuide/README.md) and open the topic guide for the affected area.
+MiNeko Harness is a plugin-based Agent Harness on vendored Cordis. Before changing code, start with [AgentGuide/README.md](AgentGuide/README.md) and open the topic guide for the affected area.
 
 ## Task authority
 

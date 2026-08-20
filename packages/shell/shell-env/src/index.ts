@@ -27,7 +27,7 @@ export const inject: string[] = []
 
 /** Plugin config (all optional — the built-in facts resolve without defaults). */
 export interface Config {
-  /** MiNeko Herness home directory exposed as `MNH_HOME`; defaults to `$MNH_HOME` or `~/.mnh`. */
+  /** MiNeko Harness home directory exposed as `MNH_HOME`; defaults to `$MNH_HOME` or `~/.mnh`. */
   mnhHome?: string
 }
 

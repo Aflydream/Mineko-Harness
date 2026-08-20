@@ -20,7 +20,7 @@ const MINIMUM_GIT = [2, 26, 0]
 const HOOKS_DIRECTORY = 'mnh-hooks'
 const OWNERSHIP_MARKER = '.mnh-lefthook-owned'
 const OWNERSHIP_MARKER_VERSION = 1
-const OWNERSHIP_MARKER_OWNER = 'mineko-herness worktree-local lefthook hooks'
+const OWNERSHIP_MARKER_OWNER = 'mineko-harness worktree-local lefthook hooks'
 const INSTALL_LOCK = 'mnh-lefthook-install.lock'
 const INSTALL_LOCK_TIMEOUT_MS = 30_000
 const INSTALL_LOCK_INITIALIZATION_TIMEOUT_MS = 1_000
@@ -28,7 +28,7 @@ const INSTALL_LOCK_POLL_MS = 50
 const ALLOW_HOOKS_PATH_OVERRIDE = 'MNH_LEFTHOOK_ALLOW_HOOKS_PATH_OVERRIDE'
 const REPOSITORY_EXTENSION_PATTERN = '^extensions\\.'
 const PAIRING_MERGE_DRIVER_CONFIG = [
-  ['merge.mnh-translation-pairing.name', 'MiNeko Herness bilingual pairing records'],
+  ['merge.mnh-translation-pairing.name', 'MiNeko Harness bilingual pairing records'],
   [
     'merge.mnh-translation-pairing.driver',
     'scripts/merge-translation-pairing-driver.sh %O %A %B %P',

@@ -11,7 +11,7 @@ import { isAbsolute, join, relative, resolve as resolvePath } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { afterEach, describe, expect, it } from 'vitest'
 import {
-  MiNekoHerness,
+  MiNekoHarness,
   HarnessClient,
   HarnessSession,
   JsonRpcResponseError,
@@ -41,8 +41,8 @@ function fakeLaunch(env: Record<string, string> = {}, extra: LaunchOverrides = {
   }
 }
 
-function harnessWith(env: Record<string, string> = {}, extra: LaunchOverrides = {}): MiNekoHerness {
-  const harness = new MiNekoHerness({ launch: fakeLaunch(env, extra) })
+function harnessWith(env: Record<string, string> = {}, extra: LaunchOverrides = {}): MiNekoHarness {
+  const harness = new MiNekoHarness({ launch: fakeLaunch(env, extra) })
   cleanups.push(() => harness.close())
   return harness
 }
@@ -53,7 +53,7 @@ async function tempDir(prefix: string): Promise<string> {
   return dir
 }
 
-describe('MiNekoHerness', () => {
+describe('MiNekoHarness', () => {
   it('ignores notifications that precede the submitted message receipt', async () => {
     const notifications = [
       { method: 'session.status', params: { sessionId: 'owned', status: 'running' } },
@@ -102,7 +102,7 @@ describe('MiNekoHerness', () => {
           async * [Symbol.asyncIterator]() {},
         }),
       },
-    } as unknown as MiNekoHerness
+    } as unknown as MiNekoHarness
 
     const result = await new HarnessSession(harness, 'owned').run('go')
 
@@ -150,7 +150,7 @@ describe('MiNekoHerness', () => {
   it('sends the configured cwd/provider/model/maxTokens in the handshake exactly once', async () => {
     const dir = await tempDir('sdk-client-init-')
     const recordFile = join(dir, 'init.jsonl')
-    const harness = new MiNekoHerness({
+    const harness = new MiNekoHarness({
       launch: fakeLaunch({ FAKE_RECORD_INIT: recordFile }),
       cwd: dir,
       provider: 'custom-provider',
@@ -180,7 +180,7 @@ describe('MiNekoHerness', () => {
     await mkdir(inner)
     const relativeCwd = relative(process.cwd(), inner)
     expect(isAbsolute(relativeCwd)).toBe(false)
-    const harness = new MiNekoHerness({
+    const harness = new MiNekoHarness({
       launch: fakeLaunch({ FAKE_RECORD_INIT: recordFile, FAKE_ECHO_CWD_IN_INIT: '1' }, { cwd: relativeCwd }),
     })
     cleanups.push(() => harness.close())
@@ -230,9 +230,9 @@ describe('MiNekoHerness', () => {
   })
 
   it('supports await using disposal', async () => {
-    let captured: MiNekoHerness
+    let captured: MiNekoHarness
     {
-      await using harness = new MiNekoHerness({ launch: fakeLaunch() })
+      await using harness = new MiNekoHarness({ launch: fakeLaunch() })
       captured = harness
       const result = await harness.run('scoped')
       expect(result.finalResponse).toBe('hello from fake runtime')
@@ -368,7 +368,7 @@ describe('HarnessClient', () => {
 
     // A bare unbounded request with omitted params sends `{}` on the wire.
     const identity = await client.request('initialize') as { serverInfo: { name: string } }
-    expect(identity.serverInfo.name).toBe('mineko-herness-sdk-runtime')
+    expect(identity.serverInfo.name).toBe('mineko-harness-sdk-runtime')
 
     // Async iteration consumes queued items and then parks.
     const collected: string[] = []

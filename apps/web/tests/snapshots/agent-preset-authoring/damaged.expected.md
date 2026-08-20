@@ -53,7 +53,7 @@
         - text: 复制
     - listitem:
       - 'button "设为默认: 插件制作模式"':
-        - text: 插件制作模式 内置 用于制作和调试 MiNeko Herness 插件：具备标准模式的全部能力，并提供运行时检查、插件实验和 Agent preset 创作指导。
+        - text: 插件制作模式 内置 用于制作和调试 MiNeko Harness 插件：具备标准模式的全部能力，并提供运行时检查、插件实验和 Agent preset 创作指导。
         - code: cordis
       - 'button "查看: 插件制作模式"':
         - img

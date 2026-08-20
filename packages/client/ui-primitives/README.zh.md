@@ -2,7 +2,7 @@
 
 [English](README.md) | 中文
 
-纯 React 原子组件（零 cordis）：StateDot、DisclosureRow、ic_ds_* 图标、Button/Pill/Menu/Modal/Input、Toast 短时横幅、OnboardingSurface 首次使用接管层（portal 到 body 的遮罩加不透明展示层，在且仅在自身生命周期内保持 `#root` 为 `inert`）、markdown 家族（MessageText/MarkdownText/JsonBlock）、只读 JsonTree 检查器、`useAnchoredMaxHeight` 钩子（把底部锚定的浮层高度收敛到锚点上方的视口空间，并在 resize、scroll 与调用方提供的依赖变化时重新测量）、TerminalBlock、DiffBlock、ReadBlock、SearchBlock，以及 WebBlock。`Modal` 与 `Menu` 会在受控关闭时保留渲染层并反向播放入场动效，动画结束后才卸载；`useAnimatedPresence` 为功能自有浮层提供相同生命周期，偏好减少动态效果的客户端会跳过两个过渡。
+纯 React 原子组件（零 cordis）：StateDot、DisclosureRow、ic_ds_* 图标、Button/Pill/Menu/Modal/Input、Toast 短时横幅、markdown 家族（MessageText/MarkdownText/JsonBlock）、只读 JsonTree 检查器、`useAnchoredMaxHeight` 钩子（把底部锚定的浮层高度收敛到锚点上方的视口空间，并在 resize、scroll 与调用方提供的依赖变化时重新测量）、TerminalBlock、DiffBlock、ReadBlock、SearchBlock，以及 WebBlock。`Modal` 与 `Menu` 会在受控关闭时保留渲染层并反向播放入场动效，动画结束后才卸载；`useAnimatedPresence` 为功能自有浮层提供相同生命周期，偏好减少动态效果的客户端会跳过两个过渡。
 
 ## 液态玻璃按钮
 

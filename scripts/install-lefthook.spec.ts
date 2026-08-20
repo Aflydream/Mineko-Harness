@@ -589,7 +589,7 @@ describe('worktree-local Lefthook installer', { timeout: 15_000 }, () => {
       join(externalHooks, '.mnh-lefthook-owned'),
       `${JSON.stringify({
         version: 1,
-        owner: 'mineko-herness worktree-local lefthook hooks',
+        owner: 'mineko-harness worktree-local lefthook hooks',
         hooksPath: externalHooks,
       })}\n`,
       0o600,

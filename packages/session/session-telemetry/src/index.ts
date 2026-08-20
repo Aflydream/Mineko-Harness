@@ -1,5 +1,5 @@
 /**
- * SessionTelemetryBackend Service Definition for the MiNeko Herness.
+ * SessionTelemetryBackend Service Definition for the MiNeko Harness.
  *
  * This package owns the CAPTURE side of session-event reporting — which records
  * exist (the chunk projection), what they carry (the logical record), when

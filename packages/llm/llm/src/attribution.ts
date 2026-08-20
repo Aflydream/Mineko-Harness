@@ -38,9 +38,9 @@ export interface AppIdentity {
  * can suppress attribution entirely.
  */
 export const APP_IDENTITY: AppIdentity = {
-  product: 'mineko-herness',
+  product: 'mineko-harness',
   version,
-  url: 'https://github.com/aflydream/mineko-herness',
+  url: 'https://github.com/aflydream/mineko-harness',
 }
 
 /**

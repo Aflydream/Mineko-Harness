@@ -160,8 +160,8 @@ export const TRANSLATION_SCOPE_GLOB_EXCLUDES = [
   '**/.pytest_cache/**',
   'apps/web/dist/**',
   '.artifacts/**',
-  'python/sdk-runtime/src/mineko_herness_runtime/runtime/mnh-jsonrpc-agent-*/**',
-  'python/sdk-runtime/src/mineko_herness_runtime/runtime/node/**',
+  'python/sdk-runtime/src/mineko_harness_runtime/runtime/mnh-jsonrpc-agent-*/**',
+  'python/sdk-runtime/src/mineko_harness_runtime/runtime/node/**',
   'vendor/**',
 ]
 
@@ -172,8 +172,8 @@ function isTranslationSourceExcluded(file: string): boolean {
       || segment.startsWith('.doc-typecheck-')
     || segment.startsWith('.node-next-types-'))
     || file.startsWith('apps/web/dist/')
-    || file.startsWith('python/sdk-runtime/src/mineko_herness_runtime/runtime/mnh-jsonrpc-agent-')
-    || file.startsWith('python/sdk-runtime/src/mineko_herness_runtime/runtime/node/')
+    || file.startsWith('python/sdk-runtime/src/mineko_harness_runtime/runtime/mnh-jsonrpc-agent-')
+    || file.startsWith('python/sdk-runtime/src/mineko_harness_runtime/runtime/node/')
 }
 
 /** Whether one discovered Markdown or sidecar path belongs to the bilingual source corpus. */
@@ -302,7 +302,7 @@ export function parseTranslationMarkdown(content: string): Nodes {
   return fromMarkdown(content, { extensions: [gfm()], mdastExtensions: [gfmFromMarkdown()] })
 }
 
-const PUBLIC_REPOSITORY_BLOB_ROOT = 'https://github.com/aflydream/mineko-herness/blob/main/'
+const PUBLIC_REPOSITORY_BLOB_ROOT = 'https://github.com/aflydream/mineko-harness/blob/main/'
 
 /** Return the accepted relative and public-repository links to one counterpart. */
 export function languageSwitcherTargets(counterpart: string): string[] {

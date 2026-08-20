@@ -17,11 +17,11 @@
 克隆仓库以使用其中的可运行示例，创建虚拟环境，并安装 SDK 及其同版本内置运行时：
 
 ```sh
-git clone https://github.com/aflydream/mineko-herness.git
-cd mineko-herness
+git clone https://github.com/aflydream/mineko-harness.git
+cd mineko-harness
 python -m venv .venv
 . .venv/bin/activate
-python -m pip install mineko-herness-sdk
+python -m pip install mineko-harness-sdk
 ```
 
 安装后的运行时不需要系统提供 Node.js。需要从源码构建运行时或 wheel 包的仓库贡献者应使用 [Python 贡献者工作流](../../../python/development.md)。
@@ -56,13 +56,13 @@ python examples/jsonrpc-agent/minimal.py \
 ```python
 from pathlib import Path
 
-from mineko_herness import MiNekoHerness
+from mineko_harness import MiNekoHarness
 
 config = Path("examples/jsonrpc-agent/minimal.cordis.yml").resolve()
 workspace = Path("/absolute/path/to/workspace").resolve()
 sessions = Path("/absolute/path/to/sessions").resolve()
 
-with MiNekoHerness(
+with MiNekoHarness(
     provider="deepseek-official",
     model="deepseek-v4-flash",
     max_tokens=49_152,
@@ -78,7 +78,7 @@ with MiNekoHerness(
 print(result.final_response)
 ```
 
-`MiNekoHerness` 会延迟启动内置运行时，并持续复用，直至退出上下文管理器。复用同一个 harness 与 session id 会保留该会话拥有的 Bash 进程，包括其工作目录、已导出的变量与 shell 函数。独立任务应使用新的 session id；只有下一次调用需要延续同一段持久化对话时，才复用原有 id。
+`MiNekoHarness` 会延迟启动内置运行时，并持续复用，直至退出上下文管理器。复用同一个 harness 与 session id 会保留该会话拥有的 Bash 进程，包括其工作目录、已导出的变量与 shell 函数。独立任务应使用新的 session id；只有下一次调用需要延续同一段持久化对话时，才复用原有 id。
 
 ## 了解示例组合
 

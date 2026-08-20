@@ -9,17 +9,17 @@
   - tablist:
     - tab "Chat" [selected]
     - tab "Trajectory"
-- text: Use web_search to search exactly "MiNeko Herness snapshot search". Then reply exactly SEARCH_DONE and stop. {{clock}}
+- text: Use web_search to search exactly "MiNeko Harness snapshot search". Then reply exactly SEARCH_DONE and stop. {{clock}}
 - button "Copy":
   - img
 - button "Context injection @aflydream/mnh-system-prompt":
   - img
   - img
   - text: Context injection @aflydream/mnh-system-prompt
-- button "Search MiNeko Herness snapshot search":
+- button "Search MiNeko Harness snapshot search":
   - img
   - img
-  - text: Search MiNeko Herness snapshot search
+  - text: Search MiNeko Harness snapshot search
 - paragraph: SEARCH_DONE
 - button "Copy":
   - img

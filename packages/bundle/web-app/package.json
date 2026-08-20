@@ -1,13 +1,13 @@
 {
   "name": "@aflydream/mnh-web-app",
   "description": "The mnh browser-surface bundle: the web patch layer over mnh-base plus the runtime glue plugin (frontend dist serving, web-surface prompt, bash runtime variables, URL line)",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "packages/bundle/web-app"
   },
   "type": "module",

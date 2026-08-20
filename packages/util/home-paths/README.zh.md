@@ -2,11 +2,11 @@
 
 [English](README.md) | 中文
 
-MiNeko Herness 用户数据的共享文件系统路径辅助工具。
+MiNeko Harness 用户数据的共享文件系统路径辅助工具。
 
 ## MNH 主目录
 
-`resolveMnhHome()` 解析 MiNeko Herness 的单根主目录。优先级从高到低为：显式配置的路径、`$MNH_HOME`、`~/.mnh`。harness 将所有用户数据保存在同一根目录下。
+`resolveMnhHome()` 解析 MiNeko Harness 的单根主目录。优先级从高到低为：显式配置的路径、`$MNH_HOME`、`~/.mnh`。harness 将所有用户数据保存在同一根目录下。
 
 `mnhHomePath(...segments)` 使用 Node 的平台路径规则，将子路径段拼接到解析后的主目录下。不传入任何路径段时，返回主目录本身。
 
@@ -14,7 +14,7 @@ MiNeko Herness 用户数据的共享文件系统路径辅助工具。
 
 `MNH_HOME_DIR_NAME` 定义默认用户数据目录名：`.mnh`。
 
-`defaultMnhHome()` 使用 Node 的平台路径规则，将操作系统主目录与 `.mnh` 拼接，并返回默认 MiNeko Herness 主目录。
+`defaultMnhHome()` 使用 Node 的平台路径规则，将操作系统主目录与 `.mnh` 拼接，并返回默认 MiNeko Harness 主目录。
 
 `expandHomePath()` 使用操作系统主目录展开 `~`、`~/...` 和 Windows 风格的 `~\...` 前缀。它会保留非波浪号路径和 `~user/...` 原样不变。
 

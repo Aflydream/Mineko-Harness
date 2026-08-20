@@ -2,7 +2,7 @@
 
 English | [中文](README.zh.md)
 
-Shared anonymous identity for session telemetry, direct feedback acknowledgement, and DeepSeek provider requests. `getOrCreateAnonymousUserId()` returns a random UUID v4 scoped to one harness home, persisted as the bare line `$MNH_HOME/.anonymous-user-id` (`~/.mnh/.anonymous-user-id` when `MNH_HOME` is unset). The OpenTelemetry backend reports it as Resource `user.id`; `/feedback` includes the same value in its acknowledgement; and `mnh-llm-deepseek` sends it as `x-mineko-herness-user-id`, allowing the receiving systems to correlate records without independently generated identities.
+Shared anonymous identity for session telemetry, direct feedback acknowledgement, and DeepSeek provider requests. `getOrCreateAnonymousUserId()` returns a random UUID v4 scoped to one harness home, persisted as the bare line `$MNH_HOME/.anonymous-user-id` (`~/.mnh/.anonymous-user-id` when `MNH_HOME` is unset). The OpenTelemetry backend reports it as Resource `user.id`; `/feedback` includes the same value in its acknowledgement; and `mnh-llm-deepseek` sends it as `x-mineko-harness-user-id`, allowing the receiving systems to correlate records without independently generated identities.
 
 The identity is never derived from the hostname, network address, git remote, or another identifying source. Deleting `.anonymous-user-id` resets the identity on the next process launch. Separate harness homes have separate identities.
 

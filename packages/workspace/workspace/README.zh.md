@@ -2,7 +2,7 @@
 
 [English](README.md) | 中文
 
-MiNeko Herness 的 Workspace 实体注册表（`ctx.workspaceRegistry`）：通过领域数据形式存储持久 workspace 记录、稳定 workspace 顺序和按新到旧排列的候选会话索引。消费方看到 `Workspace` 接口；实体实现保持包私有。
+MiNeko Harness 的 Workspace 实体注册表（`ctx.workspaceRegistry`）：通过领域数据形式存储持久 workspace 记录、稳定 workspace 顺序和按新到旧排列的候选会话索引。消费方看到 `Workspace` 接口；实体实现保持包私有。
 
 实体／存储理由见[领域 Agent Note](../../../AgentGuide/architecture.md)；仅使用头部的引导初始化和 GUI 排序见 [Workspace UI 产品流 Agent Note](../../../AgentGuide/conventions.md)。
 

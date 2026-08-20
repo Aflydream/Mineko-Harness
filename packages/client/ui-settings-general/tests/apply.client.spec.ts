@@ -51,7 +51,7 @@ async function bench(isLoopback = true) {
   return { ctx, slots: ctx.get('slots') as SlotRegistry, locale, settingsDescribe, settingsOpenDocument }
 }
 
-/** Declare the shell's six child slots the way ui-settings' entry does. */
+/** Declare the shell's five child slots the way ui-settings' entry does. */
 function declare(slots: SlotRegistry): () => void {
   return slots.register(
     {
@@ -62,7 +62,6 @@ function declare(slots: SlotRegistry): () => void {
         'settings.action': { kind: 'list', scope: 'root' },
         'settings.close': { kind: 'single', scope: 'root' },
         'settings.section': { kind: 'list', scope: 'root' },
-        'settings.onboarding': { kind: 'list', scope: 'root' },
       },
     } as never,
     () => null,
@@ -91,9 +90,6 @@ describe('ui-settings-general apply', () => {
     expect(resolveSlotLabel(entry.options.label)).toBe('通用设置')
     expect(before.slots.spec('settings.general.item')).toEqual({ kind: 'list', scope: 'root' })
     expect(before.slots.entries('settings.general.item')).toEqual([])
-    // The onboarding hole stays declared for feature-owned steps; this plugin
-    // no longer seats one.
-    expect(before.slots.entries('settings.onboarding')).toEqual([])
     const action = before.slots.entries('settings.action')[0]!
     const actionInjected = (action.inject as unknown as () => SettingsDocumentActionInjected)()
     expect(actionInjected.controller.store.getSnapshot().status).toBe('idle')

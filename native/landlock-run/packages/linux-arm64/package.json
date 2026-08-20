@@ -4,7 +4,7 @@
   "description": "Prebuilt landlock-run Landlock launcher binary for linux-arm64 (static musl) — resolved as a file path by @aflydream/mnh-node-addon-landlock-run, never imported",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aflydream/mineko-herness.git",
+    "url": "git+https://github.com/aflydream/mineko-harness.git",
     "directory": "native/landlock-run/packages/linux-arm64"
   },
   "os": [

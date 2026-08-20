@@ -16,7 +16,7 @@ Requires `ctx.skills` (`inject: ['skills']`).
 |---|---|---|
 | `providerName` | `filesystem` | Unique name used to register this provider on `ctx.skills`. |
 | `includeDefaultRoots` | `true` | Include project and user roots around `customSkillDirs`; set false for an isolated custom-root provider. |
-| `mnhHome` | `$MNH_HOME` or `~/.mnh` | MiNeko Herness config root resolved by [`@aflydream/mnh-home-paths`](../../util/home-paths/README.md); scans `skills` under this directory. |
+| `mnhHome` | `$MNH_HOME` or `~/.mnh` | MiNeko Harness config root resolved by [`@aflydream/mnh-home-paths`](../../util/home-paths/README.md); scans `skills` under this directory. |
 | `agentsHome` | `$MNH_AGENTS_HOME` or `~/.agents` | Shared agent config root scanned for compatible skills. |
 | `customSkillDirs` | `[]` | Additional local skill roots scanned after project roots and before user roots. |
 | `watch` | `true` | Watch host-local roots and invalidate the local provider when catalog membership or frontmatter may have changed. |

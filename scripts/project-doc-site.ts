@@ -15,7 +15,7 @@ import { gfm } from 'micromark-extension-gfm'
 import type { Nodes } from 'mdast'
 import { docsPages, type DocsLocale, type DocsPage } from '../website/docs.ts'
 
-const REPOSITORY_URL = 'https://github.com/aflydream/mineko-herness'
+const REPOSITORY_URL = 'https://github.com/aflydream/mineko-harness'
 const REPOSITORY_RAW_URL = REPOSITORY_URL.replace('github.com', 'raw.githubusercontent.com')
 const root = resolve(import.meta.dirname, '..')
 const generatedRoot = resolve(root, 'website/.generated')
