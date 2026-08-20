@@ -68,7 +68,21 @@ test('keeps manual dispatch dry-run and tag publication artifact-first', () => {
   const builder = yaml.load(readFile(join(repositoryRoot, 'apps/desktop/electron-builder.yml')))
   assert.deepEqual(workflow.on, {
     push: { tags: ['v*'] },
-    workflow_dispatch: null,
+    workflow_dispatch: {
+      inputs: {
+        tag: {
+          description: 'Existing release tag to recover, for example v0.1.0',
+          required: false,
+          type: 'string',
+        },
+        publish: {
+          description: 'Publish the validated GitHub Release instead of a build-only dry run',
+          required: false,
+          default: false,
+          type: 'boolean',
+        },
+      },
+    },
     workflow_call: {
       inputs: {
         ref: {
@@ -81,6 +95,11 @@ test('keeps manual dispatch dry-run and tag publication artifact-first', () => {
           required: true,
           type: 'string',
         },
+        publish: {
+          description: 'Publish the validated GitHub Release',
+          required: true,
+          type: 'boolean',
+        },
       },
     },
   })
@@ -88,17 +107,17 @@ test('keeps manual dispatch dry-run and tag publication artifact-first', () => {
   assert.equal(workflow.jobs.build['runs-on'], 'windows-2025')
   assert.equal(
     workflow.jobs.release.if,
-    "(github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || github.event_name == 'workflow_call'",
+    "(github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || (inputs.publish == true && inputs.tag != '')",
   )
   assert.deepEqual(workflow.jobs.release.permissions, { contents: 'write' })
   assert.equal(workflow.jobs.release.needs, 'build')
 
   const buildSteps = workflow.jobs.build.steps
   const checkout = buildSteps.find(step => step.uses === 'actions/checkout@v6')
-  assert.equal(checkout.with.ref, "${{ inputs.ref || github.ref }}")
+  assert.equal(checkout.with.ref, "${{ inputs.ref || inputs.tag || github.ref }}")
   const metadata = buildSteps.find(step => step.name === 'Resolve and verify desktop release metadata')
   assert.deepEqual(metadata.env, {
-    MNH_RELEASE_EVENT_NAME: '${{ github.event_name }}',
+    MNH_RELEASE_EVENT_NAME: "${{ inputs.publish && 'workflow_call' || github.event_name }}",
     MNH_RELEASE_REF_NAME: '${{ inputs.tag || github.ref_name }}',
   })
   const packageStep = buildSteps.find(step => step.name === 'Package Windows installer')

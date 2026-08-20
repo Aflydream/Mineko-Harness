@@ -207,4 +207,5 @@ jobs:
     with:
       ref: ${{ needs.release-after-merge.outputs.merge_sha }}
       tag: ${{ needs.release-after-merge.outputs.tag }}
+      publish: true
     secrets: inherit
