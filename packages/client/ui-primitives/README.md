@@ -2,7 +2,7 @@
 
 English | [中文](README.zh.md)
 
-Pure React atoms (zero cordis): StateDot, DisclosureRow, ic_ds_* icons, Button/Pill/Menu/Modal/Input, the Toast transient banner, the OnboardingSurface first-run takeover (body-portaled mask + opaque stage that holds `#root` inert for exactly its own lifetime), the markdown family (MessageText/MarkdownText/JsonBlock), the read-only JsonTree inspector, the `useAnchoredMaxHeight` hook that clamps a bottom-anchored overlay to the viewport space above its anchor (re-measured on resize, scroll, and a caller-supplied dependency), TerminalBlock, DiffBlock, ReadBlock, SearchBlock, and WebBlock. `Modal` and `Menu` retain their rendered layer while a controlled close plays the inverse entrance motion, then unmount at animation end; `useAnimatedPresence` supplies the same lifecycle to feature-owned overlays, and reduced-motion clients skip both transitions.
+Pure React atoms (zero cordis): StateDot, DisclosureRow, ic_ds_* icons, Button/Pill/Menu/Modal/Input, the Toast transient banner, the markdown family (MessageText/MarkdownText/JsonBlock), the read-only JsonTree inspector, the `useAnchoredMaxHeight` hook that clamps a bottom-anchored overlay to the viewport space above its anchor (re-measured on resize, scroll, and a caller-supplied dependency), TerminalBlock, DiffBlock, ReadBlock, SearchBlock, and WebBlock. `Modal` and `Menu` retain their rendered layer while a controlled close plays the inverse entrance motion, then unmount at animation end; `useAnimatedPresence` supplies the same lifecycle to feature-owned overlays, and reduced-motion clients skip both transitions.
 
 ## Liquid glass button
 

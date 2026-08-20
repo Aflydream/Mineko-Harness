@@ -1,7 +1,7 @@
 {
   "name": "@aflydream/mnh-web-frontend",
   "description": "Web application entry: vite build over the @aflydream/mnh-client-web shell library; dist/ served by apps/cli's mnh web",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },

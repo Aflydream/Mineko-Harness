@@ -1,7 +1,7 @@
 {
   "name": "@aflydream/mnh-client-ui-attachment",
   "description": "Pure React attachment atoms for the mnh web UI: draft-image rail, message image gallery, and original-image lightbox (zero cordis)",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },

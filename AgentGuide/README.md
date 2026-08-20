@@ -16,7 +16,7 @@ The user request is the product authority for the active task. Repository guidan
 
 | Measure | Current value |
 |---|---:|
-| Product version | `0.1.0-rc.5` |
+| Product version | `0.1.0` |
 | Supported Node.js | `^22.19.0` or `>=24.0.0` |
 | Package manager | `pnpm@11.7.0` |
 | Harness packages | 221 |

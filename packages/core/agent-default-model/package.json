@@ -1,7 +1,7 @@
 {
   "name": "@aflydream/mnh-agent-default-model",
   "description": "Default model selection shared by Agent entry points",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },

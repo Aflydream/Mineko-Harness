@@ -1,7 +1,7 @@
 {
   "name": "@aflydream/mnh-sdk-jsonrpc-server",
   "description": "Stdio JSON-RPC server plugin for out-of-process MiNeko Harness SDK clients",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },

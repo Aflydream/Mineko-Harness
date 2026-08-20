@@ -1,7 +1,7 @@
 {
   "name": "@aflydream/mnh-terminal",
   "description": "Persistent PTY session seam for the MiNeko Harness — owner-scoped ids, backend registry, interactive sends, reads, signals, and awaited cleanup",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },

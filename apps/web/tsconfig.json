@@ -41,7 +41,7 @@
     "tests/models-settings.e2e.ts",
     "tests/default-model.e2e.ts",
     "tests/declared-reasoning.e2e.ts",
-    "tests/onboarding-deepseek-config.e2e.ts",
+    "tests/deepseek-settings.e2e.ts",
     "tests/workspace-management.e2e.ts",
     "tests/replay-round-trip.e2e.ts",
     "tests/hmr-live.e2e.ts",

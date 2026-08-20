@@ -1,7 +1,7 @@
 {
   "name": "@aflydream/mnh-terminal-bash",
   "description": "Persistent shell PTY backend over the MiNeko Harness subprocess terminal primitive",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },

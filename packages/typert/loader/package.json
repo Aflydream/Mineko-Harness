@@ -1,7 +1,7 @@
 {
   "name": "@aflydream/mnh-typert-loader",
   "description": "Loader integration for generated Typert package contributions",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },

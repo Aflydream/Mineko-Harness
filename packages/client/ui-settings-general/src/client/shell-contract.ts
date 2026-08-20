@@ -20,12 +20,6 @@ export interface SettingsSectionRow {
   label: string
 }
 
-/** One ordered onboarding step projected from a slot registration. */
-export interface SettingsOnboardingStep {
-  id: string
-  order: number
-}
-
 /**
  * Registrant-private injected share of the settings shell (assembled in
  * apply): the ledger's nav-row projection as a hooks-compartment source —
@@ -35,8 +29,6 @@ export type SettingsRootInjected = {
   hooks: {
     /** settings.section ledger projected into ordered nav rows. */
     sections: HostObservable<readonly SettingsSectionRow[]>
-    /** settings.onboarding ledger projected into coordinator order. */
-    onboardingSteps: HostObservable<readonly SettingsOnboardingStep[]>
   }
 }
 
@@ -54,6 +46,5 @@ export type SettingsRootComponentProps =
     | 'settings.action'
     | 'settings.close'
     | 'settings.section'
-    | 'settings.onboarding'
   >
   & InjectFace<SettingsRootInjected>

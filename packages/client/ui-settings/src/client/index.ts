@@ -12,8 +12,8 @@ import type { ClientContext } from '@aflydream/mnh-client-runtime/client'
 import { SettingsScopeBinder } from './settings-scope.ts'
 
 export type {
-  SettingsGeneralItemOwnerProps, SettingsHeaderOwnerProps, SettingsOnboardingOwnerProps,
-  SettingsPluginsTabOwnerProps, SettingsSectionOwnerProps, SettingsTriggerOwnerProps,
+  SettingsGeneralItemOwnerProps, SettingsHeaderOwnerProps, SettingsPluginsTabOwnerProps,
+  SettingsSectionOwnerProps, SettingsTriggerOwnerProps,
 } from './contract/slots.ts'
 export { SettingsScopeController, SettingsScopeBinder } from './settings-scope.ts'
 
