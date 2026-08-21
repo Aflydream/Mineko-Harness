@@ -67,6 +67,22 @@ describe.skipIf(process.platform !== 'win32')('desktop built smoke', () => {
       return { status: response.status, contentType: response.headers.get('content-type') }
     })
     expect(logoResponse).toEqual({ status: 200, contentType: 'image/png' })
+    const resourceBoundaries = await page.evaluate(async () => {
+      const head = await fetch('/logo.png', { method: 'HEAD' })
+      const directory = await fetch('/assets/')
+      return {
+        head: {
+          status: head.status,
+          contentType: head.headers.get('content-type'),
+          bodyBytes: (await head.arrayBuffer()).byteLength,
+        },
+        directoryStatus: directory.status,
+      }
+    })
+    expect(resourceBoundaries).toEqual({
+      head: { status: 200, contentType: 'image/png', bodyBytes: 0 },
+      directoryStatus: 404,
+    })
     await page.getByRole('button', { name: /Collapse sidebar|收起侧边栏/ }).click()
     const railLogo = page.locator('button img[src="/logo.png"]')
     await railLogo.waitFor({ state: 'visible' })

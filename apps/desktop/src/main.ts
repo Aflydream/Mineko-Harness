@@ -1,8 +1,8 @@
 /** Electron main process for the single-instance desktop carrier and Cordis host tree. */
 
-import { app, BrowserWindow, MessageChannelMain, protocol } from 'electron'
+import { app, BrowserWindow, MessageChannelMain, net, protocol } from 'electron'
 import { mkdirSync } from 'node:fs'
-import { readFile } from 'node:fs/promises'
+import { readFile, stat } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import { extname, join, normalize, resolve, sep } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -89,7 +89,7 @@ function registerResources(ctx: Context): void {
     // desktop page those resolve to `mnh://app/plugins/...`; keep accepting
     // the explicit `mnh://plugins/...` form for direct diagnostics too.
     if (url.hostname === 'plugins' || (url.hostname === 'app' && url.pathname.startsWith('/plugins/'))) {
-      return pluginResource(url, modules)
+      return pluginResource(url, modules, request.method)
     }
     if (url.hostname !== 'app') return new Response('not found', { status: 404 })
     const relative = decodeURIComponent(url.pathname === '/' ? '/index.html' : url.pathname)
@@ -97,37 +97,61 @@ function registerResources(ctx: Context): void {
     if (candidate !== distRoot && !candidate.startsWith(`${distRoot}${sep}`)) {
       return new Response('forbidden', { status: 403 })
     }
+    if (candidate !== indexPath) {
+      return immutableFile(candidate, mimeType(extname(candidate)), request.method)
+    }
     try {
-      let body = await readFile(candidate)
-      if (candidate === indexPath) {
-        const graph: WebBootGraph = modules.graph()
-        let html = injectBootManifest(body.toString('utf8'), graph)
-        html = injectBootTheme(html)
-        body = Buffer.from(html)
-      }
-      const response = new Response(request.method === 'HEAD' ? null : new Blob([Uint8Array.from(body)]), {
+      const graph: WebBootGraph = modules.graph()
+      let html = injectBootManifest(await readFile(candidate, 'utf8'), graph)
+      html = injectBootTheme(html)
+      return new Response(request.method === 'HEAD' ? null : html, {
         status: 200,
-        headers: { 'content-type': mimeType(extname(candidate)), 'cache-control': candidate === indexPath ? 'no-cache' : 'public, max-age=31536000, immutable' },
+        headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-cache' },
       })
-      return response
     } catch {
-      if (candidate !== indexPath) return new Response('not found', { status: 404 })
       return new Response('not found', { status: 404 })
     }
   }
   protocol.handle('mnh', handler)
 }
 
-async function pluginResource(url: URL, modules: ClientModuleRegistry): Promise<Response> {
+async function pluginResource(url: URL, modules: ClientModuleRegistry, method: string): Promise<Response> {
   const pathname = decodeURIComponent(url.pathname)
   const prefix = url.hostname === 'plugins' ? '/' : '/plugins/'
   const map = pathname.endsWith('/client.js.map')
   const suffix = map ? '/client.js.map' : '/client.js'
   if (!pathname.startsWith(prefix) || !pathname.endsWith(suffix)) return new Response('not found', { status: 404 })
   const id = pathname.slice(prefix.length, -suffix.length)
-  const body = await modules.readBundle(id, map)
-  if (body === undefined) return new Response('not found', { status: 404 })
-  return new Response(new Blob([Uint8Array.from(body)]), { headers: { 'content-type': map ? 'application/json; charset=utf-8' : 'text/javascript; charset=utf-8', 'cache-control': 'public, max-age=31536000, immutable' } })
+  const clientPath = modules.clientPath(id)
+  if (clientPath === undefined) return new Response('not found', { status: 404 })
+  return immutableFile(
+    `${clientPath}${map ? '.map' : ''}`,
+    map ? 'application/json; charset=utf-8' : 'text/javascript; charset=utf-8',
+    method,
+  )
+}
+
+/** Stream one immutable local asset through Chromium without a main-process Buffer/Blob copy. */
+async function immutableFile(path: string, contentType: string, method: string): Promise<Response> {
+  const headers = {
+    'content-type': contentType,
+    'cache-control': 'public, max-age=31536000, immutable',
+  }
+  try {
+    // Judge the entry kind here instead of leaving it to Chromium's file
+    // handler: a directory must be a flat 404, never a generated listing.
+    if (!(await stat(path)).isFile()) return new Response('not found', { status: 404 })
+    const file = await net.fetch(pathToFileURL(path).href)
+    // A body nobody will read has to be released, or every HEAD (and every
+    // rejected fetch) leaves an open stream behind.
+    if (!file.ok || method === 'HEAD') {
+      await file.body?.cancel()
+      return file.ok ? new Response(null, { status: 200, headers }) : new Response('not found', { status: 404 })
+    }
+    return new Response(file.body, { status: 200, headers })
+  } catch {
+    return new Response('not found', { status: 404 })
+  }
 }
 
 function mimeType(extension: string): string {
