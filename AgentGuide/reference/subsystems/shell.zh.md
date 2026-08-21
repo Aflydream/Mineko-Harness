@@ -218,7 +218,7 @@ interface ShellProcessRead {
 
 ## 服务
 
-`ShellExecutor` 拥有 `resolve`、前台 `run`、后台进程 `start` 以及 `sandboxMode` 能力事实。`mnh-bash-local` 拥有命令默认值补全、超时/中止分类、终端环境以及后台读取合并；进程组、有界收集器、spill 文件、凭据清除与 dispose（资源释放）后完全停稳归[子进程服务](subprocess.md)所有。`mnh-tool-bash` 拥有面向模型的渲染，并将后台句柄适配到[通用任务运行时](jobs.md)。`mnh-shell` 拥有 shell 工具共享的退出状态约定：导出的 `parseExitStatus`/`ParsedExitStatus` 是 `mnh-tool-bash` 的 `renderResult` 与 `mnh-tool-pwsh` 的 `renderPwshResult` 所追加的 `[exit code: N]` / `[killed by signal: X]` 标记的逆解析，两个工具的 `presentResult` 都用它把渲染文本拆分为 terminal 卡的输出正文与退出状态 pill。
+`ShellExecutor` 拥有 `resolve`、前台 `run`、后台进程 `start` 以及 `sandboxMode` 与 `dialect` 两项能力事实。`dialect` 指明命令实际运行在哪种 shell 语言下，供工具据此教给模型正确语法：同一个 `pwsh` 工具在一台主机上到达 PowerShell 7，在另一台上到达 Windows PowerShell 5.1（未安装 PowerShell 7 时 `mnh-pwsh-local` 会回退到 `powershell.exe`），而 5.1 会在**解析**阶段就拒绝 `&&`、`||`、三元运算符与 `??`——因此被告知错误方言的模型写出的命令根本不会运行。`undefined` 表示执行器无法判定，工具必须保持方言中立。`mnh-bash-local` 拥有命令默认值补全、超时/中止分类、终端环境以及后台读取合并；进程组、有界收集器、spill 文件、凭据清除与 dispose（资源释放）后完全停稳归[子进程服务](subprocess.md)所有。`mnh-tool-bash` 拥有面向模型的渲染，并将后台句柄适配到[通用任务运行时](jobs.md)。`mnh-shell` 拥有 shell 工具共享的退出状态约定：导出的 `parseExitStatus`/`ParsedExitStatus` 是 `mnh-tool-bash` 的 `renderResult` 与 `mnh-tool-pwsh` 的 `renderPwshResult` 所追加的 `[exit code: N]` / `[killed by signal: X]` 标记的逆解析，两个工具的 `presentResult` 都用它把渲染文本拆分为 terminal 卡的输出正文与退出状态 pill。
 
 <!-- BEGIN GENERATED cordis-surface (gen-cordis-catalog.ts) — do not edit between markers -->
 
@@ -266,7 +266,7 @@ abstract run(spec: ShellExecSpec): Promise<ShellRunResult>
 abstract start(spec: ShellExecSpec): ShellProcess
 ```
 
-Source: [`packages/shell/shell/src/index.ts:65`](../../../packages/shell/shell/src/index.ts)
+Source: [`packages/shell/shell/src/index.ts:77`](../../../packages/shell/shell/src/index.ts)
 
 <a id="ctxshellenv--shellenvregistry"></a>
 

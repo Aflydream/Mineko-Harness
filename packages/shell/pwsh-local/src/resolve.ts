@@ -10,6 +10,8 @@
 
 import { lstatSync } from 'node:fs'
 import { join } from 'node:path'
+// Type-only, so this module stays runtime-dependency-free for the coverage-gate probe.
+import type { ShellDialect } from '@aflydream/mnh-shell'
 
 /**
  * Well-known Windows PowerShell install locations plus PATH entries, newest
@@ -34,6 +36,25 @@ export function candidatePwshPaths(env: NodeJS.ProcessEnv = process.env): string
   // Windows PowerShell 5.1 remains the last-resort fallback on legacy hosts.
   candidates.push(join(systemRoot, 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe'))
   return candidates
+}
+
+/**
+ * Name the PowerShell dialect a resolved executable runs. The two editions
+ * live at distinguishable names by construction: Windows ships 5.1 only as
+ * `powershell.exe`, and PowerShell 7+ only as `pwsh.exe` (or bare `pwsh` on
+ * PATH). A configured path under neither name is unnameable — the caller must
+ * then stay dialect-neutral rather than guess, because guessing 7 on a 5.1
+ * host is exactly the failure this function exists to prevent.
+ * @param resolvedPath - the executable {@link resolvePwshPath} produced.
+ * @returns the dialect, or `undefined` when the name does not identify one.
+ */
+export function detectPowerShellDialect(resolvedPath: string): ShellDialect | undefined {
+  // Compare the basename only: the same executable is reached through the
+  // well-known absolute paths, a PATH entry, and a bare command name.
+  const name = resolvedPath.replace(/^.*[\\/]/, '').toLowerCase()
+  if (name === 'powershell' || name === 'powershell.exe') return 'windows-powershell-5'
+  if (name === 'pwsh' || name === 'pwsh.exe') return 'powershell-7'
+  return undefined
 }
 
 /**

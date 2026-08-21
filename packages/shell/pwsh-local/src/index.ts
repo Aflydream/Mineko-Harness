@@ -18,12 +18,12 @@
 import { Context } from '@deepseek-ai/cordis'
 import z from '@deepseek-ai/schemastery'
 import { SHELL_SETTINGS_NAMESPACE, ShellExecutor } from '@aflydream/mnh-shell'
-import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellProcessRead, ShellRunResult, CollectedOutput } from '@aflydream/mnh-shell'
+import type { ShellDialect, ShellExecRequest, ShellExecSpec, ShellProcess, ShellProcessRead, ShellRunResult, CollectedOutput } from '@aflydream/mnh-shell'
 import type { SubprocessCollect, SubprocessHandle, SubprocessOutputReader, SubprocessSpawnSpec } from '@aflydream/mnh-subprocess'
 import { installSettingsSection } from '@aflydream/mnh-settings'
 import { clampTimeout, deadline, MAX_TIMER_DELAY_MS, timeoutOf } from '@aflydream/mnh-timeout'
 /* jscpd:ignore-end */
-import { resolvePwshPath } from './resolve.ts'
+import { detectPowerShellDialect, resolvePwshPath } from './resolve.ts'
 
 /* jscpd:ignore-start -- deliberate call-for-call mirror of mnh-bash-local (Agent Note: pwsh-tool-and-executor). */
 /**
@@ -82,7 +82,7 @@ type ResolvedConfig = Required<Omit<Config, 'cwd' | 'pwshPath'>> & Pick<Config, 
 
 // Resolution lives in its own dependency-free module so the repository's
 // coverage-gate probe shares the exact definition the suites use.
-export { candidatePwshPaths, resolvePwshPath } from './resolve.ts'
+export { candidatePwshPaths, detectPowerShellDialect, resolvePwshPath } from './resolve.ts'
 
 /** Project a settled collect-mode reader into the final CollectedOutput shape. */
 function finalOutput(reader: SubprocessOutputReader): CollectedOutput {
@@ -155,6 +155,17 @@ export class PwshLocalExecutor extends ShellExecutor {
   /** The pwsh executable every command runs through. */
   get pwshPath(): string {
     return this.resolvedPwshPath
+  }
+
+  /**
+   * The PowerShell dialect commands run under, derived from the resolved
+   * executable's name. A model told the wrong edition writes syntax the host
+   * rejects — Windows PowerShell 5.1 has no `&&`, no ternary, and no
+   * null-coalescing — so an unrecognizable configured path reports `undefined`
+   * and leaves the tool dialect-neutral instead of guessing.
+   */
+  override get dialect(): ShellDialect | undefined {
+    return detectPowerShellDialect(this.resolvedPwshPath)
   }
 
   constructor(ctx: Context, config: Config) {

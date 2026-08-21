@@ -21,6 +21,18 @@ import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellRunResult } fr
  */
 export const SHELL_SETTINGS_NAMESPACE = settingsNamespace('shell')
 
+/**
+ * Shell dialect an executor runs commands under. Merge-extensible: a consumer
+ * that does not recognize a value must fall back to dialect-neutral behavior
+ * rather than assume a default.
+ *
+ * `windows-powershell-5` is Windows PowerShell 5.1 (`powershell.exe`), whose
+ * language predates the pipeline chain operators (`&&`/`||`), the ternary,
+ * and the null-coalescing/null-conditional operators; `powershell-7` is
+ * PowerShell 7+ (`pwsh.exe`), which has all of them.
+ */
+export type ShellDialect = 'windows-powershell-5' | 'powershell-7' | 'posix-sh'
+
 export { MNH_ENV_PREFIX } from './types.ts'
 export type {
   ShellExecRequest,
@@ -73,6 +85,19 @@ export abstract class ShellExecutor extends Service {
    * @returns the configured default sandbox mode, when supported.
    */
   get sandboxMode(): SandboxMode | undefined {
+    return undefined
+  }
+
+  /**
+   * The shell dialect commands actually run under, when the executor can name
+   * it. A tool folds this into its model-facing description: the same `pwsh`
+   * tool reaches PowerShell 7 on one host and Windows PowerShell 5.1 on
+   * another, and the two reject different syntax — a model given the wrong
+   * dialect writes commands the host cannot parse. `undefined` means the
+   * executor cannot determine it, and the tool must stay dialect-neutral.
+   * @returns the dialect identifier, when known.
+   */
+  get dialect(): ShellDialect | undefined {
     return undefined
   }
 

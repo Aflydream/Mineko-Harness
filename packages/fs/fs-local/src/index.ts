@@ -23,6 +23,7 @@ import type {
 import {
   applyLiteralEdit,
   listDirectory,
+  matchExistingLineEndings,
   normalizeLineEndings,
   probe,
   probeNoFollow,
@@ -197,9 +198,13 @@ export class LocalFileSystem extends FileSystem {
       const before = diffable
         ? await readTextForDiff(target.targetKey, this.config.diffBasisMaxBytes, signal)
         : null
+      // Overwriting keeps the file's own line-ending style, the way `editText`
+      // does. A model writes LF, so without this a whole-file write to a CRLF
+      // file rewrites every line ending as a side effect of the edit it meant.
+      const stored = existing === null ? content : await matchExistingLineEndings(target.targetKey, content, signal)
       await writeFileAtomic(
         target.targetKey,
-        content,
+        stored,
         existing?.mode,
         signal,
         this.internals,

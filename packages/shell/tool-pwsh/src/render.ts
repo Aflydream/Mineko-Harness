@@ -34,6 +34,26 @@ export interface RenderablePwshResult {
 }
 
 /**
+ * Marker explaining output the host wrote in its legacy console code page.
+ *
+ * The executor pins UTF-8 by prepending statements to the command, but
+ * PowerShell parses the whole `-Command` string before running any of it: a
+ * SYNTAX error therefore reports before the pin takes effect, in the host's OEM
+ * code page, and UTF-8 decoding turns those bytes into U+FFFD. Without this
+ * marker the model sees only replacement characters and cannot tell a syntax
+ * error from a program that printed unreadable bytes.
+ */
+const LEGACY_ENCODING_MARKER = '[output contained bytes that are not UTF-8: this host wrote them in its legacy '
+  + 'console code page, which happens when PowerShell rejects the command at PARSE time (nothing ran). '
+  + 'Check the command for syntax this PowerShell edition does not accept — on Windows PowerShell 5.1 that '
+  + 'is `&&`, `||`, the ternary `? :`, `??`, or `?.` — and rewrite it rather than re-running it unchanged.]'
+
+/** Whether decoding replaced undecodable bytes, i.e. the child did not write UTF-8. */
+function hasUndecodableBytes(text: string): boolean {
+  return text.includes('�')
+}
+
+/**
  * Shape one finished run into the text the model sees: stdout, then a marked
  * stderr section, then exit-status markers, matching the bash tool's story —
  * a clean exit (0, no signal) produces no marker.
@@ -59,6 +79,9 @@ export function renderPwshResult(
   if (body.length === 0) body = '(no output)'
 
   const markers: string[] = []
+  // Explain unreadable bytes before every other marker: it tells the model why
+  // the text above is illegible, which it must know to read the rest at all.
+  if (hasUndecodableBytes(body)) markers.push(LEGACY_ENCODING_MARKER)
   // Keep the exit marker last because parseExitStatus anchors there.
   if (result.sandbox?.denied) {
     markers.push(sandboxDenialMarker(result.sandbox.mode))

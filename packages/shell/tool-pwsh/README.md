@@ -4,7 +4,15 @@ English | [中文](README.zh.md)
 
 The model-facing `pwsh` tool registered over the `ctx.shell` executor seam. Intended for Windows compositions where a PowerShell executor (e.g. `@aflydream/mnh-pwsh-local`) backs `ctx.shell`; the tool contract is PowerShell-dialect: native `C:\...` paths and `$env:NAME` variables. Behavior mirrors `mnh-tool-bash` call-for-call — foreground and `run_in_background` execution through the generic job runtime, the managed `MNH_*` environment through the shared `shell-env` registry, the sandbox denial rendering with the same-turn `sandbox_permissions` escalation surface, and the bash marker/truncation rendering story (a clean exit produces no marker).
 
-Requires a loaded executor implementation and the `shell-env` plugin; the tool stays pending until both exist (`inject: ['tools', 'bash', 'systemPrompt', 'bashEnv']`).
+Requires a loaded executor implementation and the `shell-env` plugin; the tool stays pending until both exist (`inject: ['tools', 'shell', 'systemPrompt', 'shellEnv']`).
+
+## Dialect
+
+The description is assembled per composition from `ctx.shell.dialect`, because the same tool reaches a different LANGUAGE depending on the host: `mnh-pwsh-local` resolves PowerShell 7 when it is installed and otherwise falls back to Windows PowerShell 5.1, whose parser rejects `&&`, `||`, the ternary, `??`, and `?.` outright. A model told the wrong edition writes commands that fail before running, and 5.1 reports that parse error in the host's legacy console code page — so the diagnostic reaches the model as `�` replacement characters (the encoding pin is prepended to the command string, and PowerShell parses the whole string before executing any of it). `renderPwshResult` therefore also appends a marker whenever the collected text contains replacement characters, naming the parse-time failure the model cannot otherwise read.
+
+Under 5.1 the guidance additionally states what `;` does NOT do, since it is the only chaining operator left: it neither stops on failure nor carries a failure into the exit code, which reflects the last statement only, and this edition collapses every native non-zero exit to 1. The description names the three remedies — `cmd1; if ($?) { cmd2 }`, a leading `$ErrorActionPreference = 'Stop';`, and a trailing `; exit $LASTEXITCODE`. The executor does NOT append `exit $LASTEXITCODE` itself: when the last statement is a cmdlet, `$LASTEXITCODE` is stale or unset, so an automatic append would report a fabricated code instead of the real outcome.
+
+`dialect` returning `undefined` (a configured `pwshPath` under neither well-known name) keeps the description dialect-neutral and asks the model to check `$PSVersionTable.PSVersion.Major` before relying on 7-only syntax, rather than assuming the richer language.
 
 The package root exposes only the Cordis plugin contract (`name`, `inject`, `Config`, `apply`); result rendering (`src/render.ts`) and background-job adaptation (`src/background.ts`) mirror the bash tool's structure and stay reachable through the package's `./src/*` export.
 

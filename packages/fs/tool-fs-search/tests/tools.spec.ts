@@ -743,6 +743,17 @@ describe('glob results', () => {
     expect(text(await call(ctx, 'glob', { pattern: '*', path: ' ' }))).toContain('path must be a non-empty string')
   })
 
+  it('rejects a backslash-separated pattern instead of matching nothing', async () => {
+    // Verified against the packaged ripgrep: `src\**\*.ts` exits 1 with no
+    // output, so a model reads "no matches" as "no such files". A named error
+    // costs one retry; the silent empty result costs the conclusion.
+    const { ctx } = await setup()
+    const result = await call(ctx, 'glob', { pattern: 'src\\**\\*.ts' })
+    expect(result.isError).toBe(true)
+    expect(text(result)).toContain('must separate path segments with "/" even on Windows')
+    expect(text(result)).toContain('[*]')
+  })
+
   it('threads a valid path through to the spawn as the plain search root element', async () => {
     const { ctx, subprocess } = await setup()
     subprocess.handler = () => runResult('sub/a.ts\n')
@@ -1061,6 +1072,15 @@ describe('grep results', () => {
     expect(text(await call(ctx, 'grep', { pattern: 'x', include: '  ' }))).toContain('include must be a non-empty glob')
     expect(text(await call(ctx, 'grep', { pattern: 'x', include: '!*.ts' }))).toContain('negated patterns')
     expect(text(await call(ctx, 'grep', { pattern: 'x', include: '*.ts,*.js' }))).toContain('comma-separated list')
+  })
+
+  it('rejects backslash separators in include instead of matching nothing', async () => {
+    // Windows-shaped filters are the likely model mistake, and ripgrep answers
+    // them with a silent empty result rather than an error.
+    const { ctx } = await setup()
+    const result = await call(ctx, 'grep', { pattern: 'x', include: 'src\\*.ts' })
+    expect(result.isError).toBe(true)
+    expect(text(result)).toContain('must separate path segments with "/" even on Windows')
   })
 
   it('accepts a whitespace-only pattern (a legitimate regex) and brace alternation in include', async () => {

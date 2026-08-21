@@ -68,6 +68,16 @@ export interface GrepInput {
 function validateInclude(include: string): void {
   if (include.trim().length === 0) throw new Error('include must be a non-empty glob when given')
   if (include.startsWith('!')) throw new Error('include must be a positive glob filter; negated patterns ("!…") are not supported')
+  // `\` escapes in glob syntax rather than separating segments, so a
+  // Windows-style filter silently matches no file and the search reports "no
+  // matches" for a pattern that was never applied. Same rule as `glob`.
+  if (include.includes('\\')) {
+    throw new Error(
+      `include must separate path segments with "/" even on Windows, but got ${JSON.stringify(include)}: `
+      + 'in glob syntax "\\" escapes the next character instead of separating segments, so this filter '
+      + 'matches nothing. Rewrite it with "/" (for example "src/**/*.ts").',
+    )
+  }
   let braceDepth = 0
   for (const char of include) {
     if (char === '{') braceDepth++
@@ -287,7 +297,8 @@ export function applyGrepTool(ctx: Context, caps: GrepToolCaps): void {
     parameters: {
       pattern: { type: 'string', required: true, description: 'Regular expression to search for (ripgrep syntax).' },
       path: { type: 'string', description: 'File or directory to search. Defaults to the session workspace; a relative path resolves against it.' },
-      include: { type: 'string', description: 'One glob filter for which files to search (e.g. "*.ts", "*.{js,jsx}"). Not a list; negation is not supported.' },
+      include: { type: 'string', description: 'One glob filter for which files to search (e.g. "*.ts", "*.{js,jsx}"). '
+        + 'Separate segments with "/" on every platform, Windows included. Not a list; negation is not supported.' },
     },
     timeoutMs: caps.timeoutMs,
     output: {

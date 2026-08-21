@@ -33,6 +33,36 @@ import * as BashEnvPlugin from '@aflydream/mnh-shell-env'
 import type { ShellProcessRead } from '@aflydream/mnh-shell'
 import { processOutcome } from '../src/background.ts'
 import { renderPwshProcessRead, renderPwshResult } from '../src/render.ts'
+import { pwshDialectGuidance } from '../src/index.ts'
+
+describe('pwshDialectGuidance', () => {
+  it('warns that ";" carries neither failure nor a native exit code on 5.1', () => {
+    // Verified against a real 5.1 host: `Get-Item missing; Write-Output after`
+    // exits 0 and `cmd /c exit 3` exits 1. Since the same paragraph tells the
+    // model to chain with `;` (5.1 has no `&&`), omitting these two facts would
+    // teach it to read a swallowed failure as success.
+    const text = pwshDialectGuidance('windows-powershell-5')
+    expect(text).toContain('Windows PowerShell 5.1')
+    expect(text).toContain('reflects the LAST statement only')
+    expect(text).toContain('cmd1; if ($?) { cmd2 }')
+    expect(text).toContain("$ErrorActionPreference = 'Stop'")
+    expect(text).toContain('; exit $LASTEXITCODE')
+    expect(text).toContain('collapses every native non-zero exit to 1')
+  })
+
+  it('does not carry the 5.1 workarounds onto PowerShell 7', () => {
+    const text = pwshDialectGuidance('powershell-7')
+    expect(text).toContain('PowerShell 7')
+    expect(text).not.toContain('LASTEXITCODE')
+    expect(text).toContain('`&&`, `||`, the ternary `? :`, `??`, and `?.` all work')
+  })
+
+  it('stays dialect-neutral when the executor cannot name the edition', () => {
+    const text = pwshDialectGuidance(undefined)
+    expect(text).toContain('not declared')
+    expect(text).toContain('$PSVersionTable.PSVersion.Major')
+  })
+})
 
 const testToolSignal = new AbortController().signal
 

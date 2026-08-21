@@ -33,7 +33,7 @@ import type {} from '@aflydream/mnh-user-approval'
 import type { SandboxExecutionPolicy, SandboxMode } from '@aflydream/mnh-sandbox'
 import { ESCALATION_TARGETS, approveEscalation, validateEscalationArgs } from '@aflydream/mnh-sandbox'
 import type { SandboxPolicyService } from '@aflydream/mnh-sandbox-policy'
-import type { ShellRunResult } from '@aflydream/mnh-shell'
+import type { ShellDialect, ShellRunResult } from '@aflydream/mnh-shell'
 import { parseExitStatus } from '@aflydream/mnh-shell'
 import { processOutcome } from './background.ts'
 import { renderPwshProcessRead, renderPwshResult } from './render.ts'
@@ -100,14 +100,77 @@ function validatePwshArgs(args: PwshToolArgs): void {
 }
 /* jscpd:ignore-end */
 
-function pwshDescription(backgroundEnabled: boolean, escalationModes: readonly SandboxMode[]): string {
+/**
+ * The dialect rules a model must know BEFORE writing its first command. Windows
+ * PowerShell 5.1 and PowerShell 7 differ in language, not just in cmdlets, and
+ * a 5.1 host rejects the 7-only forms at PARSE time — so nothing in the command
+ * runs, and the parser writes its complaint in the host's legacy console code
+ * page rather than UTF-8, which reaches the model as replacement characters. A
+ * model that knows the edition never writes those forms; a model that does not
+ * gets an unreadable failure it cannot diagnose. Hence the dialect sentence is
+ * not optional polish.
+ * @param dialect - the executor's reported dialect, `undefined` when unknown.
+ * @returns the dialect paragraph, empty when the dialect cannot be named.
+ */
+export function pwshDialectGuidance(dialect: ShellDialect | undefined): string {
+  if (dialect === 'windows-powershell-5') {
+    return 'This host runs Windows PowerShell 5.1 (`powershell.exe`), NOT PowerShell 7. '
+      + 'The following are PARSE errors here, so the whole command fails before anything runs: '
+      + '`&&` and `||` (chain with `;`), the ternary `? :`, `??`, `??=`, and `?.`. '
+      + 'Use `if`/`else` and explicit `$null -eq` checks instead. '
+      // `;` is the only chaining operator left, and it is NOT a substitute for
+      // `&&`: it neither stops on failure nor carries the failure out. Verified
+      // on 5.1 — `Get-Item missing; Write-Output after` exits 0, and
+      // `cmd /c exit 3` exits 1. A model told to use `;` without this paragraph
+      // reads "exit code 0" as success for a command that failed.
+      + 'IMPORTANT — `;` only sequences statements; it does not stop on failure and does not carry '
+      + 'a failure into the exit code, which reflects the LAST statement only. So `cmd1; cmd2` reports '
+      + 'success whenever `cmd2` succeeds, even if `cmd1` failed. For "run only if the previous succeeded" '
+      + 'write `cmd1; if ($?) { cmd2 }`. To make a cmdlet failure abort the rest, start the command with '
+      + '`$ErrorActionPreference = \'Stop\'; `. To surface a native program\'s real exit code, end with '
+      + '`; exit $LASTEXITCODE` — otherwise this edition collapses every native non-zero exit to 1, so '
+      + 'the reported `[exit code: N]` tells you that a command failed but not with which code. '
+      + '`ConvertFrom-Json` has no `-AsHashtable` here and returns a PSCustomObject. '
+      + 'Avoid `2>&1` on a native executable: 5.1 wraps each stderr line in an error record and sets `$?` '
+      + 'to false even when the exe exited 0 — stderr is captured for you, so do not redirect it. '
+      + 'Write files with `Out-File -Encoding utf8` or `Set-Content -Encoding utf8`; `Set-Content` defaults '
+      + 'to the system ANSI code page here. '
+      + 'A parse error is reported in the host legacy code page, so its text can arrive as `\uFFFD` '
+      + 'replacement characters: if you see those, assume you used 7-only syntax and rewrite for 5.1. '
+  }
+  if (dialect === 'powershell-7') {
+    return 'This host runs PowerShell 7 (`pwsh.exe`): `&&`, `||`, the ternary `? :`, `??`, and `?.` all work, '
+      + 'and `ConvertFrom-Json -AsHashtable` is available. '
+  }
+  // Dialect-neutral: the executor could not name the edition, so teach the
+  // model to establish it rather than let it assume the richer language.
+  return 'The PowerShell edition on this host is not declared. Windows PowerShell 5.1 rejects `&&`, `||`, '
+    + 'the ternary, and `??` at parse time while PowerShell 7 accepts them, so either keep to the 5.1 subset '
+    + '(`;` plus `if ($?)`) or check `$PSVersionTable.PSVersion.Major` once before relying on 7-only syntax. '
+}
+
+function pwshDescription(
+  backgroundEnabled: boolean,
+  escalationModes: readonly SandboxMode[],
+  dialect: ShellDialect | undefined,
+): string {
   const background = backgroundEnabled
     ? 'Set `run_in_background: true` for long-running commands: the call returns a job id immediately; read its output with `job_output` and stop it with `job_kill`.'
     : 'Background execution is not available; long-running commands must finish within the timeout.'
-  const base = 'Execute a PowerShell command (`pwsh -Command`) and return its stdout/stderr. '
-    + 'Each call runs in a fresh pwsh process: no state (cwd, variables, functions) persists between calls — '
+  const base = 'Execute a PowerShell command and return its stdout/stderr. '
+    + 'Each call runs in a fresh PowerShell process: no state (cwd, variables, functions) persists between calls — '
     + 'pass `workdir` instead of using `cd`. Paths use native Windows form (`C:\\...`); read environment '
-    + 'variables with `$env:NAME`. Non-zero exits are reported as `[exit code: N]`. '
+    + 'variables with `$env:NAME`. '
+    + pwshDialectGuidance(dialect)
+    + 'This is PowerShell, not a POSIX shell: `head`, `tail`, `which`, `touch`, `wc -l`, `mkdir -p`, `rm -rf`, '
+    + 'and `2>/dev/null` do not exist. Use `Select-Object -First/-Last`, `Get-Content -TotalCount/-Tail`, '
+    + '`(Get-Command x).Source`, `New-Item`, `Measure-Object -Line`, `New-Item -ItemType Directory -Force`, '
+    + '`Remove-Item -Recurse -Force`, and `2>$null`. There is no inline `VAR=value cmd` prefix — set `$env:VAR` first. '
+    + 'Nothing interactive can run: stdin is closed, so `Read-Host`, `Get-Credential`, `pause`, and `git rebase -i` '
+    + 'never receive input; pass `-Confirm:$false` where a cmdlet would prompt. '
+    + 'For a multi-line argument such as a commit message, use a single-quoted here-string whose closing `\'@` '
+    + 'sits at column 0. '
+    + 'Non-zero exits are reported as `[exit code: N]`. '
     + 'Current harness environment facts are exposed through managed `$env:MNH_*` variables; inspect them when needed. '
     + 'Commands may run under a file sandbox; a blocked file operation is reported as `[sandbox: file access denied under <mode> mode]` — a policy denial, not a bug in the command; do not retry another way. '
     + 'Long output is truncated to its tail; the full output is saved to a file whose path is reported when available. '
@@ -251,7 +314,7 @@ export function apply(ctx: Context, config: Config = {}): void {
 
   ctx.tools.register(defineTool({
     name: 'pwsh',
-    description: pwshDescription(backgroundEnabled, escalationModes),
+    description: pwshDescription(backgroundEnabled, escalationModes, ctx.shell.dialect),
     /* jscpd:ignore-start -- deliberate mirror of mnh-tool-bash's parameter surface (pwsh-tool-and-executor Agent Note). */
     parameters: {
       command: { type: 'string', required: true, description: 'The PowerShell command to execute.' },

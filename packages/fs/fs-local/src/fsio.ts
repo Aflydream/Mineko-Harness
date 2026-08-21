@@ -18,6 +18,13 @@ const BINARY_SAMPLE_BYTES = 8192
 // Bound one non-abortable FileHandle.read so cancellation is observed between chunks.
 const DIFF_BASIS_READ_CHUNK_BYTES = 64 * 1024
 
+/**
+ * Prefix inspected to decide a file's dominant line-ending style, matching the
+ * span {@link detectLineEndings} samples so a bounded probe and a whole-file
+ * read agree.
+ */
+const LINE_ENDING_SAMPLE_BYTES = 4096
+
 function isENOENT(error: unknown): boolean {
   return error instanceof Error && 'code' in error && error.code === 'ENOENT'
 }
@@ -646,6 +653,59 @@ function detectLineEndings(raw: string): LineEndings {
  */
 function restoreLineEndings(content: string, lineEndings: LineEndings): string {
   return lineEndings === 'LF' ? content : normalizeLineEndings(content).split('\n').join('\r\n')
+}
+
+/**
+ * Rewrite content in the line-ending style a file on disk already uses, for an
+ * overwrite. `editText` preserves that style because it read the file; a
+ * whole-file `write` never read it, so without this an overwrite of a CRLF file
+ * silently converts every line to LF — on Windows that turns a one-line change
+ * into a whole-file diff. Only an existing, decodable text file with a CRLF
+ * majority converts; an absent, binary, oversized, or unreadable target leaves
+ * the content exactly as the caller supplied it, as does creating a new file.
+ * @param absolutePath - the file about to be overwritten (typically a target key).
+ * @param content - the caller's replacement text.
+ * @param signal - aborts the probe read (`FS_ABORTED`).
+ * @returns the content, converted to CRLF only when the existing file is CRLF.
+ */
+export async function matchExistingLineEndings(
+  absolutePath: string,
+  content: string,
+  signal?: AbortSignal,
+): Promise<string> {
+  const existing = await readLineEndingSample(absolutePath, signal)
+  return existing === null ? content : restoreLineEndings(content, existing)
+}
+
+/**
+ * Detect a file's dominant line-ending style from a bounded prefix. The sample
+ * covers the same span {@link detectLineEndings} inspects, so a whole-file read
+ * would not change the verdict.
+ * @returns the detected style, or `null` when the prefix is unreadable or binary.
+ */
+async function readLineEndingSample(
+  absolutePath: string,
+  signal?: AbortSignal,
+): Promise<LineEndings | null> {
+  throwIfAborted(signal, 'write')
+  try {
+    const handle = await open(absolutePath, 'r')
+    try {
+      const buffer = Buffer.allocUnsafe(LINE_ENDING_SAMPLE_BYTES)
+      const { bytesRead } = await handle.read(buffer, 0, LINE_ENDING_SAMPLE_BYTES, 0)
+      const sample = buffer.subarray(0, bytesRead)
+      // A NUL means binary: it has no line-ending style to preserve, and
+      // `writeText` only ever replaces it with text.
+      if (sample.includes(0)) return null
+      return detectLineEndings(sample.toString('utf8'))
+    } finally {
+      await handle.close()
+    }
+  } catch {
+    // Absent or unreadable: the caller's content stands unchanged. A genuine
+    // write failure surfaces from the write itself, not from this probe.
+    return null
+  }
 }
 
 function countOccurrences(content: string, needle: string): number {

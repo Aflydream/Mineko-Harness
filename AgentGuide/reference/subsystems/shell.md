@@ -218,7 +218,7 @@ interface ShellProcessRead {
 
 ## The service
 
-`ShellExecutor` owns `resolve`, foreground `run`, background-process `start`, and the `sandboxMode` capability fact. `mnh-bash-local` owns command defaulting, timeout/abort classification, the terminal environment, and the background read merge; process groups, bounded collectors, spill files, credential scrubbing, and disposal quiescence are the [subprocess service](subprocess.md)'s. `mnh-tool-bash` owns model-facing rendering and adapts background handles into the [generic job runtime](jobs.md). `mnh-shell` owns the shell tools' shared exit-status contract: the exported `parseExitStatus`/`ParsedExitStatus` inverts the `[exit code: N]` / `[killed by signal: X]` markers `mnh-tool-bash`'s `renderResult` and `mnh-tool-pwsh`'s `renderPwshResult` append, and both tools' `presentResult` use it to split the rendered text into the terminal card's output body and its exit-status pill.
+`ShellExecutor` owns `resolve`, foreground `run`, background-process `start`, and the `sandboxMode` and `dialect` capability facts. `dialect` names the shell language commands actually run under, so a tool can teach the model the right syntax: the same `pwsh` tool reaches PowerShell 7 on one host and Windows PowerShell 5.1 on another (`mnh-pwsh-local` falls back to `powershell.exe` when no PowerShell 7 is installed), and 5.1 rejects `&&`, `||`, the ternary, and `??` at PARSE time — so a model told the wrong dialect writes commands that never run. `undefined` means the executor cannot name it and the tool must stay dialect-neutral. `mnh-bash-local` owns command defaulting, timeout/abort classification, the terminal environment, and the background read merge; process groups, bounded collectors, spill files, credential scrubbing, and disposal quiescence are the [subprocess service](subprocess.md)'s. `mnh-tool-bash` owns model-facing rendering and adapts background handles into the [generic job runtime](jobs.md). `mnh-shell` owns the shell tools' shared exit-status contract: the exported `parseExitStatus`/`ParsedExitStatus` inverts the `[exit code: N]` / `[killed by signal: X]` markers `mnh-tool-bash`'s `renderResult` and `mnh-tool-pwsh`'s `renderPwshResult` append, and both tools' `presentResult` use it to split the rendered text into the terminal card's output body and its exit-status pill.
 
 <!-- BEGIN GENERATED cordis-surface (gen-cordis-catalog.ts) — do not edit between markers -->
 
@@ -266,7 +266,7 @@ abstract run(spec: ShellExecSpec): Promise<ShellRunResult>
 abstract start(spec: ShellExecSpec): ShellProcess
 ```
 
-Source: [`packages/shell/shell/src/index.ts:65`](../../../packages/shell/shell/src/index.ts)
+Source: [`packages/shell/shell/src/index.ts:77`](../../../packages/shell/shell/src/index.ts)
 
 <a id="ctxshellenv--shellenvregistry"></a>
 

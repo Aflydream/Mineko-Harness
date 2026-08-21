@@ -4,7 +4,15 @@
 
 注册在 `ctx.shell` 执行器 seam 之上的面向模型的 `pwsh` 工具。面向由 PowerShell 执行器（如 `@aflydream/mnh-pwsh-local`）支撑 `ctx.shell` 的 Windows 组合；工具约定是 PowerShell 方言：原生 `C:\...` 路径与 `$env:NAME` 变量。行为与 `mnh-tool-bash` 逐调用对齐——通过通用任务运行时执行前台与 `run_in_background`、通过共享 `shell-env` 注册表管理 `MNH_*` 环境、sandbox 拒绝渲染与同轮次 `sandbox_permissions` 升级面、以及 bash 的 marker/截断渲染故事（干净退出不产生 marker）。
 
-需要已加载的执行器实现与 `shell-env` 插件；两者都存在前工具保持 pending（`inject: ['tools', 'bash', 'systemPrompt', 'bashEnv']`）。
+需要已加载的执行器实现与 `shell-env` 插件；两者都存在前工具保持 pending（`inject: ['tools', 'shell', 'systemPrompt', 'shellEnv']`）。
+
+## 方言
+
+描述按组合逐次装配，取自 `ctx.shell.dialect`——因为同一个工具在不同主机上抵达的是不同的**语言**：`mnh-pwsh-local` 在装有 PowerShell 7 时解析到它，否则回退到 Windows PowerShell 5.1，而 5.1 的解析器直接拒绝 `&&`、`||`、三元运算符、`??` 与 `?.`。被告知错误版本的模型写出的命令会在运行前就失败，而且 5.1 会用主机的旧控制台代码页报告该解析错误——于是诊断信息到模型手里变成 `�` 替换字符（编码 pin 是加在命令字符串前面的，而 PowerShell 会先解析完整个字符串再执行）。因此 `renderPwshResult` 在收集到的文本含替换字符时还会追加一条标记，点明这是模型本来读不出来的解析期失败。
+
+在 5.1 下，指引还会说明 `;` **不**做什么——它是仅剩的串联操作符：既不会在失败时停下，也不会把失败带进退出码，退出码只反映最后一条语句；而且这个版本会把原生程序的所有非零退出码压成 1。描述给出三条补救写法：`cmd1; if ($?) { cmd2 }`、开头加 `$ErrorActionPreference = 'Stop';`、结尾加 `; exit $LASTEXITCODE`。执行器**不会**自己追加 `exit $LASTEXITCODE`：当最后一条语句是 cmdlet 时 `$LASTEXITCODE` 是过期的或未设置的，自动追加只会报出一个编造的退出码而非真实结果。
+
+`dialect` 返回 `undefined`（配置的 `pwshPath` 不属于任一已知名字）时，描述保持方言中立，并要求模型在依赖 7-only 语法前先查 `$PSVersionTable.PSVersion.Major`，而不是假定更丰富的那一版语言。
 
 包根只导出 Cordis 插件约定（`name`、`inject`、`Config`、`apply`）；结果渲染（`src/render.ts`）与后台任务适配（`src/background.ts`）镜像 bash 工具的结构，并可通过包的 `./src/*` 导出访问。
 

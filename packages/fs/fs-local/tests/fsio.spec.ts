@@ -13,6 +13,7 @@ import { createServer } from 'node:net'
 import {
   applyLiteralEdit,
   listDirectory,
+  matchExistingLineEndings,
   probe,
   probeNoFollow,
   readForEdit,
@@ -24,6 +25,7 @@ import {
   writeFileAtomic,
 } from '../src/fsio.ts'
 import type { LocalTarget } from '../src/fsio.ts'
+import { canSymlink } from './helpers/symlink.ts'
 import { copyFileDaclWin32, readFileDaclWin32 } from '../src/win32.ts'
 import { FsError, FsTargetKey } from '@aflydream/mnh-fs'
 
@@ -57,7 +59,7 @@ describe('resolveLocalTarget', () => {
     expect(target.targetKey).toBe(join(await realpath(dir), 'missing.txt'))
   })
 
-  it('two paths to the same file via a symlink share one targetKey', async () => {
+  it.skipIf(!canSymlink)('two paths to the same file via a symlink share one targetKey', async () => {
     const real = join(dir, 'real.txt')
     await writeFile(real, 'hi')
     const link = join(dir, 'link.txt')
@@ -73,7 +75,7 @@ describe('resolveLocalTarget', () => {
     expect(target.targetKey).toBe(join(await realpath(dir), 'no-such-dir', 'child.txt'))
   })
 
-  it('keeps the key stable across create when an ancestor is a symlink', async () => {
+  it.skipIf(!canSymlink)('keeps the key stable across create when an ancestor is a symlink', async () => {
     // A symlinked workspace root with a not-yet-created subdirectory: the
     // pre-create key (via the symlink, missing parent) must equal the
     // post-create key (file exists, realpathed) so observed-state survives.
@@ -150,7 +152,7 @@ describe('probe', () => {
 })
 
 describe('probeNoFollow', () => {
-  it('reports symlinks without following them', async () => {
+  it.skipIf(!canSymlink)('reports symlinks without following them', async () => {
     const real = join(dir, 'real.txt')
     const link = join(dir, 'link.txt')
     await writeFile(real, 'hi')
@@ -171,7 +173,7 @@ describe('probeNoFollow', () => {
 })
 
 describe('listDirectory', () => {
-  it('lists direct children in stable order without reading content', async () => {
+  it.skipIf(!canSymlink)('lists direct children in stable order without reading content', async () => {
     const root = join(dir, 'skills')
     await mkdir(join(root, 'dir-skill'), { recursive: true })
     await writeFile(join(root, 'zeta.md'), 'zeta')
@@ -191,7 +193,7 @@ describe('listDirectory', () => {
     expect(entries.find(entry => entry.name === 'dir-skill')?.size).toBeUndefined()
   })
 
-  it('derives child target keys from the listed parent identity', async () => {
+  it.skipIf(!canSymlink)('derives child target keys from the listed parent identity', async () => {
     const realOne = join(dir, 'real-one')
     const realTwo = join(dir, 'real-two')
     const link = join(dir, 'link')
@@ -240,13 +242,13 @@ describe('listDirectory', () => {
     }
   })
 
-  it('translates preflight metadata IO failures into FS_IO_ERROR', async () => {
+  it.skipIf(!canSymlink)('translates preflight metadata IO failures into FS_IO_ERROR', async () => {
     const loop = join(dir, 'loop')
     await symlink(loop, loop)
     await expect(listDirectory(localTarget(loop))).rejects.toMatchObject({ code: 'FS_IO_ERROR' })
   })
 
-  it('translates child resolution failures into structured listing errors', async () => {
+  it.skipIf(!canSymlink)('translates child resolution failures into structured listing errors', async () => {
     const root = join(dir, 'listed')
     await mkdir(root)
     const loop = join(root, 'loop')
@@ -254,7 +256,7 @@ describe('listDirectory', () => {
     await expect(listDirectory(localTarget(root))).rejects.toMatchObject({ code: 'FS_IO_ERROR' })
   })
 
-  it('translates child permission failures into FS_PERMISSION_DENIED', async () => {
+  it.skipIf(!canSymlink)('translates child permission failures into FS_PERMISSION_DENIED', async () => {
     const root = join(dir, 'listed')
     const protectedRoot = join(dir, 'protected')
     const secret = join(protectedRoot, 'secret')
@@ -890,6 +892,37 @@ describe('applyLiteralEdit', () => {
 
   it('matches across normalized line endings', () => {
     expect(applyLiteralEdit('one\ntwo', 'one\ntwo', 'x', false, 'f').replacements).toBe(1)
+  })
+})
+
+describe('matchExistingLineEndings', () => {
+  it('converts replacement text to the existing CRLF file style', async () => {
+    const file = join(dir, 'existing-crlf.txt')
+    await writeFile(file, 'one\r\ntwo\r\n')
+    expect(await matchExistingLineEndings(file, 'ONE\nTWO\n')).toBe('ONE\r\nTWO\r\n')
+  })
+
+  it('leaves content alone for an LF file, and never doubles an already-CRLF payload', async () => {
+    const lf = join(dir, 'existing-lf.txt')
+    await writeFile(lf, 'one\ntwo\n')
+    expect(await matchExistingLineEndings(lf, 'ONE\nTWO\n')).toBe('ONE\nTWO\n')
+    const crlf = join(dir, 'existing-crlf-2.txt')
+    await writeFile(crlf, 'one\r\ntwo\r\n')
+    expect(await matchExistingLineEndings(crlf, 'ONE\r\nTWO\r\n')).toBe('ONE\r\nTWO\r\n')
+  })
+
+  it('leaves content alone for an absent, binary, or unreadable target', async () => {
+    expect(await matchExistingLineEndings(join(dir, 'absent.txt'), 'a\nb')).toBe('a\nb')
+    const binary = join(dir, 'blob.bin')
+    await writeFile(binary, Buffer.from([0x61, 0x00, 0x0d, 0x0a, 0x62]))
+    expect(await matchExistingLineEndings(binary, 'a\nb')).toBe('a\nb')
+    expect(await matchExistingLineEndings(dir, 'a\nb')).toBe('a\nb')
+  })
+
+  it('decides from the sampled prefix, so a large CRLF file still converts', async () => {
+    const file = join(dir, 'big-crlf.txt')
+    await writeFile(file, 'line\r\n'.repeat(4096))
+    expect(await matchExistingLineEndings(file, 'a\nb')).toBe('a\r\nb')
   })
 })
 

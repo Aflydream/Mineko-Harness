@@ -62,15 +62,37 @@ export interface GlobInput {
 }
 
 /**
+ * Reject a glob whose separators are backslashes. In glob syntax `\` is an
+ * ESCAPE, not a separator, on every platform — so `src\**\*.ts` asks for a file
+ * literally named `src**.ts` and quietly matches nothing. A model on Windows
+ * sees `C:\...` paths from every other tool and reasonably writes the same
+ * separator here; without this it reads "no matches" as "no such files", which
+ * is a wrong answer rather than an error. Naming the mistake costs one retry;
+ * a silent empty result costs the conclusion.
+ * @param pattern - the model-supplied glob pattern.
+ * @throws Error naming the separator to use instead.
+ */
+function assertGlobSeparators(pattern: string): void {
+  if (!pattern.includes('\\')) return
+  throw new Error(
+    `pattern must separate path segments with "/" even on Windows, but got ${JSON.stringify(pattern)}: `
+    + 'in glob syntax "\\" escapes the next character instead of separating segments, so this pattern '
+    + 'matches nothing. Rewrite it with "/" (for example "src/**/*.ts"); to match a literal wildcard '
+    + 'character in a filename, use a character class such as "[*]".',
+  )
+}
+
+/**
  * Validate value constraints the schema DSL can't express: a non-blank
- * `pattern`, and a non-blank `path` when given. Throws a plain `Error` (an
- * ordinary tool argument error) otherwise.
+ * `pattern` with glob separators, and a non-blank `path` when given. Throws a
+ * plain `Error` (an ordinary tool argument error) otherwise.
  *
  * @param args - the schema-validated `glob` arguments.
  * @returns the accepted input, unchanged.
  */
 export function parseGlobArgs(args: { pattern: string; path?: string }): GlobInput {
   if (args.pattern.trim().length === 0) throw new Error('pattern must be a non-empty string')
+  assertGlobSeparators(args.pattern)
   if (args.path !== undefined && args.path.trim().length === 0) throw new Error('path must be a non-empty string when given')
   return { pattern: args.pattern, ...args.path !== undefined ? { path: args.path } : {} }
 }
@@ -319,6 +341,8 @@ export function applyGlobTool(ctx: Context, caps: GlobToolCaps): void {
         type: 'string',
         required: true,
         description: 'Glob pattern to match file paths against (e.g. "**/*.ts", "src/**/*.test.js"). '
+          + 'Separate segments with "/" on every platform, Windows included: "\\" escapes the next character '
+          + 'in glob syntax, so a Windows-style pattern matches nothing. '
           + 'A pattern with no "/" matches the basename at any depth, so "*" and "*.ts" both search the whole tree; include a separator to anchor the depth.',
       },
       path: { type: 'string', description: 'Directory to search in. Defaults to the session workspace; a relative path resolves against it.' },
