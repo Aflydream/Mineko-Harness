@@ -440,6 +440,62 @@ describe('second review regressions', () => {
     expect(provider.doc['ui-theme']).toEqual({ theme: 'light' })
   })
 
+  it('waits for a started namespace watcher when the registrant disposes', async () => {
+    const { ctx, provider } = await boot()
+    let started!: () => void
+    let release!: () => void
+    const watcherStarted = new Promise<void>((resolve) => { started = resolve })
+    const watcherRelease = new Promise<void>((resolve) => { release = resolve })
+    const fiber = ctx.plugin({
+      inject: ['settings'],
+      apply: (child: Context) => {
+        const scope = child.settings.register(settingsNamespace('ui-theme'), ThemeSchema)
+        scope.watch(async () => {
+          started()
+          await watcherRelease
+        })
+      },
+    })
+    await fiber
+    provider.pushExternal({ 'ui-theme': { theme: 'light' } })
+    await watcherStarted
+    let disposed = false
+    const disposal = fiber.dispose().then(() => { disposed = true })
+    await new Promise(resolve => setTimeout(resolve, 5))
+    expect(disposed).toBe(false)
+    release()
+    await disposal
+    expect(disposed).toBe(true)
+  })
+
+  it('resynchronizes a replacement registration after an older owner persists', async () => {
+    const { ctx } = await boot({ persistDelayMs: 30 })
+    let firstScope!: SettingsScope<ThemeConfig>
+    const first = ctx.plugin({
+      inject: ['settings'],
+      apply: (child: Context) => {
+        firstScope = child.settings.register(settingsNamespace('ui-theme'), ThemeSchema)
+      },
+    })
+    await first
+    const pending = firstScope.update({ theme: 'light' })
+    await new Promise(resolve => setTimeout(resolve, 5))
+    await first.dispose()
+
+    let replacement!: SettingsScope<ThemeConfig>
+    const second = ctx.plugin({
+      inject: ['settings'],
+      apply: (child: Context) => {
+        replacement = child.settings.register(settingsNamespace('ui-theme'), ThemeSchema)
+      },
+    })
+    await second
+    expect(replacement.get().theme).toBe('dark')
+    await pending
+    expect(replacement.get().theme).toBe('light')
+    await second.dispose()
+  })
+
   it('drains in-flight writes at service dispose and rejects later ones', async () => {
     const { ctx, provider, fiber } = await boot({ persistDelayMs: 20 })
     const service = ctx.settings
@@ -523,6 +579,23 @@ describe('second review regressions', () => {
     patch.fontSize = 99
     await pending
     expect(scope.get().fontSize).toBe(18)
+  })
+
+  it('preserves __proto__ as ordinary JSON data through clone and merge', async () => {
+    const { ctx, provider } = await boot()
+    const scope = ctx.settings.register<Record<string, unknown>>(
+      settingsNamespace('json-keys'),
+      z.any(),
+    )
+    const patch = JSON.parse('{"__proto__":{"polluted":"data"},"constructor":"own"}') as Record<string, unknown>
+    await scope.update(patch)
+    const value = scope.get()
+    expect(Object.hasOwn(value, '__proto__')).toBe(true)
+    expect(value['__proto__']).toEqual({ polluted: 'data' })
+    expect(Object.hasOwn(value, 'constructor')).toBe(true)
+    expect(value['constructor']).toBe('own')
+    expect(provider.persisted.at(-1)?.section).toEqual(patch)
+    expect(({} as { polluted?: unknown }).polluted).toBeUndefined()
   })
 })
 

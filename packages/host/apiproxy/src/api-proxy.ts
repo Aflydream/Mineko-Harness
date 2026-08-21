@@ -5,6 +5,7 @@
 
 import { randomUUID } from 'node:crypto'
 import { mkdir, stat } from 'node:fs/promises'
+import { createRequire } from 'node:module'
 import { dirname } from 'node:path'
 import type { Context } from '@deepseek-ai/cordis'
 import { installModelSelection } from '@aflydream/mnh-agent'
@@ -78,7 +79,7 @@ import type {} from '@aflydream/mnh-skill'
 // The settings/credentials seams: brand guards run at this wire boundary; the
 // service reads stay optional (`ctx.get`) so a composition without either
 // provider still serves every other domain.
-import { SettingsConflictError, settingsNamespace } from '@aflydream/mnh-settings'
+import { redactSettingsError, SettingsConflictError, settingsNamespace } from '@aflydream/mnh-settings'
 import type { SettingsDescriptor, SettingsNamespace, SettingsPathOp } from '@aflydream/mnh-settings'
 import { credentialRef } from '@aflydream/mnh-credentials'
 // Value edge: the rename impl narrows the title service's validation failure; the import also resolves `ctx.get('sessionTitle')`.
@@ -109,6 +110,8 @@ import {
   inspectApiRemoteSession,
 } from '@aflydream/mnh-api-remotes'
 import { canOpenNativePath, openNativePath, openNativeTextFile } from './native-path-opener.ts'
+
+const { version: HOST_VERSION } = createRequire(import.meta.url)('../package.json') as { version: string }
 
 /** Page size when history is called without maxMessages. */
 const DEFAULT_MAX_MESSAGES = 50
@@ -1994,7 +1997,10 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
       }
       return err(request, {
         code: 'settings-rejected',
-        message: error instanceof Error ? error.message : String(error),
+        // A schema rejection quotes the value it rejected, and the candidate a
+        // write validates is the STORED section merged with this patch — so the
+        // quoted value can be a secret this client never sent. Report position.
+        message: redactSettingsError(error) ?? (error instanceof Error ? error.message : String(error)),
         details: { ns },
       })
     }
@@ -2922,10 +2928,11 @@ export function createApiProxy(ctx: Context, defaults: ApiProxyDefaults): ApiPro
 
     host: {
       describe(request) {
-        // TODO: version should read apps/cli's package.json; placeholder for now.
         const selection = defaults.defaultModelSelection()
         return Promise.resolve(ok(request, {
-          version: '0.0.1',
+          // Release constraints keep every mnh package on the app version, and
+          // this package's manifest remains beside both source and built entry.
+          version: HOST_VERSION,
           // Same source as session.create's fallback: the UI's default project
           // must match where an unspecified-cwd session actually lands.
           cwd: defaults.cwd,

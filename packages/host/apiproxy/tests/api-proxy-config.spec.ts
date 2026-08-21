@@ -158,9 +158,13 @@ class BrokenCatalogAdapter extends CatalogAdapter {
 const NS = settingsNamespace('llm-deepseek')
 
 const AdapterConfig = z.object({
-  apiKey: z.string().role('secret'),
+  apiKey: z.string().default('schema-secret').role('secret'),
   apiKeyEnv: z.string().default('DEEPSEEK_API_KEY'),
   baseURL: z.string(),
+  auth: z.union([
+    z.object({ token: z.string().role('secret') }),
+    z.object({ credentialRef: z.string() }),
+  ]),
 })
 
 async function harness(options?: {
@@ -245,7 +249,7 @@ describe('settings domain', () => {
 
   it('describes layered redacted namespaces with their secret slots', async () => {
     const ctx = await harness({ settings: {
-      doc: { 'llm-deepseek': { apiKey: 'user-secret', baseURL: 'https://user' } },
+      doc: { 'llm-deepseek': { apiKey: 'user-secret', baseURL: 'https://user', auth: { token: 'union-secret' } } },
       documentPath: '/tmp/custom-settings.yaml',
     } })
     ctx.settings.register(NS, AdapterConfig, { base: { baseURL: 'https://base' } })
@@ -258,11 +262,16 @@ describe('settings domain', () => {
     expect(view.ns).toBe('llm-deepseek')
     expect(view.applies).toBe('live')
     expect((view.schema as { refs?: unknown }).refs).toBeDefined()
-    expect(view.value).toEqual({ apiKeyEnv: 'DEEPSEEK_API_KEY', baseURL: 'https://user' })
+    expect(view.value).toEqual({ apiKeyEnv: 'DEEPSEEK_API_KEY', baseURL: 'https://user', auth: {} })
     expect(view.base).toEqual({ baseURL: 'https://base' })
-    expect(view.user).toEqual({ baseURL: 'https://user' })
-    expect(view.secrets).toEqual([{ path: ['apiKey'], set: true }])
+    expect(view.user).toEqual({ baseURL: 'https://user', auth: {} })
+    expect(view.secrets).toEqual([
+      { path: ['apiKey'], set: true },
+      { path: ['auth', 'token'], set: true },
+    ])
     expect(JSON.stringify(value)).not.toContain('user-secret')
+    expect(JSON.stringify(value)).not.toContain('union-secret')
+    expect(JSON.stringify(value)).not.toContain('schema-secret')
   })
 
   it('opens the provider-resolved document without accepting a browser path', async () => {
@@ -519,7 +528,10 @@ describe('settings domain', () => {
       const view = expectOk(await api.settings.update(request({ ns: 'llm-deepseek', patch: { apiKey: 'sk-new', baseURL: 'https://next' } })))
       expect(view.value).toEqual({ apiKeyEnv: 'DEEPSEEK_API_KEY', baseURL: 'https://next' })
       expect(view.user).toEqual({ baseURL: 'https://next' })
-      expect(view.secrets).toEqual([{ path: ['apiKey'], set: true }])
+      expect(view.secrets).toEqual([
+        { path: ['apiKey'], set: true },
+        { path: ['auth', 'token'], set: false },
+      ])
       expect(JSON.stringify(view)).not.toContain('sk-new')
     })
     expect(frames).toEqual([forwardedSettings('llm-deepseek')])
@@ -544,6 +556,19 @@ describe('settings domain', () => {
     const error = expectErr(await api.settings.update(request({ ns, patch })))
     expect(error.code).toBe('settings-rejected')
     expect(error.details).toEqual({ ns })
+  })
+
+  it('names the position a schema rejected without echoing the rejected value', async () => {
+    const ctx = await harness()
+    ctx.settings.register(NS, AdapterConfig)
+    const api = createApiProxy(ctx, DEFAULTS)
+    const error = expectErr(await api.settings.update(request({ ns: 'llm-deepseek', patch: { baseURL: 42 } })))
+    expect(error.code).toBe('settings-rejected')
+    // The candidate a write validates merges the stored section, so the value
+    // schemastery quotes in its own message can be a secret this caller never
+    // sent. The wire gets the position instead.
+    expect(error.message).toBe("the value at $.baseURL does not satisfy this namespace's schema")
+    expect(error.message).not.toContain('42')
   })
 
   it('answers an unregistered namespace exactly like an unexposed one', async () => {

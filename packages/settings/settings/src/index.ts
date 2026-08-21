@@ -8,11 +8,11 @@
 
 import { Context, Service } from '@deepseek-ai/cordis'
 import type z from '@deepseek-ai/schemastery'
-import { redactSecrets } from './redact.ts'
+import { redactSecrets, redactSecretSchema } from './redact.ts'
 import type { RedactedSecret } from './redact.ts'
 import type { SettingsNamespace, SettingsUpdateSource } from './types.ts'
 
-export { redactSecrets } from './redact.ts'
+export { redactSecrets, redactSettingsError } from './redact.ts'
 export type { RedactedSecret, RedactedValue } from './redact.ts'
 export type { SettingsNamespace, SettingsUpdateSource } from './types.ts'
 
@@ -67,7 +67,7 @@ export interface SettingsDescriptor {
   // public API, provider contract, implementations, tests, and consumers.
   /** The registered namespace. */
   ns: SettingsNamespace
-  /** Serialized schemastery schema (`schema.toJSON()`). */
+  /** Serialized schemastery schema; secret defaults are absent from redacted descriptors. */
   schema: unknown
   /** Current resolved value. */
   value: unknown
@@ -92,9 +92,10 @@ export interface SettingsDescriptor {
 /** Options for {@link SettingsProvider.describe}. */
 export interface SettingsDescribeOptions {
   /**
-   * Strip `role('secret')` fields from `value`/`base`/`user` and enumerate
-   * them in each descriptor's `secrets`. Every wire surface MUST pass this;
-   * the verbatim default exists for same-process configuration UIs only.
+   * Strip `role('secret')` fields from `value`/`base`/`user`, remove their
+   * defaults from the serialized schema, and enumerate them in each
+   * descriptor's `secrets`. Every wire surface MUST pass this; the verbatim
+   * default exists for same-process configuration UIs only.
    */
   redactSecrets?: boolean
 }
@@ -189,6 +190,11 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
   return proto === Object.prototype || proto === null
 }
 
+/** Define an enumerable own data property without invoking `__proto__` setters. */
+function setOwn(target: Record<string, unknown>, key: string, value: unknown): void {
+  Object.defineProperty(target, key, { value, enumerable: true, configurable: true, writable: true })
+}
+
 /**
  * One path-addressed edit to a namespace's user section. Path mutation exists
  * for a caller holding an INCOMPLETE view of the section — a configuration UI
@@ -272,12 +278,10 @@ function cloneJsonShaped(
     if (isPlainObject(value)) {
       if (visiting.has(value)) throw reject('a circular reference', path)
       visiting.add(value)
-      // TODO(settings-json-properties): Use property-safe construction here and
-      // in mergeLayers so valid JSON keys such as "__proto__" remain own data.
       const out: Record<string, unknown> = {}
       for (const [key, entry] of Object.entries(value)) {
         if (entry === undefined) continue
-        out[key] = clone(entry, `${path}.${key}`)
+        setOwn(out, key, clone(entry, `${path}.${key}`))
       }
       visiting.delete(value)
       return out
@@ -299,7 +303,7 @@ function mergeLayers(under: unknown, over: unknown): unknown {
   if (!isPlainObject(under) || !isPlainObject(over)) return over
   const merged: Record<string, unknown> = { ...under }
   for (const [key, value] of Object.entries(over)) {
-    merged[key] = key in merged ? mergeLayers(merged[key], value) : value
+    setOwn(merged, key, Object.hasOwn(merged, key) ? mergeLayers(merged[key], value) : value)
   }
   return merged
 }
@@ -342,6 +346,15 @@ interface SettingsRegistration {
 }
 
 /**
+ * Upper bound on waiting for started watcher invocations and queued writes to
+ * settle. A callback that never returns must not hold its registrant fiber —
+ * or process shutdown — open forever. Past the bound the invocation is
+ * abandoned rather than awaited; it was deactivated first, so it can no longer
+ * commit or notify anything.
+ */
+const DRAIN_TIMEOUT_MS = 5_000
+
+/**
  * Abstract settings service. Providers implement raw-document storage
  * (`load`/`persist`) and push external changes through {@link Settings.publish};
  * the base class owns namespace registration, resolution, validation, change
@@ -363,6 +376,30 @@ export abstract class SettingsProvider extends Service {
     return this.stopped
   }
 
+  /**
+   * Await settled tails, abandoning them past {@link DRAIN_TIMEOUT_MS} instead
+   * of hanging. Every caller deactivates its watchers first, so an abandoned
+   * invocation can still finish but can no longer reach anything observable.
+   * @param tails - the settled tails to wait on.
+   * @param what - drain subject, named in the timeout warning.
+   */
+  private async drain(tails: readonly Promise<unknown>[], what: string): Promise<void> {
+    if (tails.length === 0) return
+    let timer: ReturnType<typeof setTimeout> | undefined
+    const expired = new Promise<'expired'>((resolve) => {
+      timer = setTimeout(() => { resolve('expired') }, DRAIN_TIMEOUT_MS)
+      timer.unref()
+    })
+    try {
+      const settled = Promise.allSettled(tails).then(() => 'settled' as const)
+      if (await Promise.race([settled, expired]) === 'expired') {
+        this.ctx.logger.warn('settings: abandoning %s still running after %dms', what, DRAIN_TIMEOUT_MS)
+      }
+    } finally {
+      clearTimeout(timer)
+    }
+  }
+
   constructor(ctx: Context) {
     super(ctx, 'settings')
   }
@@ -380,7 +417,7 @@ export abstract class SettingsProvider extends Service {
       // so disposal completes only once storage and observers are quiescent.
       // Invocations queued but not yet started skip via the stopped check.
       this.stopped = true
-      await Promise.allSettled([...this.writeQueues.values(), ...this.pendingTails])
+      await this.drain([...this.writeQueues.values(), ...this.pendingTails], 'queued writes and watcher invocations')
     }
     this.publish(await this.load())
   }
@@ -450,9 +487,16 @@ export abstract class SettingsProvider extends Service {
     }
     this.ctx.effect(() => {
       this.registrations.set(ns, registration)
-      // TODO(settings-registration-quiescence): Deactivate every watcher and await
-      // its tail on disposal so callbacks cannot outlive the registrant fiber.
-      return () => this.registrations.delete(ns)
+      return async () => {
+        if (this.registrations.get(ns) === registration) this.registrations.delete(ns)
+        const tails: Promise<void>[] = []
+        for (const watcher of registration.watchers) {
+          watcher.active = false
+          tails.push(watcher.tail)
+        }
+        registration.watchers.clear()
+        await this.drain(tails, `watcher invocations for "${String(ns)}"`)
+      }
     }, `settings.register(${JSON.stringify(String(ns))})`)
     return {
       get: () => registration.resolved as T,
@@ -491,7 +535,9 @@ export abstract class SettingsProvider extends Service {
       const detachedUser = user === undefined ? undefined : structuredClone(user)
       const descriptor: SettingsDescriptor = {
         ns: registration.ns,
-        schema: registration.schema.toJSON(),
+        schema: options?.redactSecrets === true
+          ? redactSecretSchema(registration.schema as z<never>)
+          : registration.schema.toJSON(),
         value: registration.resolved,
         revision: registration.revision,
         ...base === undefined ? {} : { base },
@@ -632,15 +678,24 @@ export abstract class SettingsProvider extends Service {
           : (snapshot['ops'] as SettingsPathOp[]).reduce(applyPathOp, current)
       const next = deepFreeze(this.resolve(registration.schema, registration.base, section, registration.validate))
       await this.persist(ns, section)
-      // The write reached storage either way; the cache must say so. Commit
-      // only when this registration is still the namespace owner — a fiber
-      // disposed (or replaced) mid-persist must not receive the notification.
+      // The write reached storage either way; the cache and current owner must
+      // say so. A replacement registration may have resolved the old document
+      // while this write was in flight, so reconcile it from the committed
+      // section instead of leaving its in-memory value stale.
       this.document[ns] = section
-      // TODO(settings-replacement-resync): Re-resolve any replacement registration
-      // from this persisted section so an old in-flight write cannot leave it stale.
-      if (this.registrations.get(ns) === registration && !this.isStopped()) {
-        this.bumpRevision(registration, current, section)
+      const owner = this.registrations.get(ns)
+      if (owner === undefined || this.isStopped()) return
+      this.bumpRevision(owner, current, section)
+      if (owner === registration) {
         this.commit(registration, next, 'update')
+        return
+      }
+      try {
+        const replacement = deepFreeze(this.resolve(owner.schema, owner.base, section, owner.validate))
+        this.commit(owner, replacement, 'update')
+      } catch (error) {
+        this.ctx.logger.warn('settings: keeping last good "%s" after an older registration persisted an incompatible section', ns)
+        this.ctx.logger.warn(error)
       }
     })
     this.writeQueues.set(ns, run)
