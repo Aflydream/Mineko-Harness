@@ -24,8 +24,8 @@ import type {} from '@aflydream/mnh-goal/client'
 // api-remotes import already places it in every client program.
 import type { Translate } from '@aflydream/mnh-client-ui-slots'
 import type { ComposerAttachment, ComposerBarProps } from '../contract/slots.ts'
-import { deriveDecorations } from '../input/decorations.ts'
-import type { DraftDecorations } from '../input/decorations.ts'
+import { deriveDecorations } from '../contract/input-decorations.ts'
+import type { DraftDecorations } from '../contract/input-decorations.ts'
 import {
   attachmentErrorText, attachmentRailLabels, dropOverlayLabels, imageSizeText, lightboxLabels,
 } from '../image-labels.ts'

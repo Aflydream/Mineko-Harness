@@ -1,12 +1,12 @@
 /**
  * Queue read face for the InputState.queue projection (frozen contract in
- * ../input/contract.ts): a uSES-compatible observable over one session's
+ * input.ts): a uSES-compatible observable over one session's
  * transient inbox rows. The Session snapshot already keeps the queue array
  * reference-stable across unrelated snapshot swaps, so this is a pure
  * projection — no second store, no copy.
  */
 import type { ObservableSnapshot, SessionFace } from '@aflydream/mnh-client-runtime/client'
-import type { QueuedMessage } from '../input/contract.ts'
+import type { QueuedMessage } from './input.ts'
 
 /**
  * Project a session's transient inbox rows as a bare observable (subscribe/getSnapshot).

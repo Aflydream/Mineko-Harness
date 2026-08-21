@@ -16,7 +16,7 @@ import { useMemo, useState } from 'react'
 import { Button } from '@aflydream/mnh-client-ui-primitives'
 import type { RunningToolCall } from '@aflydream/mnh-client-runtime/client'
 import { PendingApproval, type ApprovalComposerProps } from '../contract/slots.ts'
-import { rootToolCall } from '../chat/tool-node-reader.ts'
+import { rootToolCall } from '../contract/tool-node-reader.ts'
 import css from './ApprovalPanel.module.css'
 
 /** Extract the shell command from an approval's paired running call (bash-family args carry `command`); undefined hides the line. */

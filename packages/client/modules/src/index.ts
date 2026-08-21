@@ -7,12 +7,12 @@
  * `clientModuleHost` service (the HMR node half's registration/notification
  * face).
  *
- * Scanning is incremental per package — there is no full-rescan code path.
- * Every cordis `internal/plugin` emission (fiber construction/disposal) marks
- * the fiber's entry name dirty; a microtask flush reconciles each dirty name
- * against the live loader entries. The activation pass seeds the same dirty
- * set with all current entries and flushes synchronously, so first scan and
- * steady state share one implementation. Package metadata (including the
+ * Scanning is incremental per package. Every cordis `internal/plugin`
+ * emission (fiber construction/disposal) marks the fiber's entry name dirty;
+ * a microtask flush snapshots active loader entry names once, then reconciles
+ * every dirty name against that snapshot. The activation pass seeds the same
+ * dirty set from its initial snapshot and flushes synchronously, so first scan
+ * and steady state share one implementation. Package metadata (including the
  * negative "not a client package" verdict) is cached per name and never
  * expires — plugin-set changes take effect on restart; bundle content
  * changes reach the graph only through
@@ -226,13 +226,14 @@ export class ClientModuleRegistry extends Service {
       })
     })
 
-    // Activation pass: the initial scan IS the incremental path over the
-    // current entries, flushed synchronously (nothing async between subscribe,
-    // seed, and flush).
-    for (const entry of ctx.loader.entries()) this.dirty.add(entry.options.name)
+    // Activation pass: one snapshot both seeds the incremental path and
+    // supplies its active-name lookup. Nothing async can invalidate it before
+    // the synchronous flush completes.
+    const initial = this.snapshotEntries()
+    for (const entryName of initial.seen) this.dirty.add(entryName)
     this.composed = this.compose()
     const failures: Error[] = []
-    this.flush(err => failures.push(err))
+    this.flush(err => failures.push(err), initial.active)
     if (failures.length > 0) {
       throw new ClientPackageCompositionError(failures)
     }
@@ -265,22 +266,6 @@ export class ClientModuleRegistry extends Service {
    */
   clientPath(id: string): string | undefined {
     return this.table.get(id)?.clientPath
-  }
-
-  /**
-   * Read a registered client bundle or source map for a non-HTTP carrier.
-   * @param id - entry id (package name).
-   * @param sourceMap - whether to read the adjacent source map.
-   * @returns the bundle bytes, or undefined for an unknown entry.
-   */
-  async readBundle(id: string, sourceMap: boolean = false): Promise<Buffer | undefined> {
-    const path = this.clientPath(id)
-    if (path === undefined) return undefined
-    try {
-      return await readFile(`${path}${sourceMap ? '.map' : ''}`)
-    } catch {
-      return undefined
-    }
   }
 
   /**
@@ -398,16 +383,21 @@ export class ClientModuleRegistry extends Service {
     }
   }
 
-  /** Reconcile one entry name against the live loader entries. @returns whether the table changed. */
-  private processOne(entryName: string): boolean {
-    let qualifies = false
+  /** Snapshot loader membership once per flush so dirty-name reconciliation stays linear. */
+  private snapshotEntries(): { seen: Set<string>; active: Set<string> } {
+    const seen = new Set<string>()
+    const active = new Set<string>()
     for (const entry of this.ctx.loader.entries()) {
-      if (entry.options.name === entryName && entry.fiber !== undefined && !entry.disabled) {
-        qualifies = true
-        break
-      }
+      const entryName = entry.options.name
+      seen.add(entryName)
+      if (entry.fiber !== undefined && !entry.disabled) active.add(entryName)
     }
-    if (!qualifies) return this.table.delete(entryName)
+    return { seen, active }
+  }
+
+  /** Reconcile one entry name against the current active-name snapshot. @returns whether the table changed. */
+  private processOne(entryName: string, active: ReadonlySet<string>): boolean {
+    if (!active.has(entryName)) return this.table.delete(entryName)
     if (this.table.has(entryName)) return false
     const meta = this.resolveMeta(entryName)
     if (meta === null) return false
@@ -418,12 +408,12 @@ export class ClientModuleRegistry extends Service {
     return true
   }
 
-  private flush(onError: (err: Error) => void): void {
+  private flush(onError: (err: Error) => void, active: ReadonlySet<string> = this.snapshotEntries().active): void {
     let changed = false
     for (const entryName of [...this.dirty]) {
       this.dirty.delete(entryName)
       try {
-        if (this.processOne(entryName)) changed = true
+        if (this.processOne(entryName, active)) changed = true
       } catch (error) {
         // Steady state: one broken package must not poison the others; the
         // activation pass aggregates these into a loud throw instead.

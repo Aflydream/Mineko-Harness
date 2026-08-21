@@ -5,7 +5,7 @@ import { LocaleRuntime } from '@aflydream/mnh-client-locale/client'
 import { usePinnedBrowserLanguages } from '@aflydream/mnh-client-test-runtime'
 import { apply, inject } from '@aflydream/mnh-client-ui-workspace/client'
 import type { WorkspaceBrowserInjected, WorkspacePickerInjected } from '@aflydream/mnh-client-ui-workspace/client'
-import { WorkspaceBrowser } from '../src/client/WorkspaceBrowser.tsx'
+import { WorkspaceBrowser } from '../src/client/rows/WorkspaceBrowser.tsx'
 import { WorkspacePicker } from '../src/client/WorkspacePicker.tsx'
 
 // The service reads its initial locale from the browser; these specs assert

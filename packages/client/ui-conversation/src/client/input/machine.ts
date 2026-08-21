@@ -18,7 +18,7 @@ import type { InputSubmitMode } from '../contract/composer-submission.ts'
 import type {
   ConsumeTokenGuard, EditRange, EditSelection, InputEffect, InputEvent, InputMachineOptions,
   InputState, Occurrence, PasteAttemptState, PasteComponent, SubmitAttempt,
-} from './contract.ts'
+} from '../contract/input.ts'
 
 /** The object-replacement character backing every chip occurrence in the draft. */
 export const PLACEHOLDER = '￼'

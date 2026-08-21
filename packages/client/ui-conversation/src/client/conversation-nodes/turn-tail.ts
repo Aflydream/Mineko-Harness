@@ -7,7 +7,7 @@ import type {} from '@aflydream/mnh-llm-retry/types'
 import type {
   AssistantChatData, FinalAssistantChatData, TurnTailChatData,
 } from '../contract/chat-nodes.ts'
-import { deriveTurnMetrics } from '../chat/turn-metrics.ts'
+import { deriveTurnMetrics } from '../contract/turn-metrics.ts'
 import { CHAT_SYNTHETIC_SEQ_OFFSETS, chatNode } from './common.ts'
 
 declare module '@aflydream/mnh-client-ui-conversation/client' {

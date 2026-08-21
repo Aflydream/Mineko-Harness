@@ -16,6 +16,7 @@
 
 import { globSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, resolve, sep } from 'node:path'
+import { resolveClientRelative } from './client-domain-graph-path.ts'
 
 const root = resolve(import.meta.dirname, '..')
 const CLIENT_DIR = join(root, 'packages/client')
@@ -55,13 +56,7 @@ function checkPackage(pkgName: string, clientDir: string): Violation[] {
       // Resolve the relative specifier against the importing file's directory
       // to a client-dir-relative path.
       const fromDir = rel.includes('/') ? rel.slice(0, rel.lastIndexOf('/')) : ''
-      const parts = (fromDir ? fromDir.split('/') : [])
-      for (const seg of spec.split('/')) {
-        if (seg === '.') continue
-        if (seg === '..') parts.pop()
-        else parts.push(seg)
-      }
-      const target = parts.join('/')
+      const target = resolveClientRelative(fromDir, spec)
       if (target.startsWith('..')) continue // out of client dir (package root) — package-level rules govern
       const toDomain = domainOf(target)
       if (toDomain === '' || CONTRACT_DIRS.has(toDomain)) continue // top-level shared file or contract layer

@@ -18,13 +18,13 @@ import {
 import type {
   SessionId, SessionListState, SessionSearchResultItem, WorkspaceId, WorkspaceView,
 } from '@aflydream/mnh-client-runtime/client'
-import type { WorkspaceBrowserProps } from './contract/slots.ts'
-import type { SessionNode, SessionOrderBy } from './tree.ts'
-import { deriveFlat, deriveGroups, deriveSearchResults, UNGROUPED_KEY } from './tree.ts'
-import { ProjectRowItem, SearchResultItem, SessionNodeItem } from './rows/Rows.tsx'
-import { FLAT_SESSION_ORDER_KEY } from './stores.ts'
-import { WorkspacePickFlow } from './WorkspacePicker.tsx'
-import css from './WorkspaceBrowser.module.css'
+import type { WorkspaceBrowserProps } from '../contract/slots.ts'
+import type { SessionNode, SessionOrderBy } from '../tree.ts'
+import { deriveFlat, deriveGroups, deriveSearchResults, UNGROUPED_KEY } from '../tree.ts'
+import { ProjectRowItem, SearchResultItem, SessionNodeItem } from './Rows.tsx'
+import { FLAT_SESSION_ORDER_KEY } from '../stores.ts'
+import { WorkspacePickFlow } from '../WorkspacePicker.tsx'
+import css from '../WorkspaceBrowser.module.css'
 
 /**
  * Column slide length (--ds-transition-duration-slow): rail-search focus waits it out —

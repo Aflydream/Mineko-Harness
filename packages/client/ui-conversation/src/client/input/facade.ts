@@ -15,7 +15,7 @@ import type {
 import type {
   DraftAttachmentId, EditRange, EditSelection, InputActions, InputEffect, InputNotice, InputState,
   PasteComponent, QueuedMessage, SessionInput, SubmitAttempt,
-} from './contract.ts'
+} from '../contract/input.ts'
 import type { InputSubmitMode } from '../contract/composer-submission.ts'
 import { InputMachine } from './machine.ts'
 

@@ -1,5 +1,5 @@
 /**
- * Client Agent-scope primitive: mint a Cordis context tagged with the owning
+ * Shared client Agent-scope primitive: mint a Cordis context tagged with the owning
  * Agent's identity. The mechanism mirrors the host `mnh-scope` architecture
  * (no-op plugin fiber + context tag + `Context.filter` routing predicate);
  * the shape deliberately diverges: the filter lives on the actx itself

@@ -12,8 +12,8 @@ import type {
   MessageId, PromptContentPart, QueueAction, RpcResult, SessionId,
 } from '@aflydream/mnh-api-remotes/client'
 import type { RemoteResult } from '@aflydream/mnh-typert-protocol'
-import type { ConversationSnapshot } from '../sessions/conversation.ts'
-import type { ObservableSnapshot } from './store.ts'
+import type { ObservableSnapshot } from '../contract/store.ts'
+import type { ConversationSnapshot } from './conversation.ts'
 
 /** Key-addressed projection read face (the useProjection resolution path; see ProjectionValueStore). */
 export interface ProjectionsFace {

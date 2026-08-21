@@ -91,14 +91,6 @@ graph(): WebBootGraph
 clientPath(id: string): string | undefined
 
 /**
- * Read a registered client bundle or source map for a non-HTTP carrier.
- * @param id - entry id (package name).
- * @param sourceMap - whether to read the adjacent source map.
- * @returns the bundle bytes, or undefined for an unknown entry.
- */
-async readBundle(id: string, sourceMap: boolean = false): Promise<Buffer | undefined>
-
-/**
  * Re-hash one bundle (the HMR watch's registration hook — the only entry
  * point through which bundle content changes reach the graph).
  * @param id - entry id (package name).

@@ -11,7 +11,7 @@ import { CodeBlock } from '@aflydream/mnh-client-ui-primitives'
 import { shallowEqual } from '@aflydream/mnh-client-runtime/client'
 import type { ConversationSnapshot, RunningToolCall, ToolCallBlock, ToolResultNode } from '@aflydream/mnh-client-runtime/client'
 import type { DetailsSlotProps } from '../contract/slots.ts'
-import { findToolCall } from '../chat/tool-node-reader.ts'
+import { findToolCall } from '../contract/tool-node-reader.ts'
 import css from './DetailsPanel.module.css'
 
 /** Full props composed by reference from the contract (automatic shares & injected share). */

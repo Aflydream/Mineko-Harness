@@ -5,7 +5,7 @@ import type {
 } from '@aflydream/mnh-api-remotes/client'
 import { transportError } from '@aflydream/mnh-host-apiproxy/api'
 import type { ObservableSnapshot } from '../contract/store.ts'
-import { Notifier } from '../sessions/notifier.ts'
+import { Notifier } from '../notifier.ts'
 
 /** Host input retained by a local Workspace until materialization succeeds. */
 export type WorkspaceCreateInput = { path: string }

@@ -201,8 +201,14 @@ describe('ReadRow keyed toolview', () => {
     expect(view.container.querySelector('[data-read]')).not.toBeNull()
     expect(contentTexts(view.container)).toContain('export const a = 1')
     expect(view.getByText('显示 3 / 180 行')).toBeTruthy()
-    // Collapse back in place: the card unmounts, the summary link returns.
+    // Collapse back in place: retain the card through its exit motion, then
+    // unmount it and restore the summary-only row.
     toggleRow(view)
+    const closing = view.container.querySelector(
+      '[data-disclosure-content][aria-hidden="true"]',
+    ) as HTMLElement
+    expect(closing.querySelector('[data-read]')).not.toBeNull()
+    fireEvent.animationEnd(closing)
     expect(view.container.querySelector('[data-read]')).toBeNull()
     expect(view.getAllByText('src/a.ts').length).toBe(1)
   })

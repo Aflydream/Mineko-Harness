@@ -12,15 +12,15 @@ import type {
   RpcResult, SessionId, SubagentAddress,
 } from '@aflydream/mnh-api-remotes/client'
 import type { HostObservable, SessionMaybeProvideInfo } from '@aflydream/mnh-client-ui-slots'
-import type { AgentContext } from '../agents/scope.ts'
-import type { SessionSearchResultItem } from '../sessions/manager.ts'
+import type { AgentContext } from '../scope.ts'
+import type { SessionSearchResultItem } from './manager.ts'
 import type {
   SessionBinding, SessionListState, SessionProvideDescriptor,
-} from '../sessions/service.ts'
-import type { SessionFace } from './session.ts'
-import type { ObservableSnapshot } from './store.ts'
+} from './service.ts'
+import type { SessionFace } from './session-contract.ts'
+import type { ObservableSnapshot } from '../contract/store.ts'
 
-export type { AgentContext } from '../agents/scope.ts'
+export type { AgentContext } from '../scope.ts'
 
 /** The sessions-service face injected as `ctx.sessions`. */
 export interface ISessions {

@@ -18,7 +18,7 @@ import type { PendingInteractionStatus } from './pending.ts'
 // the 'title' projection key this manager projects into list rows (and any
 // useProjection('title') consumer reads). Zero value imports by construction.
 import type {} from '@aflydream/mnh-session-title/client'
-import { Notifier } from './notifier.ts'
+import { Notifier } from '../notifier.ts'
 import { ProjectionValueStore } from './projection-store.ts'
 import { Session } from './session.ts'
 import type { SessionRemotes } from './remotes.ts'

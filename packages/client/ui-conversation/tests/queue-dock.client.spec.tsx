@@ -16,7 +16,7 @@ import type { SnapshotSelectorHook } from '@aflydream/mnh-client-ui-slots'
 import { makeTranslate } from '@aflydream/mnh-client-test-runtime'
 import { zh as commonZh } from '@aflydream/mnh-client-locale/src/locales/zh.ts'
 import type { QueueItemId } from '../src/client/contract/queue.ts'
-import type { InputState } from '../src/client/input/contract.ts'
+import type { InputState } from '../src/client/contract/input.ts'
 import { zh } from '../src/client/locales.ts'
 import { QueueDock, queueDockEntry, type QueueDockInjected, type QueueDockProps } from '../src/client/queue/QueueDock.tsx'
 

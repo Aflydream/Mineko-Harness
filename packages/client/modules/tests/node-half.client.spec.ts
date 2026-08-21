@@ -44,7 +44,7 @@ function writePackage(
 /** Construct the node-half service and capture its plugin-bundle route. */
 function constructWithRoute(
   packageNames: string[],
-  options: { baseUrl?: string; fallbackBaseUrl?: string } = {},
+  options: { baseUrl?: string; fallbackBaseUrl?: string; onEntries?: () => void } = {},
 ): { service: ClientModuleRegistry; route: WebRoute } {
   const ctx = new Context()
   contexts.push(ctx)
@@ -52,6 +52,7 @@ function constructWithRoute(
   if (options.fallbackBaseUrl !== undefined) installModuleFallback(ctx, [options.fallbackBaseUrl])
   ctx.provide('loader', {
     *entries() {
+      options.onEntries?.()
       for (const packageName of packageNames) {
         yield { options: { name: packageName }, fiber: {}, disabled: false }
       }
@@ -78,6 +79,19 @@ function construct(packageNames: string[]): ClientModuleRegistry {
 }
 
 describe('client bundle activation', () => {
+  it('snapshots loader entries once while composing the initial client graph', () => {
+    const packageNames = ['@fixture/first-client', '@fixture/second-client']
+    for (const packageName of packageNames) {
+      const clientPath = writePackage(packageName)
+      mkdirSync(dirname(clientPath), { recursive: true })
+      writeFileSync(clientPath, 'module.exports = {}\n')
+    }
+    let scans = 0
+    expect(constructWithRoute(packageNames, { onEntries: () => { scans += 1 } }).service.graph().entries)
+      .toHaveLength(2)
+    expect(scans).toBe(1)
+  })
+
   it('discovers client metadata through the installation fallback', () => {
     root = realpathSync(mkdtempSync(join(tmpdir(), 'mnh-client-modules-')))
     const profile = join(root, 'profile')

@@ -7,8 +7,8 @@
  * widening what features may do to the workspaces domain.
  */
 import type { DirectoryListing, SessionId, WorkspaceId, WorkspaceView } from '@aflydream/mnh-api-remotes/client'
-import type { WorkspaceListState } from '../workspaces/service.ts'
-import type { ObservableSnapshot } from './store.ts'
+import type { ObservableSnapshot } from '../contract/store.ts'
+import type { WorkspaceListState } from './service.ts'
 
 /** The workspaces-service face injected as `ctx.workspaces`. */
 export interface IWorkspaces {

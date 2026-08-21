@@ -33,6 +33,13 @@ function dragProps(overrides: Partial<RowDragProps> = {}): RowDragProps {
   }
 }
 
+function finishMenuExit(): void {
+  const menu = document.querySelector('[role="menu"][aria-hidden="true"]') as HTMLElement
+  expect(menu).not.toBeNull()
+  fireEvent.animationEnd(menu)
+  expect(document.querySelector('[role="menu"]')).toBeNull()
+}
+
 /** Install the async browser clipboard and restore its prior host shape. */
 function installClipboard(writeText: (text: string) => Promise<void>): () => void {
   const prior = Object.getOwnPropertyDescriptor(navigator, 'clipboard')
@@ -267,16 +274,16 @@ describe('workspace browser rows', () => {
     expect(screen.getByRole('menuitem', { name: '删除工作区' }).className).toMatch(/danger/)
     fireEvent.click(screen.getByRole('menuitem', { name: '重命名' }))
     expect(onRename).toHaveBeenCalledOnce()
-    expect(screen.queryByRole('menu')).toBeNull()
+    finishMenuExit()
     fireEvent.click(screen.getByRole('button', { name: '工作区“Project”的操作' }))
     fireEvent.click(screen.getByRole('menuitem', { name: '删除工作区' }))
-    expect(screen.queryByRole('menu')).toBeNull()
+    finishMenuExit()
     expect(onRename).toHaveBeenCalledOnce()
     expect(onDelete).toHaveBeenCalledOnce()
     // Escape closes without selecting (Menu onClose path).
     fireEvent.click(screen.getByRole('button', { name: '工作区“Project”的操作' }))
     fireEvent.keyDown(document, { key: 'Escape' })
-    expect(screen.queryByRole('menu')).toBeNull()
+    finishMenuExit()
   })
 
   it('workspace hover card shows its details and copies the full directory path', async () => {
@@ -355,22 +362,24 @@ describe('workspace browser rows', () => {
     expect(screen.getByRole('menuitem', { name: '归档会话' }).className).not.toMatch(/danger/)
     // Rename dispatches with the current display title (dialog prefill).
     fireEvent.click(screen.getByRole('menuitem', { name: '重命名' }))
-    expect(screen.queryByRole('menu')).toBeNull()
+    finishMenuExit()
     expect(onRename).toHaveBeenCalledWith(node.id, 'One')
     expect(onOpen).not.toHaveBeenCalled()
     fireEvent.click(screen.getByRole('button', { name: '会话“One”的操作' }))
     fireEvent.click(screen.getByRole('menuitem', { name: '分叉会话' }))
     expect(onFork).toHaveBeenCalledWith(node.id)
+    finishMenuExit()
     // Archive dispatches without opening the session.
     fireEvent.click(screen.getByRole('button', { name: '会话“One”的操作' }))
     fireEvent.click(screen.getByRole('menuitem', { name: '归档会话' }))
     expect(onArchive).toHaveBeenCalledWith(node.id)
+    finishMenuExit()
     expect(onRename).toHaveBeenCalledOnce()
     expect(onOpen).not.toHaveBeenCalled()
     // Escape closes without selecting (Menu onClose path).
     fireEvent.click(screen.getByRole('button', { name: '会话“One”的操作' }))
     fireEvent.keyDown(document, { key: 'Escape' })
-    expect(screen.queryByRole('menu')).toBeNull()
+    finishMenuExit()
   })
 
 
@@ -393,6 +402,10 @@ describe('workspace browser rows', () => {
       fireEvent.pointerLeave(wrapper)
       // Menu open (disabled=true) suppresses the card for the same hover.
       fireEvent.click(screen.getByRole('button', { name: '会话“Hovered”的操作' }))
+      const closingCard = screen.getByText('1分钟前').closest('[aria-hidden="true"]') as HTMLElement
+      expect(closingCard).not.toBeNull()
+      fireEvent.animationEnd(closingCard)
+      expect(screen.queryByText('1分钟前')).toBeNull()
       fireEvent.pointerEnter(wrapper)
       act(() => { vi.advanceTimersByTime(1000) })
       expect(screen.queryByText('1分钟前')).toBeNull()

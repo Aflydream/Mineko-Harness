@@ -1,4 +1,4 @@
-// Notifier: subscription + batched notification primitive shared by Session and
+// Shared notifier: subscription + batched notification primitive used across domains and
 // SessionManager. Semantics: N markDirty calls collapse into one microtask flush, while
 // N markFrameDirty calls collapse into one animation-frame flush;
 // the flush rebuilds the snapshot cache BEFORE notifying (useSyncExternalStore requires a stable

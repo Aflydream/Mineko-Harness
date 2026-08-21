@@ -43,8 +43,8 @@ export type { SubagentDescendantSummary } from './sessions/subagent-lineage.ts'
 // materialization/projection implementation; no test-side mirror to drift).
 export { SessionProvideChannel } from './sessions/provide.ts'
 export type { SessionProvideChannelHost } from './sessions/provide.ts'
-export { createScope } from './agents/scope.ts'
-export type { AgentScopeHandle } from './agents/scope.ts'
+export { createScope } from './scope.ts'
+export type { AgentScopeHandle } from './scope.ts'
 export { DirectoryBrowseError, WorkspaceCreateError, WorkspaceRuntime } from './workspaces/service.ts'
 export { resolveWorkspacePath } from './workspaces/path.ts'
 // Contract only: the scope implementation and its Host transport belong to
@@ -53,9 +53,9 @@ export type {
   SettingsScope, SettingsScopeSnapshot, SettingsScopeSpec,
 } from './contract/settings-scope.ts'
 export type { Session } from './sessions/session.ts'
-export type { ISession, ProjectionsFace, SessionFace } from './contract/session.ts'
-export type { AgentContext, ISessions } from './contract/sessions.ts'
-export type { IWorkspaces } from './contract/workspaces.ts'
+export type { ISession, ProjectionsFace, SessionFace } from './sessions/session-contract.ts'
+export type { AgentContext, ISessions } from './sessions/service-contract.ts'
+export type { IWorkspaces } from './workspaces/contract.ts'
 export type {
   SessionBinding, SessionListState, SessionProvideContribution, SessionProvideDescriptor, SessionSummary,
 } from './sessions/service.ts'
@@ -173,9 +173,9 @@ declare module '@deepseek-ai/cordis' {
     /** Per-target Conversation snapshot builder registry. */
     conversationViews: import('./conversation/view-registry.ts').ConversationViewRegistry
     /** The outward face only; the concrete service stays inside the runtime. */
-    sessions: import('./contract/sessions.ts').ISessions
+    sessions: import('./sessions/service-contract.ts').ISessions
     /** The outward face only; the concrete service stays inside the runtime. */
-    workspaces: import('./contract/workspaces.ts').IWorkspaces
+    workspaces: import('./workspaces/contract.ts').IWorkspaces
   }
 }
 

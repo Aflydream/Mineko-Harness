@@ -8,7 +8,7 @@ import type {
 import type { SnapshotStore } from '../contract/store.ts'
 import { createSnapshotStore } from '../contract/store.ts'
 import type { SessionsPort, SessionsPortList } from '../contract/sessions-port.ts'
-import type { IWorkspaces } from '../contract/workspaces.ts'
+import type { IWorkspaces } from './contract.ts'
 import { WorkspaceManager, type WorkspaceListPhase } from './manager.ts'
 
 /** Workspace list plus the two-baseline readiness and default-target projection. */

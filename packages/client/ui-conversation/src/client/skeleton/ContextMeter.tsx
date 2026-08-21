@@ -10,7 +10,7 @@ import type { UseProjection } from '@aflydream/mnh-client-runtime/client'
 import type {} from '@aflydream/mnh-token-meter/client'
 import { Tooltip, useAnimatedPresence } from '@aflydream/mnh-client-ui-primitives'
 import type { ComposerBarProps } from '../contract/slots.ts'
-import { contextOccupancy, formatTokens } from '../chat/StatsLine.tsx'
+import { contextOccupancy, formatTokens } from '../contract/stats.ts'
 import css from './ContextMeter.module.css'
 
 /** Ring geometry: 14px viewBox, 2px stroke. */

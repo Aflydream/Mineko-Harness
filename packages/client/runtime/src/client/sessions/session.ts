@@ -10,7 +10,7 @@ import type {
 // Value import from the inline-safe wire layer (not the connection plugin):
 // plugin-to-plugin value imports are a bundle purity error.
 import { transportError } from '@aflydream/mnh-host-apiproxy/api'
-import type { SessionFace } from '../contract/session.ts'
+import type { SessionFace } from './session-contract.ts'
 import { ConversationNodeAssembler } from './conversation-assembler.ts'
 import type { ConversationRuntime } from './conversation-assembler.ts'
 import type { ConversationEventInput, ConversationPublication } from '../contract/conversation.ts'
@@ -20,7 +20,7 @@ import type {
 import { EMPTY_CHAT_SNAPSHOT } from './conversation.ts'
 import type { PendingInteraction } from './pending.ts'
 import { PendingWait } from './pending.ts'
-import { Notifier } from './notifier.ts'
+import { Notifier } from '../notifier.ts'
 import type { RemoteResult } from '@aflydream/mnh-typert-protocol'
 import type { SessionRemotes } from './remotes.ts'
 import { ProjectionValueStore } from './projection-store.ts'

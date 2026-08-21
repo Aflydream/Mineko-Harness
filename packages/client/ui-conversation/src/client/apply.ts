@@ -16,12 +16,12 @@ import type {
   ComposerChainProps, ConversationInjected, ConversationSessionHeaderInjected, ConversationSessionInjected,
   DetailsInjected,
 } from './contract/slots.ts'
-import type { InputNotice } from './input/contract.ts'
+import type { InputNotice } from './contract/input.ts'
 import { createChatStore } from './stores.ts'
 import { ConversationController, UnsupportedImageMediaTypeError } from './service.ts'
 import type { IConversation } from './service.ts'
-import { ComposerBlockRegistry } from './input/blocks.ts'
-import type { ComposerBlock } from './input/blocks.ts'
+import { ComposerBlockRegistry } from './blocks.ts'
+import type { ComposerBlock } from './blocks.ts'
 import { InputHub } from './input/hub.ts'
 import { ComposerSubmissionPolicy } from './input/submission-policy.ts'
 import { InputBar } from './skeleton/InputBar.tsx'

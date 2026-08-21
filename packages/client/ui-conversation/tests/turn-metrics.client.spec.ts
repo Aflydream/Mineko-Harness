@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from 'vitest'
 import type { AssistantMessageNode, ConversationNode, UserMessageNode } from '@aflydream/mnh-client-runtime/client'
-import { assistantStepReading, deriveTurnMetrics } from '../src/client/chat/turn-metrics.ts'
+import { assistantStepReading, deriveTurnMetrics } from '../src/client/contract/turn-metrics.ts'
 import { formatLatencySeconds, formatTokensPerSecond } from '../src/client/chat/message-chrome.ts'
 
 interface StepSpec {

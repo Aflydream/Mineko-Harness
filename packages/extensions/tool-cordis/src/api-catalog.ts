@@ -396,12 +396,6 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         returns: 'the path, or undefined for an unknown id.',
       },
       {
-        signature: 'async readBundle(id: string, sourceMap: boolean = false): Promise<Buffer | undefined>',
-        description: 'Read a registered client bundle or source map for a non-HTTP carrier.',
-        parameters: [{ name: 'id', description: 'entry id (package name).' }, { name: 'sourceMap', description: 'whether to read the adjacent source map.' }],
-        returns: 'the bundle bytes, or undefined for an unknown entry.',
-      },
-      {
         signature: 'rebuilt(id: string): string | undefined',
         description: 'Re-hash one bundle (the HMR watch\'s registration hook — the only entry point through which bundle content changes reach the graph).',
         parameters: [{ name: 'id', description: 'entry id (package name).' }],

@@ -253,7 +253,9 @@ describe('style claiming', () => {
         return {}
       },
     })
+    const queries = vi.spyOn(document, 'querySelectorAll')
     await b.loader.import('a', '', {})
+    expect(queries).toHaveBeenCalledTimes(1)
     expect(b.loader.loadCache.get('a')?.styles).toEqual(['a', 'sheet-1'])
     expect(document.querySelectorAll('style[data-plugin="a"]')).toHaveLength(2)
     expect(foreign.getAttribute('data-plugin')).toBe('other')

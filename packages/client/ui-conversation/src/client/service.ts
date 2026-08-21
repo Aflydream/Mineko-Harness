@@ -16,8 +16,8 @@ import type { ISessions, SessionFace, SessionId } from '@aflydream/mnh-client-ru
 import type { ImageAttachmentRef, ImageMediaType } from '@aflydream/mnh-attachment'
 import type { ComposerAttachment } from './contract/slots.ts'
 import type { QueueAction, QueueItemId } from './contract/queue.ts'
-import type { ComposerBlocks } from './input/blocks.ts'
-import type { DraftAttachmentId, SessionInputResolver } from './input/contract.ts'
+import type { ComposerBlocks } from './blocks.ts'
+import type { DraftAttachmentId, SessionInputResolver } from './contract/input.ts'
 import type { InputSubmitMode } from './contract/composer-submission.ts'
 
 /**

@@ -40,12 +40,11 @@ const stripClientSuffix = (spec: string): string =>
  */
 const claimStyles = (id: string): string[] => {
   if (typeof document === 'undefined') return []
-  for (const el of document.querySelectorAll('style:not([data-plugin])')) {
-    el.setAttribute('data-plugin', id)
-  }
   const owned: string[] = []
-  for (const el of document.querySelectorAll(`style[data-plugin=${JSON.stringify(id)}]`)) {
-    owned.push(el.getAttribute('data-plugin-css') ?? id)
+  const selector = `style:not([data-plugin]), style[data-plugin=${JSON.stringify(id)}]`
+  for (const el of document.querySelectorAll(selector)) {
+    if (!el.hasAttribute('data-plugin')) el.setAttribute('data-plugin', id)
+    if (el.getAttribute('data-plugin') === id) owned.push(el.getAttribute('data-plugin-css') ?? id)
   }
   return owned
 }

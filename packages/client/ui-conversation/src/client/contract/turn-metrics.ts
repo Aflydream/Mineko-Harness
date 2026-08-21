@@ -1,4 +1,4 @@
-// Latency/throughput folds shared by the settled turn footer and StatsLine.
+// Latency and throughput folds shared by the settled turn footer and StatsLine.
 
 import type { AssistantMessageNode, ConversationNode } from '@aflydream/mnh-client-runtime/client'
 

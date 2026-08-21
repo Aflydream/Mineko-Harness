@@ -11,8 +11,8 @@ import type {
   ArbitrateKey, ArbitrateOutcome, CommandClaim, ConsumeTokenRequest, PickOutcome,
   ReferenceInsert, SubmitOutcome, TokenSpan,
 } from '@aflydream/mnh-client-ui-input-trigger/client'
-import type { QueueRow } from '../contract/queue.ts'
-import type { InputSubmitMode } from '../contract/composer-submission.ts'
+import type { QueueRow } from './queue.ts'
+import type { InputSubmitMode } from './composer-submission.ts'
 
 /** Browser-runtime identity of one unsent image draft. */
 export type DraftAttachmentId = Branded<'DraftAttachmentId'>
