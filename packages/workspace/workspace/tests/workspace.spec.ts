@@ -16,6 +16,7 @@ import WorkspaceRegistry, {
   WorkspaceOrderInvalidError,
 } from '../src/index.ts'
 import type { WorkspaceDomainState, WorkspaceRecord } from '../src/index.ts'
+import { canSymlink } from '../../../fs/fs-local/tests/helpers/symlink.ts'
 
 const DOMAIN_VERSION = 2
 
@@ -199,7 +200,7 @@ describe('WorkspaceRegistry lifecycle and bootstrap', () => {
     expect(storedState(pool)).toEqual({ initialized: true, workspaceIds: [], archivedSessionIds: [] })
   })
 
-  it('bootstraps once from list headers only, in workspace/session createdAt order', async () => {
+  it.skipIf(!canSymlink)('bootstraps once from list headers only, in workspace/session createdAt order', async () => {
     const older = await makeDir('older')
     const newer = await makeDir('newer')
     const alias = join(base, 'older-link')
@@ -352,7 +353,7 @@ describe('WorkspaceRegistry lifecycle and bootstrap', () => {
 })
 
 describe('WorkspaceRegistry create and lookup', () => {
-  it('creates newest-first and idempotently reuses a canonical path without retitling', async () => {
+  it.skipIf(!canSymlink)('creates newest-first and idempotently reuses a canonical path without retitling', async () => {
     const firstDir = await makeDir('first')
     const secondDir = await makeDir('second')
     const alias = join(base, 'first-link')

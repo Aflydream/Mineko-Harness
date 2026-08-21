@@ -7,6 +7,7 @@ import { mkdir, mkdtemp, realpath, rm, symlink, writeFile } from 'node:fs/promis
 import { tmpdir } from 'node:os'
 import { join, parse } from 'node:path'
 import { isPathUnder } from '../src/containment.ts'
+import { canSymlink } from '../../fs-local/tests/helpers/symlink.ts'
 
 let base: string
 
@@ -30,7 +31,7 @@ describe('filesystem sandbox containment', () => {
     expect(await isPathUnder(join(base, 'case-sensitive-child'), base, true)).toBe(true)
   })
 
-  it('recognizes an alias-equivalent root by filesystem identity for a missing target', async () => {
+  it.skipIf(!canSymlink)('recognizes an alias-equivalent root by filesystem identity for a missing target', async () => {
     const realRoot = join(base, 'real')
     const aliasRoot = join(base, 'alias')
     await mkdir(realRoot)

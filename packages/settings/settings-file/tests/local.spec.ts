@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Context } from '@deepseek-ai/cordis'
 import z from '@deepseek-ai/schemastery'
+import { mkdtempSync, rmSync, symlinkSync } from 'node:fs'
 import { chmod, lstat, mkdir, mkdtemp, readFile, readdir, rename, rm, stat, symlink, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
@@ -8,6 +9,22 @@ import { writeFileAtomic } from '@aflydream/mnh-atomic-write'
 import { settingsNamespace } from '@aflydream/mnh-settings'
 import { FileSettingsProvider, resolveSpec } from '../src/index.ts'
 
+/**
+ * Whether this session may create symlinks at all. Windows grants that only to
+ * an elevated or developer-mode session, so the planted-symlink case has no
+ * hostile sibling to plant and is skipped rather than failed.
+ */
+const canSymlink = ((): boolean => {
+  const probe = mkdtempSync(join(tmpdir(), 'mnh-symlink-probe-'))
+  try {
+    symlinkSync(join(probe, 'target'), join(probe, 'link'))
+    return true
+  } catch {
+    return false
+  } finally {
+    rmSync(probe, { recursive: true, force: true })
+  }
+})()
 interface ThemeConfig {
   theme: 'dark' | 'light'
   fontSize: number
@@ -197,7 +214,7 @@ describe('persist', () => {
     expect(beta.get().fontSize).toBe(20)
   })
 
-  it('never follows a planted symlink at a temp path and never leaves the document a symlink', async () => {
+  it.skipIf(!canSymlink)('never follows a planted symlink at a temp path and never leaves the document a symlink', async () => {
     const dir = await tempDir()
     const path = join(dir, 'settings.yaml')
     const victim = join(dir, 'victim.txt')

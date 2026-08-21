@@ -42,6 +42,7 @@ import {
 import { resolveConfig } from '../src/config.ts'
 import { candidateScopeKey, renderInstructionChanges, renderWorkspaceInstructionSet, USER_GLOBAL_DIRECTORY, USER_GLOBAL_FILE } from '../src/render.ts'
 import { MockAdapter, textResponse, toolCallResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
+import { canSymlink } from '../../../fs/fs-local/tests/helpers/symlink.ts'
 
 /** Per-candidate reconciliation scope key: directory paired with the file name. */
 const sk = (directory: string, candidateName: string): string => candidateScopeKey(directory, candidateName)
@@ -450,7 +451,7 @@ describe('workspace context instruction discovery', () => {
     }
   })
 
-  it('follows a symlinked instruction file to its target content', async () => {
+  it.skipIf(!canSymlink)('follows a symlinked instruction file to its target content', async () => {
     const root = await tempRepo()
     const home = await tempRepo()
     const outside = await tempRepo()
@@ -471,7 +472,7 @@ describe('workspace context instruction discovery', () => {
     }
   })
 
-  it('follows a symlinked instruction file through ctx.fs to its target content', async () => {
+  it.skipIf(!canSymlink)('follows a symlinked instruction file through ctx.fs to its target content', async () => {
     const root = await tempRepo()
     const home = await tempRepo()
     const outside = await tempRepo()
@@ -3377,7 +3378,7 @@ describe('dynamic nested workspace context injection', () => {
     }
   })
 
-  it('removes a previously loaded instruction file once it resolves to a directory through a symlink', async () => {
+  it.skipIf(!canSymlink)('removes a previously loaded instruction file once it resolves to a directory through a symlink', async () => {
     const root = await tempRepo()
     const home = await tempRepo()
     try {

@@ -1,4 +1,5 @@
 import { existsSync, mkdirSync, mkdtempSync, realpathSync } from 'node:fs'
+import { createRequire } from 'node:module'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
@@ -18,6 +19,8 @@ import type { RpcRequest, RpcResponse } from '@aflydream/mnh-host-apiproxy/api/r
 import { RpcId } from '@aflydream/mnh-host-apiproxy/api/rpc'
 import { createApiProxy } from '@aflydream/mnh-host-apiproxy'
 import { MemoryStorageBackend } from '../../../storage/storage-domain/tests/helpers/memory-backend.ts'
+
+const { version: hostVersion } = createRequire(import.meta.url)('../package.json') as { version: string }
 
 let nextRpc = 1
 
@@ -232,8 +235,10 @@ describe('host.openPath', () => {
   it('describes whether this deployment can reach a user-visible native desktop', async () => {
     const visible = await harness(undefined, undefined, { canOpenPath: () => true })
     const headless = await harness(undefined, undefined, { canOpenPath: () => false })
-    expect(expectOk(await visible.api.host.describe(request({}))).canOpenPath).toBe(true)
-    expect(expectOk(await headless.api.host.describe(request({}))).canOpenPath).toBe(false)
+    expect(expectOk(await visible.api.host.describe(request({}))))
+      .toMatchObject({ version: hostVersion, canOpenPath: true })
+    expect(expectOk(await headless.api.host.describe(request({}))))
+      .toMatchObject({ version: hostVersion, canOpenPath: false })
   })
 
   it('opens through the injected native boundary', async () => {

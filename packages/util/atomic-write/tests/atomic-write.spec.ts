@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { withFileLock, writeFileAtomic } from '../src/index.ts'
+import { canSymlink } from '../../../fs/fs-local/tests/helpers/symlink.ts'
 
 async function scratch(): Promise<string> {
   return mkdtemp(join(tmpdir(), 'mnh-atomic-write-'))
@@ -26,7 +27,7 @@ describe('writeFileAtomic', () => {
     if (process.platform !== 'win32') expect((await stat(target)).mode & 0o777).toBe(0o600)
   })
 
-  it('replaces a symlinked target itself without writing through to the referent', async () => {
+  it.skipIf(!canSymlink)('replaces a symlinked target itself without writing through to the referent', async () => {
     const dir = await scratch()
     const victim = join(dir, 'victim')
     await writeFile(victim, 'victim-content')

@@ -54,6 +54,7 @@ const POST_SOAK_RENDER_TURN = SOAK_TURNS + 1
 const SOAK_DELTA_COUNT = 8
 const SOAK_TOOL_INTERVAL = 10
 const SOAK_CHECKPOINT_INTERVAL = 10
+const PERFORMANCE_SHELL_TOOL = process.platform === 'win32' ? 'pwsh' : 'bash'
 const LONG_CONTINUATION_USER_PREFIX = 'LONG_CONTINUATION_USER'
 const LONG_CONTINUATION_FIRST_PREFIX = 'LONG_CONTINUATION_FIRST'
 const LONG_CONTINUATION_DONE_PREFIX = 'LONG_CONTINUATION_DONE'
@@ -469,7 +470,9 @@ function soakTurn(index: number): ConversationTurnSpec {
 function toolStream(index: number, marker: string): StreamChunk[] {
   const callId = CallId(`performance-tool-${marker.toLowerCase()}-${String(index)}`)
   const args = JSON.stringify({
-    command: `printf '${marker}\\n'`,
+    command: process.platform === 'win32'
+      ? `Write-Output ${marker}`
+      : `printf '${marker}\\n'`,
     description: `Emit performance marker ${String(index)}`,
   })
   return [
@@ -478,13 +481,13 @@ function toolStream(index: number, marker: string): StreamChunk[] {
       type: 'tool-call-delta',
       index: 0,
       id: callId,
-      name: 'bash',
+      name: PERFORMANCE_SHELL_TOOL,
       argumentsDelta: args,
     },
     {
       type: 'block-end',
       index: 0,
-      block: { type: 'tool-call', id: callId, name: 'bash', arguments: args },
+      block: { type: 'tool-call', id: callId, name: PERFORMANCE_SHELL_TOOL, arguments: args },
     },
     { type: 'usage', usage: { inputTokens: 256, outputTokens: 32 } },
     { type: 'finish', reason: { kind: 'tool-calls' } },
@@ -985,7 +988,7 @@ async function continueConversation(
     expect(toolCalls).toHaveLength(toolTurn ? 1 : 0)
     expect(toolResults).toHaveLength(toolTurn ? 1 : 0)
     if (spec.toolResultMarker !== undefined) {
-      expect(toolCalls[0]?.data.name).toBe('bash')
+      expect(toolCalls[0]?.data.name).toBe(PERFORMANCE_SHELL_TOOL)
       const toolResult = toolResults[0]
       if (toolResult?.type !== 'tool/result') {
         throw new Error(`continued turn ${String(index)} did not log its tool result`)

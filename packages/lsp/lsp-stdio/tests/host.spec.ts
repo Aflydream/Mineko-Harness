@@ -10,6 +10,7 @@ import { Context } from '@deepseek-ai/cordis'
 import LocalFileSystem from '@aflydream/mnh-fs-local'
 import { deadline } from '@aflydream/mnh-timeout'
 import { canonicalizeWorkspace, readHostSource } from '@aflydream/mnh-lsp-stdio'
+import { canSymlink } from '../../../fs/fs-local/tests/helpers/symlink.ts'
 
 const execFileAsync = promisify(execFile)
 
@@ -47,7 +48,7 @@ describe('canonicalizeWorkspace', () => {
     expect((await workspace()).canonicalPath).toBe(ws)
   })
 
-  it('resolves a symlinked workspace to its target so aliases share identity', async () => {
+  it.skipIf(!canSymlink)('resolves a symlinked workspace to its target so aliases share identity', async () => {
     const link = join(root, 'ws-link')
     await symlink(ws, link)
     expect((await canonicalizeWorkspace(fs, link)).canonicalPath).toBe(ws)
@@ -99,7 +100,7 @@ describe('readHostSource', () => {
     expect(source.fileUrl).toBe(pathToFileURL(abs).href)
   })
 
-  it('accepts a source reached through a symlink that stays inside the workspace', async () => {
+  it.skipIf(!canSymlink)('accepts a source reached through a symlink that stays inside the workspace', async () => {
     await mkdir(join(ws, 'real'))
     await writeFile(join(ws, 'real', 'c.ts'), 'c')
     await symlink(join(ws, 'real'), join(ws, 'linked'))
@@ -107,7 +108,7 @@ describe('readHostSource', () => {
     expect(source.fileUrl).toBe(pathToFileURL(join(ws, 'real', 'c.ts')).href)
   })
 
-  it('rejects a source whose canonical path escapes the workspace via symlink', async () => {
+  it.skipIf(!canSymlink)('rejects a source whose canonical path escapes the workspace via symlink', async () => {
     const outside = join(root, 'outside.ts')
     await writeFile(outside, 'secret')
     await symlink(outside, join(ws, 'escape.ts'))

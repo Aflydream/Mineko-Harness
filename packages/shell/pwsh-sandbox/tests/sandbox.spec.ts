@@ -174,8 +174,11 @@ describe.skipIf(!pwshAvailable())('SandboxPwshExecutor', () => {
     expect(calls).toHaveLength(1)
     const call = calls[0]
     expect(call?.policy).toEqual(RO)
-    // The confined argv is the pwsh invocation, ready for a runner prefix.
-    expect(call?.argv[0]).toMatch(/pwsh(\.exe)?$/u)
+    // The confined argv is the PowerShell invocation, ready for a runner prefix.
+    // Either edition is legitimate: `resolvePwshPath` falls back to Windows
+    // PowerShell 5.1 (`powershell.exe`) on a host without PowerShell 7, which is
+    // the common case on a stock Windows install.
+    expect(call?.argv[0]).toMatch(/(pwsh|powershell)(\.exe)?$/iu)
     expect(call?.argv).toContain('-NonInteractive')
     expect(call?.argv.at(-1)).toContain('echo wrapped')
     expect(result.sandbox).toEqual({ mode: 'read-only', denied: false, enforcement: 'full' })

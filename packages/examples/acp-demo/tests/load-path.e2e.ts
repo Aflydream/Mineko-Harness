@@ -24,7 +24,7 @@ import {
  */
 
 const binScript = fileURLToPath(new URL('../src/bin.ts', import.meta.url))
-const tsxLoader = fileURLToPath(import.meta.resolve('tsx'))
+const tsxLoader = import.meta.resolve('tsx')
 // Repo root is four levels up from packages/examples/acp-demo/tests.
 const repoTsconfig = fileURLToPath(new URL('../../../../tsconfig.json', import.meta.url))
 
@@ -60,6 +60,7 @@ interface Spawned {
   child: ChildProcessWithoutNullStreams
   client: ClientSideConnection
   stderr: string[]
+  closed: Promise<void>
 }
 
 let spawned: Spawned | undefined
@@ -67,10 +68,15 @@ let workdir: string | undefined
 
 afterEach(async () => {
   if (spawned !== undefined) {
-    spawned.child.kill('SIGKILL')
+    if (spawned.child.exitCode === null && spawned.child.signalCode === null) {
+      spawned.child.kill('SIGKILL')
+    }
+    await spawned.closed
     spawned = undefined
   }
-  if (workdir !== undefined) await rm(workdir, { recursive: true, force: true })
+  if (workdir !== undefined) {
+    await rm(workdir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })
+  }
   workdir = undefined
 })
 
@@ -96,6 +102,7 @@ async function boot(): Promise<Spawned & { cwd: string }> {
     },
   )
   const stderr: string[] = []
+  const closed = new Promise<void>(resolve => child.once('close', () => { resolve() }))
   child.stderr.setEncoding('utf8')
   child.stderr.on('data', (chunk: string) => stderr.push(chunk))
   const stream = ndJsonStream(
@@ -111,27 +118,31 @@ async function boot(): Promise<Spawned & { cwd: string }> {
     },
   })
   const client = new ClientSideConnection(makeClient, stream)
-  spawned = { child, client, stderr }
+  spawned = { child, client, stderr, closed }
   return { ...spawned, cwd }
 }
 
 describe('mnh-acp-demo real-load-path smoke (bin + Loader, keyless)', () => {
   it('boots via its bin and exposes only fresh text sessions', async () => {
     const { client, cwd, stderr } = await boot()
-    // initialize: a broken export shape (collapsed bridge plugin, dropped inject)
-    // crashes the tree on the first service read here — see postmortem 0001.
-    const init = await client.initialize({
-      protocolVersion: PROTOCOL_VERSION,
-      clientCapabilities: {},
-    })
-    expect(init.agentCapabilities).toEqual({
-      promptCapabilities: { image: false, audio: false, embeddedContext: false },
-    })
+    try {
+      // initialize: a broken export shape (collapsed bridge plugin, dropped inject)
+      // crashes the tree on the first service read here — see postmortem 0001.
+      const init = await client.initialize({
+        protocolVersion: PROTOCOL_VERSION,
+        clientCapabilities: {},
+      })
+      expect(init.agentCapabilities).toEqual({
+        promptCapabilities: { image: false, audio: false, embeddedContext: false },
+      })
 
-    // session/new reaches the agent FACTORY (create) without the model.
-    const { sessionId } = await client.newSession({ cwd, mcpServers: [] })
-    expect(sessionId).toBeTruthy()
+      // session/new reaches the agent FACTORY (create) without the model.
+      const { sessionId } = await client.newSession({ cwd, mcpServers: [] })
+      expect(sessionId).toBeTruthy()
 
-    expect(stderr.join('')).not.toContain('without inject')
+      expect(stderr.join('')).not.toContain('without inject')
+    } catch (error) {
+      throw new Error(`ACP startup failed: ${String(error)}\nagent stderr:\n${stderr.join('')}`, { cause: error })
+    }
   }, 30_000)
 })

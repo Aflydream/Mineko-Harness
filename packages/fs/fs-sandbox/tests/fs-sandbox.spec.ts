@@ -19,6 +19,7 @@ import type { FsTarget } from '@aflydream/mnh-fs'
 import SandboxPolicyService from '@aflydream/mnh-sandbox-policy'
 import type { SandboxMode } from '@aflydream/mnh-sandbox'
 import { SandboxedFileSystem } from '@aflydream/mnh-fs-sandbox'
+import { canSymlink } from '../../fs-local/tests/helpers/symlink.ts'
 
 let base: string
 let workspace: string
@@ -115,7 +116,7 @@ describe('workspace-write containment', () => {
     expect(existsSync(join(workspace, '..', 'sibling-escape.txt'))).toBe(false)
   })
 
-  it('a symlinked directory inside the workspace pointing OUT is denied (canonicalized before containment)', async () => {
+  it.skipIf(!canSymlink)('a symlinked directory inside the workspace pointing OUT is denied (canonicalized before containment)', async () => {
     // workspace/link -> outside ; writing workspace/link/f.txt would land in outside/f.txt.
     await symlink(outside, join(workspace, 'link'))
     const path = join(workspace, 'link', 'f.txt')
@@ -123,7 +124,7 @@ describe('workspace-write containment', () => {
     expect(existsSync(join(outside, 'f.txt'))).toBe(false)
   })
 
-  it('a NEW file created under a symlinked-out directory is denied (deepest-ancestor realpath)', async () => {
+  it.skipIf(!canSymlink)('a NEW file created under a symlinked-out directory is denied (deepest-ancestor realpath)', async () => {
     await symlink(outside, join(workspace, 'link'))
     const path = join(workspace, 'link', 'newdir', 'deep.txt')
     await expect(fs.writeText(await target(path), 'x')).rejects.toMatchObject({ code: 'FS_SANDBOX_DENIED' })

@@ -18,6 +18,7 @@ import { Context } from '@deepseek-ai/cordis'
 import { PwshLocalExecutor, ENCODING_PREAMBLE, candidatePwshPaths, resolvePwshPath } from '@aflydream/mnh-pwsh-local'
 import LocalSubprocessRuntime from '@aflydream/mnh-subprocess-local'
 import SubprocessRuntime from '@aflydream/mnh-subprocess'
+import { canSymlink } from '../../../fs/fs-local/tests/helpers/symlink.ts'
 import type { SubprocessHandle, SubprocessOutputReader, SubprocessSpawnSpec } from '@aflydream/mnh-subprocess'
 import { MAX_TIMER_DELAY_MS } from '@aflydream/mnh-timeout'
 import type { ShellProcess } from '@aflydream/mnh-shell'
@@ -127,7 +128,7 @@ describe('resolvePwshPath and candidatePwshPaths (pure, every platform)', () => 
       .toBe('pwsh')
   })
 
-  it('accepts a link-shaped PATH candidate whose target cannot be stat-ed', () => {
+  it.skipIf(!canSymlink)('accepts a link-shaped PATH candidate whose target cannot be stat-ed', () => {
     // Store app execution aliases stat as EACCES but lstat as a link; a
     // dangling symlink reproduces that split on every platform.
     const dir = mkdtempSync(join(tmpdir(), 'mnh-pwsh-resolve-link-'))
@@ -189,7 +190,14 @@ describe('spawn construction (pure, every platform)', () => {
   })
 })
 
-describe.skipIf(!hasPwsh)('PwshLocalExecutor.run', () => {
+// Real PowerShell startup dominates these tests. Windows PowerShell 5.1 —
+// what `resolvePwshPath` falls back to when no PowerShell 7 is installed, i.e.
+// a stock Windows box — takes seconds per spawn where pwsh 7 takes a fraction
+// of one, and several cases spawn twice. The 5s default timeout is a coin flip
+// there, so both real-process blocks carry an explicit budget.
+const REAL_PROCESS_TIMEOUT_MS = 30_000
+
+describe.skipIf(!hasPwsh)('PwshLocalExecutor.run', { timeout: REAL_PROCESS_TIMEOUT_MS }, () => {
   it('resolves with output and the effective timeout', { timeout: 15_000 }, async () => {
     const { bash } = await setup({ timeoutMs: 10_000 })
     const result = await bash.run(bash.resolve({ command: 'Write-Output hi' }))
@@ -317,7 +325,7 @@ describe.skipIf(!hasPwsh)('PwshLocalExecutor.run', () => {
   })
 })
 
-describe.skipIf(!hasPwsh)('PwshLocalExecutor.start (background process handles)', () => {
+describe.skipIf(!hasPwsh)('PwshLocalExecutor.start (background process handles)', { timeout: REAL_PROCESS_TIMEOUT_MS }, () => {
   it('start returns immediately with a running handle that settles as completed', async () => {
     const { bash } = await setup()
     const before = Date.now()

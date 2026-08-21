@@ -6,6 +6,7 @@ import { Context } from '@deepseek-ai/cordis'
 import SkillRegistry from '@aflydream/mnh-skill'
 import { FileSystem, FsError, FsVersion, type FsDirEntry, type FsEditOutcome, type FsEditRequest, type FsInfo, type FsPathInfo, type FsTarget, type FsWriteOutcome } from '@aflydream/mnh-fs'
 import * as SkillFileSystem from '../src/index.ts'
+import { canSymlink } from '../../../fs/fs-local/tests/helpers/symlink.ts'
 
 async function tempDir(name: string): Promise<string> {
   return await import('node:fs/promises').then(fs => fs.mkdtemp(join(tmpdir(), `mnh-${name}-`)))
@@ -406,7 +407,7 @@ describe('FileSystemSkillProvider', () => {
     expect((await ctx.skills.list()).map(skill => skill.name)).toEqual(['good-skill'])
   })
 
-  it('discovers symlinked skill directories and flat files', async () => {
+  it.skipIf(!canSymlink)('discovers symlinked skill directories and flat files', async () => {
     const home = await tempDir('skill-symlink-home')
     const external = await tempDir('skill-symlink-external')
     await writeSkill(external, 'linked-dir', 'Linked directory')
@@ -776,7 +777,7 @@ describe('FileSystemSkillProvider', () => {
     disposeProvider()
   })
 
-  it('refreshes frontmatter through a followed skill symlink', { timeout: 10000 }, async () => {
+  it.skipIf(!canSymlink)('refreshes frontmatter through a followed skill symlink', { timeout: 10000 }, async () => {
     const home = await tempDir('skill-watch-symlink-home')
     const external = await tempDir('skill-watch-symlink-external')
     const root = join(home, '.mnh/skills')

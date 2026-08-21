@@ -87,20 +87,44 @@ const roots: string[] = []
 const fixtures: MessagesFixture[] = []
 const contexts: Context[] = []
 
-// Ambient Anthropic model env leaks into the real CLI and overrides the
-// fixture settings.json on developer machines; delete it for this file and
-// restore it after, like the workspace-context USERPROFILE isolation.
-const ambientAnthropicModel = process.env.ANTHROPIC_MODEL
-const ambientAnthropicSmallFastModel = process.env.ANTHROPIC_SMALL_FAST_MODEL
+// Ambient agent-session state leaks into the real CLI through the SDK's child
+// environment and overrides what this fixture configures. `ANTHROPIC_MODEL`
+// overrides the fixture settings.json; the Claude Code session identity names
+// are worse — an inherited `CLAUDE_CODE_ENTRYPOINT` (the host's, e.g.
+// `claude-vscode`) wins over the `sdk-ts` value the SDK sets for its own child,
+// and the CLI then exits without ever reaching the Messages endpoint, so every
+// case in this file fails or times out waiting for a request that never
+// arrives. That happens whenever the suite is run from inside a Claude Code
+// session. Delete the whole family for this file and restore it after, like the
+// workspace-context USERPROFILE isolation.
+const AMBIENT_AGENT_ENV = [
+  'ANTHROPIC_MODEL',
+  'ANTHROPIC_SMALL_FAST_MODEL',
+  'AI_AGENT',
+  'CLAUDECODE',
+  'CLAUDE_AGENT_SDK_VERSION',
+  'CLAUDE_CODE_CHILD_SESSION',
+  'CLAUDE_CODE_ENABLE_SDK_FILE_CHECKPOINTING',
+  'CLAUDE_CODE_ENABLE_TASKS',
+  'CLAUDE_CODE_ENTRYPOINT',
+  'CLAUDE_CODE_EXECPATH',
+  'CLAUDE_CODE_SESSION_ID',
+  'CLAUDE_EFFORT',
+  'CLAUDE_PID',
+] as const
+const ambientAgentEnv = new Map<string, string>()
 
 beforeAll(() => {
-  delete process.env.ANTHROPIC_MODEL
-  delete process.env.ANTHROPIC_SMALL_FAST_MODEL
+  for (const name of AMBIENT_AGENT_ENV) {
+    const value = process.env[name]
+    if (value !== undefined) ambientAgentEnv.set(name, value)
+    Reflect.deleteProperty(process.env, name)
+  }
 })
 
 afterAll(() => {
-  if (ambientAnthropicModel !== undefined) process.env.ANTHROPIC_MODEL = ambientAnthropicModel
-  if (ambientAnthropicSmallFastModel !== undefined) process.env.ANTHROPIC_SMALL_FAST_MODEL = ambientAnthropicSmallFastModel
+  for (const [name, value] of ambientAgentEnv) process.env[name] = value
+  ambientAgentEnv.clear()
 })
 
 afterEach(async () => {

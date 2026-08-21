@@ -19,6 +19,7 @@ import {
 } from '../src/schema.ts'
 import { runPersistenceContract, meta, oneTurnLog, appendLog } from '../../session-persistence/tests/contract.ts'
 import { runCoordinatorContract, type CoordinatorFixture } from '../../session-persistence/tests/coordinator-contract.ts'
+import { canSymlink } from '../../../fs/fs-local/tests/helpers/symlink.ts'
 
 const dirs: string[] = []
 afterEach(async () => { for (const d of dirs.splice(0)) await rm(d, { recursive: true, force: true }) })
@@ -559,7 +560,7 @@ describe('SqliteSessionPersistence: durability and crash semantics', () => {
     await fiber2.dispose()
   })
 
-  it('source-qualifies revisions across stores while preserving same-file reopen identity', async () => {
+  it.skipIf(!canSymlink)('source-qualifies revisions across stores while preserving same-file reopen identity', async () => {
     const pathA = await freshDbPath()
     const pathB = await freshDbPath()
     const m = meta('revision-source')

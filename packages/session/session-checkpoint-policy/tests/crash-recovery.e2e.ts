@@ -13,7 +13,7 @@ import JsonlSessionPersistence from '@aflydream/mnh-session-persistence-jsonl'
 
 const repoRoot = fileURLToPath(new URL('../../../../', import.meta.url))
 const childScript = fileURLToPath(new URL('./fixtures/crash-child.ts', import.meta.url))
-const tsxLoader = fileURLToPath(import.meta.resolve('tsx'))
+const tsxLoader = import.meta.resolve('tsx')
 const sessionId = SessionId('semantic-checkpoint-crash')
 const roots: string[] = []
 const CHILD_FAILPOINT_TIMEOUT_MS = 30_000

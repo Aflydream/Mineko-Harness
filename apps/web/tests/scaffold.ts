@@ -658,22 +658,24 @@ export function fixtureUserPrompts(fixtureText: string): string[] {
 /**
  * Realize a recorded seed fixture against one scaffold: substitute the
  * `{{sessionId}}`/`{{cwd}}` placeholders and rewrite the recorded cwd to the
- * scaffold's workspace. Idempotent, so a caller may realize early (e.g. to
- * price content exactly as the host will fold it) and still pass the result
- * through {@link seedSession}.
+ * scaffold's workspace. Path values are inserted as JSON-string content, so
+ * Windows backslashes remain valid JSON escapes. Idempotent, so a caller may
+ * realize early (e.g. to price content exactly as the host will fold it) and
+ * still pass the result through {@link seedSession}.
  * @param scaffold - the booted scaffold whose workspace the seed targets.
  * @param fixtureText - the committed seed fixture text.
  * @param id - the session id the seed is realized for.
  * @returns the realized fixture text.
  */
 export function realizeSeedFixture(scaffold: WebScaffold, fixtureText: string, id: string): string {
+  const encodedCwd = JSON.stringify(scaffold.workspaceCwd).slice(1, -1)
   const realized = fixtureText
     .split('{{sessionId}}').join(id)
-    .split('{{cwd}}').join(scaffold.workspaceCwd)
+    .split('{{cwd}}').join(encodedCwd)
   const fixtureCwd = (JSON.parse(realized.split('\n', 1)[0]!) as { cwd?: string }).cwd
   return fixtureCwd === undefined
     ? realized
-    : realized.split(fixtureCwd).join(scaffold.workspaceCwd)
+    : realized.split(JSON.stringify(fixtureCwd).slice(1, -1)).join(encodedCwd)
 }
 
 export async function seedSession(
