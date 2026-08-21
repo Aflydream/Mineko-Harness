@@ -27,6 +27,20 @@ linkWorkspacePackages: true
 overrides:
   '@deepseek-ai/cosmokit': 'link:vendor/cosmokit'
   '@deepseek-ai/schemastery': 'link:vendor/schemastery'
+  '@hono/node-server': 1.19.15
+  'brace-expansion@2.1.2': 2.1.4
+  'brace-expansion@5.0.6': 5.0.9
+  dompurify: 3.4.13
+  fast-uri: 3.1.5
+  hono: 4.12.34
+  ip-address: 10.3.1
+  js-yaml: 4.3.1
+  nanoid: 3.3.18
+  postcss: 8.5.23
+  protobufjs: 7.6.5
+  'undici@7.28.0': 7.29.0
+  # @vitejs/plugin-vue 5 accepts Vite 6; docs:check verifies this patched VitePress stack.
+  'vitepress@1.6.4>vite': 6.4.3
 
 peerDependencyRules:
   allowedVersions:

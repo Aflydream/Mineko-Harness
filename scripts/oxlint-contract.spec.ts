@@ -10,6 +10,7 @@ import { describe, expect, it } from 'vitest'
 const repositoryRoot = fileURLToPath(new URL('..', import.meta.url))
 const oxlintCli = fileURLToPath(new URL('../node_modules/oxlint/bin/oxlint', import.meta.url))
 const tsxCli = fileURLToPath(new URL('../node_modules/tsx/dist/cli.mjs', import.meta.url))
+const stagedLintProbeDirectory = join(repositoryRoot, 'scripts', 'staged-lint-probes')
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -37,6 +38,13 @@ function runOxlint(args: readonly string[], env: NodeJS.ProcessEnv = {}) {
 
 function normalizedOutput(result: ReturnType<typeof runOxlint>): string {
   return `${result.stdout}${result.stderr}`.replaceAll('\\', '/')
+}
+
+async function writeStagedLintProbe(suffix: string, source: string): Promise<string> {
+  await mkdir(stagedLintProbeDirectory, { recursive: true })
+  const path = join(stagedLintProbeDirectory, `probe-${suffix}.ts`)
+  await writeFile(path, source)
+  return path
 }
 
 async function writeContractConfig(suffix: string): Promise<string> {
@@ -279,10 +287,20 @@ export const longProbe = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
     })
     expect(stagedConfig.ignorePatterns).not.toContain('packages/typert/generator/tests/fixtures/type-model/**')
 
+    const hostConfigPath = join(repositoryRoot, 'tsconfig.host.json')
+    const hostResult = parseConfigFileTextToJson(hostConfigPath, await readFile(hostConfigPath, 'utf8'))
+    if (hostResult.error !== undefined) {
+      throw new Error(flattenDiagnosticMessageText(hostResult.error.messageText, '\n'))
+    }
+    const hostConfig = hostResult.config as unknown
+    if (!isRecord(hostConfig) || !Array.isArray(hostConfig.exclude)) {
+      throw new Error('tsconfig.host.json must contain an exclude array')
+    }
+    expect(hostConfig.exclude).toContain('scripts/staged-lint-probes/**')
+
     const suffix = randomUUID()
-    const path = join(repositoryRoot, 'scripts', `staged-lint-probe-${suffix}.ts`)
+    const path = await writeStagedLintProbe(suffix, 'export const value={answer:1};\n')
     try {
-      await writeFile(path, 'export const value={answer:1};\n')
       const lint = runOxlint([
         '--config',
         relative(repositoryRoot, configPath),
@@ -303,10 +321,12 @@ export const longProbe = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
 
   it('preserves successful fix output channels', async () => {
     const suffix = randomUUID()
-    const path = join(repositoryRoot, 'scripts', `staged-lint-probe-${suffix}.ts`)
+    const path = await writeStagedLintProbe(
+      suffix,
+      '// oxlint-disable-next-line no-console\nexport const value = 1\n',
+    )
 
     try {
-      await writeFile(path, '// oxlint-disable-next-line no-console\nexport const value = 1\n')
       const result = runRepositoryOxlint([
         '--config',
         '.oxlintrc.staged.json',
@@ -327,10 +347,9 @@ export const longProbe = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
 
   it('prints only the final diagnostics when a fix retry still fails', async () => {
     const suffix = randomUUID()
-    const path = join(repositoryRoot, 'scripts', `staged-lint-probe-${suffix}.ts`)
+    const path = await writeStagedLintProbe(suffix, `export const longProbe = ${'1 + '.repeat(80)}1\n`)
 
     try {
-      await writeFile(path, `export const longProbe = ${'1 + '.repeat(80)}1\n`)
       const result = runRepositoryOxlint([
         '--config',
         '.oxlintrc.staged.json',

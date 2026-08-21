@@ -69,7 +69,7 @@ describe('request-level dynamic profiles', () => {
     expect(directory.length).toBeGreaterThan(30)
     expect(directory).toContainEqual({
       provider: 'openai',
-      displayName: 'openai',
+      displayName: 'OpenAI',
       settingsNs: 'llm-pi-ai',
       settingsPath: ['providers', 'openai'],
       declared: false,

@@ -460,14 +460,14 @@ describe('E2BSubprocessHandle', () => {
     await expect(handle.waitForExit()).resolves.toBe(true)
   })
 
-  it('rejects an unrepresentable graceMs before any remote work', () => {
+  it('rejects an unrepresentable graceMs before any remote work', async () => {
     const ctx = new Context()
     const service = Object.create(E2BSubprocessRuntime.prototype) as E2BSubprocessRuntime
     Reflect.set(service, 'disposing', false)
     Reflect.set(service, 'ctx', ctx)
     for (const graceMs of [0, -1, Number.NaN, Number.POSITIVE_INFINITY]) {
       expect(() => service.spawn(spec({ graceMs }))).toThrow('graceMs must be a positive finite number')
-      void expect(service.spawnTerminal({
+      await expect(service.spawnTerminal({
         argv: ['bash'], cwd: '/w', rows: 24, cols: 80, graceMs,
       })).rejects.toThrow('graceMs must be a positive finite number')
     }

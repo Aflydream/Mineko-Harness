@@ -71,3 +71,9 @@ release/
 worktrees/
 .agents/worktrees/
 .typert-*/
+
+# Upstream Codex checkout kept locally for reference (Apache-2.0, ~92k lines of
+# Rust). Untracked on purpose: committing it would put third-party sources in
+# this repository without going through the vendoring process, and the license
+# and THIRD_PARTY_NOTICES gates would then own them.
+codex-main/

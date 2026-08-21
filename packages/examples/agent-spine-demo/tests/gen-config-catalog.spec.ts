@@ -462,7 +462,7 @@ export function apply(ctx: Context, config: Config): void {}
     expect(page).toContain('## `@fix/one`')
     expect(page).toContain('```ts config-catalog')
     expect(page).toContain('/** A knob. */')
-    expect(page).toContain('- `@fix/lib` ([`packages/group/lib/src/index.ts`](../packages/group/lib/src/index.ts))')
+    expect(page).toContain('- `@fix/lib` ([`packages/group/lib/src/index.ts`](../../packages/group/lib/src/index.ts))')
     expect(page).toContain('- `@fix/seam` — abstract `Seam`')
   })
 })

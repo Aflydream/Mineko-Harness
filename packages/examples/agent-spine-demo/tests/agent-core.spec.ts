@@ -443,7 +443,7 @@ describe('mnh-agent-spine-demo bundle', () => {
     const home = await mkdtemp(join(tmpdir(), 'mnh-agent-spine-demo-skill-refresh-home-'))
     try {
       await mkdir(join(root, '.git'), { recursive: true })
-      const skillPath = 'AgentGuide/conventions.md'
+      const skillPath = '.agents/skills/hot-skill/SKILL.md'
       const skillSource = '---\nname: hot-skill\ndescription: Hot-added skill\n---\n\nUse the freshly loaded body.\n'
       const adapter = new MockAdapter([
         toolCallResponse('mkdir-skill', 'bash', {
@@ -533,7 +533,7 @@ describe('mnh-agent-spine-demo bundle', () => {
           {
             "callId": "write-skill",
             "isError": false,
-            "text": "<path>{{cwd}}/AgentGuide/conventions.md</path>
+            "text": "<path>{{cwd}}/.agents/skills/hot-skill/SKILL.md</path>
         <type>file</type>
         <content>
         Created file

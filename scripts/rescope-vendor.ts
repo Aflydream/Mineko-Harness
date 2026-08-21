@@ -173,12 +173,14 @@ const EXACT_EDITS: readonly ExactEdit[] = [
     file: 'knip.json',
     find: `      "ignoreDependencies": [
         "@cordisjs/plugin-logger-console",
-        "@deepseek-ai/.+"
+        "@aflydream/mnh-.+",
+        "@deepseek-ai/cordis-plugin-.+"
       ]
     },
     "packages/util/home": {`,
     replace: `      "ignoreDependencies": [
-        "@deepseek-ai/.+"
+        "@aflydream/mnh-.+",
+        "@deepseek-ai/cordis-plugin-.+"
       ]
     },
     "packages/util/home": {`,
@@ -189,12 +191,13 @@ const EXACT_EDITS: readonly ExactEdit[] = [
     file: 'knip.json',
     find: `    "packages/bundle/base": {
       "ignoreDependencies": [
-        "@deepseek-ai/.+",
+        "@aflydream/mnh-.+",
         "@cordisjs/.+"
       ]`,
     replace: `    "packages/bundle/base": {
       "ignoreDependencies": [
-        "@deepseek-ai/.+"
+        "@aflydream/mnh-.+",
+        "@deepseek-ai/cordis-plugin-.+"
       ]`,
     expect: 1,
   },
@@ -257,14 +260,6 @@ const EXACT_EDITS: readonly ExactEdit[] = [
     expect: 1,
   },
   {
-    // The root contract claimed vendored packages keep their upstream names.
-    id: 'root-agents-vendored-name-contract',
-    file: 'AGENTS.md',
-    find: 'vendored packages keep upstream names and are `private: true`. `cordis` is a peerDependency (+ dev) of every harness package.',
-    replace: 'vendored packages are rescoped ([mapping](AgentGuide/reference/rescope.md)) and `private: true`. `@deepseek-ai/cordis` is a peerDependency (+ dev) of every harness package.',
-    expect: 1,
-  },
-  {
     // The client purity gate reads `@deepseek-ai/` as "another plugin package".
     // The rescope moves the vendored framework and its libraries into that
     // namespace, where the gate would reject the library imports client
@@ -312,14 +307,14 @@ const VENDORED_LIBRARY = /^@deepseek-ai\\/(cosmokit|schemastery)(\\/|$)/
     id: 'vendoring-cookbook-name-invariant',
     file: 'docs/cookbook/adding-a-vendored-package.md',
     find: "keep upstream's `name`/`version`/`exports`/`type`",
-    replace: "rescope the `name` ([mapping](../rescope.md)) while keeping upstream's `version`/`exports`/`type`",
+    replace: "rescope the `name` ([mapping](../../AgentGuide/reference/rescope.md)) while keeping upstream's `version`/`exports`/`type`",
     expect: 1,
   },
   {
     id: 'vendoring-cookbook-name-invariant-zh',
     file: 'docs/cookbook/adding-a-vendored-package.zh.md',
     find: '保留上游的 `name`/`version`/`exports`/`type`',
-    replace: '改写 `name` 的 scope（[映射](../rescope.md)），保留上游的 `version`/`exports`/`type`',
+    replace: '改写 `name` 的 scope（[映射](../../AgentGuide/reference/rescope.md)），保留上游的 `version`/`exports`/`type`',
     expect: 1,
   },
   {

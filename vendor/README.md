@@ -30,6 +30,8 @@ Intentionally **not** vendored (verified unused by this set): `reggol`, `@cordis
 
 Keep this log exhaustive — every divergence from upstream must be listed.
 
+In-source markers for these divergences carry the `[mineko-harness]` prefix, renamed from `[mineko-herness]` together with the repository. Archived agent notes keep the old spelling on purpose, since they record what was decided at the time.
+
 1. **`hmr/src/index.ts`**: removed the `./locales/en-US.yml` / `./locales/zh-CN.yml` imports, the `.i18n({...})` call on the `Config` schema, and the `src/locales/` directory. Rationale: those imports require a runtime YAML loader hook (`@cordisjs/unyaml`) that we do not vendor; the i18n texts only localize config descriptions.
 2. **All `package.json` files**: regenerated — added `private: true`, added precise `files` entries for bundled runtime files and `lib/types/**/*.d.ts` / `.d.ts.map`, preserved `src` in `files` only for packages whose previous file list already shipped it, added a `./src/*` export where missing, pointed declaration metadata at `lib/types`, and removed upstream `devDependencies`/`scripts`/`repository` fields. Dependency and peer-dependency ranges are preserved except that `hmr` declares `esbuild` as a direct dev dependency because its source imports the `BuildFailure` type and pnpm's strict workspace resolution requires the owner package to name that dependency, and `loader` requires `node-addon-require-builtin@^0.1.4` to match the runtime used by published app packages.
 3. **All `tsconfig.json` files**: regenerated to extend the repo-root `tsconfig.base.json`, emit TypeScript intermediates to `lib/types`, and declare project references.
