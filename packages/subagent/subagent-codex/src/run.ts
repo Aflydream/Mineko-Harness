@@ -20,6 +20,7 @@ import {
 } from '@aflydream/mnh-subagent'
 import type { SubprocessHandle, SubprocessSpawnSpec } from '@aflydream/mnh-subprocess'
 import { CodexAppServerWire } from './wire.ts'
+import type { CodexApprover } from './wire.ts'
 
 /** Default POSIX grace between subprocess termination tiers. */
 export const DEFAULT_DISPOSE_GRACE_MS = 3_000
@@ -51,6 +52,12 @@ export interface CodexRunSpec {
   readonly disposeGraceMs: number
   /** Shared subprocess service spawn operation. */
   readonly spawn: (spec: SubprocessSpawnSpec) => SubprocessHandle
+  /**
+   * Host decision source for the child's command-execution and file-change
+   * approvals. Absent keeps the unattended refusal, so a composition without an
+   * approval answerer still cannot let the child act unobserved.
+   */
+  readonly approve?: CodexApprover
   /** Diagnostic sink for a post-publication error flattened into a result. */
   readonly onError?: (error: Error, stopReason: SubagentStopReason) => void
 }
@@ -133,6 +140,7 @@ export async function startCodexRun(
   const wire = new CodexAppServerWire(
     child.stdout as NonNullable<SubprocessHandle['stdout']>,
     child.stdin as NonNullable<SubprocessHandle['stdin']>,
+    spec.approve,
   )
   const disposeProcess = (): Promise<void> => disposeCodexChild(wire, child)
 

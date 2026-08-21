@@ -75,6 +75,31 @@ async function raceAbort<T>(pending: Promise<T>, signal: AbortSignal): Promise<T
 }
 
 /**
+ * Decision an app-server approval request accepts, in the protocol's own
+ * camelCase wire spelling (`CommandExecutionApprovalDecision` /
+ * `FileChangeApprovalDecision`). `cancel` denies AND interrupts the turn;
+ * `decline` denies and lets the turn continue.
+ */
+export type CodexApprovalDecision = 'accept' | 'acceptForSession' | 'decline' | 'cancel'
+
+/** What the child asks permission for, as the host needs it to render the question. */
+export interface CodexApprovalAsk {
+  /** Which approval request arrived, for the host's own presentation. */
+  readonly kind: 'commandExecution' | 'fileChange'
+  /** Decisions this exact request declared it accepts, when it declared any. */
+  readonly availableDecisions?: readonly string[]
+  /** The raw request params, so a host can render the command or the diff. */
+  readonly params: JsonObject
+}
+
+/**
+ * Host approval hook. Returning a decision the request did not offer is the
+ * host's error, so the wire narrows the answer against `availableDecisions`
+ * before sending it.
+ */
+export type CodexApprover = (ask: CodexApprovalAsk) => Promise<CodexApprovalDecision>
+
+/**
  * One app-server connection and its single ephemeral thread/turn.
  *
  * The class deliberately exposes no generic request surface. Supporting
@@ -98,6 +123,12 @@ export class CodexAppServerWire {
   constructor(
     private readonly input: Readable,
     output: Writable,
+    /**
+     * Host decision source for command-execution and file-change approvals.
+     * Absent means no approval answerer is composed, and the wire keeps the
+     * fail-closed unattended behavior rather than granting silently.
+     */
+    private readonly approve?: CodexApprover,
   ) {
     this.transport = new JsonRpcLineTransport(input, output)
     // Fatal protocol state can arrive after the current guarded operation has
@@ -295,9 +326,15 @@ export class CodexAppServerWire {
     try {
       switch (method) {
         case 'item/commandExecution/requestApproval':
+          this.validateRunIds(params)
+          // Approval answering is asynchronous now, so a failure inside it
+          // arrives as a rejection rather than a throw this try can see. Route
+          // it through the same fail path or an unanswerable request would
+          // leave the run hanging instead of failing loud.
+          return this.failing(this.decideApproval('commandExecution', params))
         case 'item/fileChange/requestApproval':
           this.validateRunIds(params)
-          return Promise.resolve({ decision: unattendedDecision(params) })
+          return this.failing(this.decideApproval('fileChange', params))
         case 'item/permissions/requestApproval':
           this.validateRunIds(params)
           return Promise.resolve({ permissions: {}, scope: 'turn' })
@@ -315,6 +352,54 @@ export class CodexAppServerWire {
       this.fail(normalized)
       return Promise.reject(normalized)
     }
+  }
+
+  /** Give an async server-request answer the same fail-the-run path as a throw. */
+  private failing<T>(answer: Promise<T>): Promise<T> {
+    return answer.catch((error: unknown) => {
+      const normalized = thrown(error)
+      this.fail(normalized)
+      throw normalized
+    })
+  }
+
+  /**
+   * Answer one approval request. Without a host approver this keeps the
+   * historic unattended refusal; with one, the child can actually run commands
+   * and change files, gated by the host's own approval surface. A decision the
+   * request did not offer is narrowed to a refusal it did, so a host answer can
+   * never become a protocol error — and anything other than an explicit
+   * approval refuses, so the failure direction stays closed.
+   */
+  private async decideApproval(
+    kind: 'commandExecution' | 'fileChange',
+    params: JsonObject,
+  ): Promise<{ decision: CodexApprovalDecision }> {
+    const offered = Array.isArray(params.availableDecisions)
+      ? params.availableDecisions.filter((value): value is string => typeof value === 'string')
+      : undefined
+    if (this.approve === undefined) {
+      return { decision: unattendedDecision(params) }
+    }
+    const asked = await this.approve({
+      kind,
+      ...offered === undefined ? {} : { availableDecisions: offered },
+      params,
+    })
+    return { decision: this.narrowDecision(asked, offered, params) }
+  }
+
+  /** Keep a host decision within what this request accepts, refusing on doubt. */
+  private narrowDecision(
+    asked: CodexApprovalDecision,
+    offered: readonly string[] | undefined,
+    params: JsonObject,
+  ): CodexApprovalDecision {
+    if (offered === undefined || offered.includes(asked)) return asked
+    // The request does not accept the host's answer. An approval that cannot be
+    // expressed must not silently become one that can, so fall back to the
+    // refusal this request does offer.
+    return unattendedDecision(params)
   }
 
   private handleNotification(method: string, params: JsonObject): void {

@@ -23,6 +23,7 @@ import {
   type CodexRunSpec,
 } from '../src/run.ts'
 import { CodexAppServerWire } from '../src/wire.ts'
+import type { CodexApprover } from '../src/wire.ts'
 
 type JsonObject = Record<string, unknown>
 
@@ -190,12 +191,12 @@ function runSpec(
   }
 }
 
-async function initializeWire(): Promise<{
+async function initializeWire(approve?: CodexApprover): Promise<{
   readonly child: FakeChild
   readonly wire: CodexAppServerWire
 }> {
   const child = fakeChild()
-  const wire = new CodexAppServerWire(child.handle.stdout!, child.handle.stdin!)
+  const wire = new CodexAppServerWire(child.handle.stdout!, child.handle.stdin!, approve)
   wire.start()
   const initializing = wire.initialize(new AbortController().signal)
   const initialize = await child.peer.nextMethod('initialize')
@@ -639,6 +640,64 @@ describe('CodexAppServerWire', () => {
 
     child.peer.send(agentMessage('answer', 'final_answer'), turnCompleted('completed'))
     await expect(result).resolves.toMatchObject({ stopReason: 'completed' })
+    wire.close()
+  })
+
+  it.each([
+    ['accept' as const, ['accept', 'decline'], 'accept'],
+    ['cancel' as const, ['accept', 'cancel'], 'cancel'],
+    // The host approves, but this request never offered `accept`: an approval
+    // that cannot be expressed must become a refusal, never a protocol error.
+    ['accept' as const, ['decline'], 'decline'],
+  ])('routes a %s decision through the host approver, narrowed to what the request offers', async (
+    hostDecision,
+    availableDecisions,
+    wireDecision,
+  ) => {
+    const asked: string[] = []
+    const { child, wire } = await initializeWire(async (ask) => {
+      asked.push(ask.kind)
+      return hostDecision
+    })
+    const result = wire.runTurn(['task'], new AbortController().signal)
+    const turnStart = await child.peer.nextMethod('turn/start')
+    child.peer.respond(turnStart, { turn: { id: 'turn-1' } })
+    await nextTask()
+    child.peer.send({
+      id: 'ask',
+      method: 'item/commandExecution/requestApproval',
+      params: { threadId: 'thread-1', turnId: 'turn-1', availableDecisions },
+    })
+    const response = await child.peer.nextResponse('ask')
+    expect(response.result).toEqual({ decision: wireDecision })
+    expect(asked).toEqual(['commandExecution'])
+    child.peer.send({
+      method: 'turn/completed',
+      params: { threadId: 'thread-1', turn: { id: 'turn-1', status: 'completed' } },
+    })
+    await result.catch(() => undefined)
+    wire.close()
+  })
+
+  it('keeps refusing when no host approver is composed', async () => {
+    // A composition without an approval answerer has nobody to ask, so the
+    // child must not be granted silently.
+    const { child, wire } = await initializeWire()
+    const result = wire.runTurn(['task'], new AbortController().signal)
+    const turnStart = await child.peer.nextMethod('turn/start')
+    child.peer.respond(turnStart, { turn: { id: 'turn-1' } })
+    await nextTask()
+    child.peer.send({
+      id: 'ask',
+      method: 'item/fileChange/requestApproval',
+      params: { threadId: 'thread-1', turnId: 'turn-1', availableDecisions: ['accept', 'decline'] },
+    })
+    expect((await child.peer.nextResponse('ask')).result).toEqual({ decision: 'decline' })
+    child.peer.send({
+      method: 'turn/completed',
+      params: { threadId: 'thread-1', turn: { id: 'turn-1', status: 'completed' } },
+    })
+    await result.catch(() => undefined)
     wire.close()
   })
 

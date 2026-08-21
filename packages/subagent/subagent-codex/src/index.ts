@@ -70,6 +70,7 @@ class CodexProvider implements SubagentProvider {
       env: this.config.env,
       disposeGraceMs: this.config.disposeGraceMs,
       spawn: spawnSpec => this.ctx.subprocess.spawn(spawnSpec),
+      ...this.approver(request),
       onError: (error, stopReason) => {
         this.ctx.logger.warn(
           `subagent-codex: child run failed (${stopReason}): ${error.message}`,
@@ -77,6 +78,39 @@ class CodexProvider implements SubagentProvider {
       },
     }
     return startCodexRun(request, spec)
+  }
+
+  /**
+   * Route the child's approvals to the host's own approval surface, so a Codex
+   * child can actually execute commands and change files under the same
+   * question the user answers for every other tool. The question is asked on
+   * behalf of the PARENT agent: the parent's turn is the one still open (it
+   * called the delegation tool), and the audit pair belongs on the session the
+   * user is watching.
+   *
+   * Without `ctx.approval` there is nobody to ask, so the field is omitted and
+   * the wire keeps refusing — a composition that cannot ask must not grant.
+   */
+  private approver(request: ResolvedSubagentStartRequest): Pick<CodexRunSpec, 'approve'> {
+    const approval = this.ctx.get('approval')
+    if (approval === undefined) return {}
+    return {
+      approve: async (ask) => {
+        const outcome = await approval.request({
+          agent: request.parent,
+          toolName: 'subagent_codex',
+          reason: ask.kind === 'commandExecution'
+            ? 'the Codex child wants to run a command'
+            : 'the Codex child wants to change files',
+          signal: request.signal,
+        })
+        // Only an explicit one-time allowance grants. `cancelled` additionally
+        // interrupts the child's turn, because the question was withdrawn rather
+        // than answered — continuing would leave it acting on a dead decision.
+        if (outcome === 'allowed-once') return 'accept'
+        return outcome === 'cancelled' ? 'cancel' : 'decline'
+      },
+    }
   }
 }
 
