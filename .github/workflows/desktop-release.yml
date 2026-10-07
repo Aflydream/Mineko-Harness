@@ -128,7 +128,7 @@ jobs:
           $hash = (Get-FileHash -LiteralPath ".artifacts/desktop/$env:ARTIFACT_NAME" -Algorithm SHA256).Hash.ToLowerInvariant()
           "$hash  $env:ARTIFACT_NAME" | Set-Content -LiteralPath .artifacts/desktop/SHA256SUMS -Encoding ascii
 
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v6
         with:
           name: ${{ steps.release.outputs.bundle_name }}
           path: .artifacts/desktop/*
